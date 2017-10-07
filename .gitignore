@@ -33,3 +33,4 @@ sysinfo.txt
 *.apk
 *.unitypackage
 BumperCarsWithLoadouts/Library/
+BumperCarsWithLoadouts/Temp/

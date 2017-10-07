@@ -45,25 +45,28 @@ public class VehicleMovement : MonoBehaviour {
         // this is the sum of all the forces
         Vector3 total = Vector3.zero;
 
-        if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) // go forward
+        Debug.Log("  Y: " + Input.GetAxis("Vertical") + "  X: " + Input.GetAxis("Horizontal"));
+
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow) || Input.GetAxis("Vertical") > 0) // go forward
         {
             direction = transform.forward;
-            total += direction * 2;
+            total += direction;
+            
         }
-        else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) // turns counter-clockwise
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow) || Input.GetAxis("Horizontal") < 0) // turns counter-clockwise
         {
             angleToRotate = Quaternion.Euler(0, angleToRotate.y - turnSpeed, 0);
             totalRotation -= turnSpeed;
         }
-        else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) // turns clockwise
+        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow) || Input.GetAxis("Horizontal") > 0) // turns clockwise
         {
             angleToRotate = Quaternion.Euler(0, angleToRotate.y + turnSpeed, 0);
             totalRotation += turnSpeed;
         }
-        else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) // go backward
+        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow) || Input.GetAxis("Vertical") < 0) // go backward
         {
             direction = -transform.forward;
-            total += direction * 2;
+            total += direction;
         }
 
         // apply the sum of the forces to our bumper car
