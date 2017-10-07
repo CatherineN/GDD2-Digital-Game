@@ -45,24 +45,24 @@ public class VehicleMovement : MonoBehaviour {
         // this is the sum of all the forces
         Vector3 total = Vector3.zero;
 
-        if(Input.GetKey(KeyCode.W)) // go forward
+        if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) // go forward
         {
-            direction = Vector3.forward;
+            direction = transform.forward;
             total += direction * 2;
         }
-        else if (Input.GetKey(KeyCode.A)) // turns counter-clockwise
+        else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) // turns counter-clockwise
         {
             angleToRotate = Quaternion.Euler(0, angleToRotate.y - turnSpeed, 0);
             totalRotation -= turnSpeed;
         }
-        else if (Input.GetKey(KeyCode.D)) // turns clockwise
+        else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) // turns clockwise
         {
             angleToRotate = Quaternion.Euler(0, angleToRotate.y + turnSpeed, 0);
-            totalRotation -= turnSpeed;
+            totalRotation += turnSpeed;
         }
-        else if (Input.GetKey(KeyCode.S)) // go backward
+        else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) // go backward
         {
-            direction = -Vector3.forward;
+            direction = -transform.forward;
             total += direction * 2;
         }
 
@@ -87,7 +87,7 @@ public class VehicleMovement : MonoBehaviour {
         velocity.y = 0;
         //add velocity to position
         position += velocity;
-        position.y = .5f;
+        position.y = 0;
         //calculate direction from velocity
         direction = velocity.normalized;
         //zero out acceleration
