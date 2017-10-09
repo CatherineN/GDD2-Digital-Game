@@ -21,6 +21,9 @@ public class SmoothFollow : MonoBehaviour
     public float rotationDamping = 2.0f;
     public bool lookBehind;
 
+    //is this camera on top? or is it the bottom ;3c
+    //public bool topCam;
+
     // Use this for initialization
     void Start()
     {
