@@ -99,7 +99,7 @@ public class VehicleMovement : MonoBehaviour {
         velocity.y = 0;
         //add velocity to position
         position += velocity;
-        position.y = 0;
+        //position.y = 0;
         //calculate direction from velocity
         direction = velocity.normalized;
         //zero out acceleration
