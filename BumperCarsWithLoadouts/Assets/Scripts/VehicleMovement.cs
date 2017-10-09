@@ -45,7 +45,7 @@ public class VehicleMovement : MonoBehaviour {
         // this is the sum of all the forces
         Vector3 total = Vector3.zero;
 
-        Debug.Log("  Y: " + Input.GetAxis("Vertical") + "  X: " + Input.GetAxis("Horizontal"));
+        //Debug.Log("  Y: " + Input.GetAxis("Vertical") + "  X: " + Input.GetAxis("Horizontal"));
 
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow) || Input.GetAxis("Vertical") > 0) // go forward
         {
@@ -71,7 +71,7 @@ public class VehicleMovement : MonoBehaviour {
 
         // apply the sum of the forces to our bumper car
         ApplyForce(total);
-        direction = Vector3.Lerp(angleToRotate * direction, transform.forward, Time.deltaTime * 0.5f);
+        direction = Vector3.Lerp(angleToRotate * direction, transform.forward, Time.deltaTime * 1);
         ApplyFriction(CalculateCoefficientFriction(0.5f, 2.0f));
 
     }
