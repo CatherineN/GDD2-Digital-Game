@@ -72,6 +72,7 @@ public class VehicleMovement : MonoBehaviour {
         // apply the sum of the forces to our bumper car
         ApplyForce(total);
         direction = angleToRotate * direction;
+        ApplyFriction(.5f);
 
     }
 
@@ -118,6 +119,22 @@ public class VehicleMovement : MonoBehaviour {
     protected void ApplyForce(Vector3 force)
     {
         acceleration += force;
+    }
+
+    /// <summary>
+	/// Applies the friction.
+	/// </summary>
+	/// <param name="coeff">Coeff. of friction</param>
+	public void ApplyFriction(float coeff)
+    {
+        //step 1: get the negation of the velocity
+        Vector3 friction = velocity * -1;
+        //step 2: get the normalized vector so it is independent of vel mag
+        friction.Normalize();
+        //step 3: multiply by coeff
+        friction = friction * coeff;
+        //step 4: apply to acceleration
+        acceleration += friction;
     }
 
 }
