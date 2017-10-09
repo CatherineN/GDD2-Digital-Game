@@ -17,7 +17,7 @@ public class VehicleMovement : MonoBehaviour {
 
     float maxSpeed = 1;
     float minSpeed = 4;
-    float turnSpeed = 0.9f;
+    float turnSpeed = 1.9f;
     float totalRotation = 0; // add or subtract 1 when rotating the bumper car
     float damping = 5; // this will slow down the bumper car as we turn
 
@@ -71,8 +71,8 @@ public class VehicleMovement : MonoBehaviour {
 
         // apply the sum of the forces to our bumper car
         ApplyForce(total);
-        direction = angleToRotate * direction;
-        ApplyFriction(.5f);
+        direction = Vector3.Lerp(angleToRotate * direction, transform.forward, Time.deltaTime * 0.5f);
+        ApplyFriction(CalculateCoefficientFriction(0.5f, 2.0f));
 
     }
 
@@ -135,6 +135,25 @@ public class VehicleMovement : MonoBehaviour {
         friction = friction * coeff;
         //step 4: apply to acceleration
         acceleration += friction;
+    }
+
+    /// <summary>
+    /// Uses a rejection to more realistically apply friction.
+    /// Cars sliding sideways have more friction than moving straight
+    /// </summary>
+    /// <param name="coeff">Standard coefficient of friction</param>
+    /// <param name="force">How tight or slidey the car is. Lower number = slidey, Higher number = tight</param>
+    /// <returns>The coefficient of friction to use</returns>
+    public float CalculateCoefficientFriction(float coeff, float force)
+    {
+        // find the projection of the forward onto velocity
+        Vector3 projection = Vector3.Dot(transform.forward, velocity.normalized) * velocity.normalized;
+
+        // find the rejection (perpendicular vector from velocity to direction)
+        Vector3 rejetion = transform.forward - projection;
+
+        // take the magnitude squared and combine it with the standard friction
+        return (rejetion.sqrMagnitude * force) + coeff;
     }
 
 }
