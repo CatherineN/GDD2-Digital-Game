@@ -14,6 +14,10 @@ public class VehicleMovement : MonoBehaviour {
     Vector3 velocity;
     Vector3 desiredVelocity;
     Vector3 acceleration;
+    Vector3 total;//total force acting on the gameobject every frame
+    Quaternion angleToRotate;//how far to rotate this frame
+
+    public int playerID;//which player the script is on
 
     public float maxForce;
     float maxSpeed = .75f;
@@ -40,34 +44,21 @@ public class VehicleMovement : MonoBehaviour {
     /// </summary>
     protected void CalcSteeringForces()
     {
+
         // this is for our rotation
-        Quaternion angleToRotate = Quaternion.Euler(0, 0, 0);
+        angleToRotate = Quaternion.Euler(0, 0, 0);
 
         // this is the sum of all the forces
-        Vector3 total = Vector3.zero;
+        total = Vector3.zero;
 
-        //Debug.Log("  Y: " + Input.GetAxis("Vertical") + "  X: " + Input.GetAxis("Horizontal"));
-
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow) || Input.GetAxis("Vertical") > 0) // go forward
+        switch (playerID)
         {
-            direction = transform.forward;
-            total += direction;
-            
-        }
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow) || Input.GetAxis("Horizontal") < 0) // turns counter-clockwise
-        {
-            angleToRotate = Quaternion.Euler(0, angleToRotate.y - turnSpeed, 0);
-            totalRotation -= turnSpeed;
-        }
-        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow) || Input.GetAxis("Horizontal") > 0) // turns clockwise
-        {
-            angleToRotate = Quaternion.Euler(0, angleToRotate.y + turnSpeed, 0);
-            totalRotation += turnSpeed;
-        }
-        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow) || Input.GetAxis("Vertical") < 0) // go backward
-        {
-            direction = -transform.forward;
-            total += direction;
+            case 1:
+                GetInputPlayer1();
+                break;
+            case 2:
+                GetInputPlayer2();
+                break;
         }
 
         //clamp the total force to maxForce
@@ -164,4 +155,62 @@ public class VehicleMovement : MonoBehaviour {
         return (rejetion.sqrMagnitude * force) + coeff;
     }
 
+<<<<<<< HEAD
 }
+=======
+
+    void GetInputPlayer1()
+    {
+
+        if (Input.GetKey(KeyCode.W) || Input.GetAxis("Vertical_P1") > 0) // go forward
+        {
+            direction = transform.forward;
+            total += direction;
+
+        }
+        if (Input.GetKey(KeyCode.A) || Input.GetAxis("Horizontal_P1") < 0) // turns counter-clockwise
+        {
+            angleToRotate = Quaternion.Euler(0, angleToRotate.y - turnSpeed, 0);
+            totalRotation -= turnSpeed;
+        }
+        if (Input.GetKey(KeyCode.D) || Input.GetAxis("Horizontal_P1") > 0) // turns clockwise
+        {
+            angleToRotate = Quaternion.Euler(0, angleToRotate.y + turnSpeed, 0);
+            totalRotation += turnSpeed;
+        }
+        if (Input.GetKey(KeyCode.S) || Input.GetAxis("Vertical_P1") < 0) // go backward
+        {
+            direction = -transform.forward;
+            total += direction;
+        }
+
+    }
+
+    void GetInputPlayer2()
+    {
+
+        if (Input.GetKey(KeyCode.UpArrow) || Input.GetAxis("Vertical_P2") > 0) // go forward
+        {
+            direction = transform.forward;
+            total += direction;
+
+        }
+        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetAxis("Horizontal_P2") < 0) // turns counter-clockwise
+        {
+            angleToRotate = Quaternion.Euler(0, angleToRotate.y - turnSpeed, 0);
+            totalRotation -= turnSpeed;
+        }
+        if (Input.GetKey(KeyCode.RightArrow) || Input.GetAxis("Horizontal_P2") > 0) // turns clockwise
+        {
+            angleToRotate = Quaternion.Euler(0, angleToRotate.y + turnSpeed, 0);
+            totalRotation += turnSpeed;
+        }
+        if (Input.GetKey(KeyCode.DownArrow) || Input.GetAxis("Vertical_P2") < 0) // go backward
+        {
+            direction = -transform.forward;
+            total += direction;
+        }
+
+    }
+}
+>>>>>>> fc8b2e6678e2706fc9a10ea57b6ed96e3b96f88c
