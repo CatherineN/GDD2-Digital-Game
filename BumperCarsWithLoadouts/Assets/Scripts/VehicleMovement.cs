@@ -15,8 +15,9 @@ public class VehicleMovement : MonoBehaviour {
     Vector3 desiredVelocity;
     Vector3 acceleration;
 
-    float maxSpeed = 1;
-    float minSpeed = 4;
+    public float maxForce;
+    float maxSpeed = .75f;
+    float minSpeed = .4f;
     float turnSpeed = 1.9f;
     float totalRotation = 0; // add or subtract 1 when rotating the bumper car
     float damping = 5; // this will slow down the bumper car as we turn
@@ -69,9 +70,12 @@ public class VehicleMovement : MonoBehaviour {
             total += direction;
         }
 
+        //clamp the total force to maxForce
+        total = Vector3.ClampMagnitude(total, maxForce);
         // apply the sum of the forces to our bumper car
         ApplyForce(total);
-        direction = Vector3.Lerp(angleToRotate * direction, transform.forward, Time.deltaTime * 1);
+
+        direction = Vector3.Lerp(angleToRotate * direction, transform.forward, Time.deltaTime * 0.5f);
         ApplyFriction(CalculateCoefficientFriction(0.5f, 2.0f));
 
     }
@@ -87,7 +91,11 @@ public class VehicleMovement : MonoBehaviour {
         //add acceleration to velocity
         velocity += acceleration * Time.deltaTime;
         //clamp velocity
-        Vector3.ClampMagnitude(velocity, maxSpeed);
+        velocity = Vector3.ClampMagnitude(velocity, maxSpeed);
+        if(velocity.magnitude < .01f)
+        {
+            velocity = Vector3.zero;
+        }
         velocity.y = 0;
         //add velocity to position
         position += velocity;
