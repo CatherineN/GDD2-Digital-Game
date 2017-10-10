@@ -5,29 +5,27 @@ using UnityEngine;
 
 // READ THE HHHfUCKING COMMENTS.
 //
-public class VehicleMovement : MonoBehaviour {
+public abstract class VehicleMovement : MonoBehaviour {
 
     // **For this, we are assuming that the mass of the bumper car will be 1**
     // variables
-    Vector3 position;
-    Vector3 direction;
-    Vector3 velocity;
-    Vector3 desiredVelocity;
-    Vector3 acceleration;
-    Vector3 total;//total force acting on the gameobject every frame
-    Quaternion angleToRotate;//how far to rotate this frame
-
-    public int playerID;//which player the script is on
+    protected Vector3 position;
+    protected Vector3 direction;
+    protected Vector3 velocity;
+    protected Vector3 desiredVelocity;
+    protected Vector3 acceleration;
+    protected Vector3 total;//total force acting on the gameobject every frame
+    protected Quaternion angleToRotate;//how far to rotate this frame
 
     public float maxForce;
-    float maxSpeed = .75f;
-    float minSpeed = .4f;
-    float turnSpeed = 1.9f;
-    float totalRotation = 0; // add or subtract 1 when rotating the bumper car
-    float damping = 5; // this will slow down the bumper car as we turn
+    protected float maxSpeed = .75f;
+    protected float minSpeed = .4f;
+    protected float turnSpeed = 1.9f;
+    protected float totalRotation = 0; // add or subtract 1 when rotating the bumper car
+    protected float damping = 5; // this will slow down the bumper car as we turn
 
     // Use this for initialization
-    void Start () {
+    public virtual void Start () {
         position = transform.position;
 	}
 
@@ -49,34 +47,8 @@ public class VehicleMovement : MonoBehaviour {
     /// Takes player input and calculates the forces acting on it accordingly
     /// Needs a max force**
     /// </summary>
-    protected void CalcSteeringForces()
-    {
+    protected abstract void CalcSteeringForces();
 
-        // this is for our rotation
-        angleToRotate = Quaternion.Euler(0, 0, 0);
-
-        // this is the sum of all the forces
-        total = Vector3.zero;
-
-        switch (playerID)
-        {
-            case 1:
-                GetInputPlayer1();
-                break;
-            case 2:
-                GetInputPlayer2();
-                break;
-        }
-
-        //clamp the total force to maxForce
-        total = Vector3.ClampMagnitude(total, maxForce);
-        // apply the sum of the forces to our bumper car
-        ApplyForce(total);
-
-        direction = Vector3.Lerp(angleToRotate * direction, transform.forward, Time.deltaTime * 0.5f);
-        ApplyFriction(CalculateCoefficientFriction(0.5f, 2.0f));
-
-    }
 
     /// <summary>
     /// UpdatePosition
@@ -160,59 +132,5 @@ public class VehicleMovement : MonoBehaviour {
 
         // take the magnitude squared and combine it with the standard friction
         return (rejetion.sqrMagnitude * force) + coeff;
-    }
-
-    void GetInputPlayer1()
-    {
-
-        if (Input.GetKey(KeyCode.W) || Input.GetAxis("Vertical_P1") > 0) // go forward
-        {
-            direction = transform.forward;
-            total += direction;
-
-        }
-        if (Input.GetKey(KeyCode.A) || Input.GetAxis("Horizontal_P1") < 0) // turns counter-clockwise
-        {
-            angleToRotate = Quaternion.Euler(0, angleToRotate.y - turnSpeed, 0);
-            totalRotation -= turnSpeed;
-        }
-        if (Input.GetKey(KeyCode.D) || Input.GetAxis("Horizontal_P1") > 0) // turns clockwise
-        {
-            angleToRotate = Quaternion.Euler(0, angleToRotate.y + turnSpeed, 0);
-            totalRotation += turnSpeed;
-        }
-        if (Input.GetKey(KeyCode.S) || Input.GetAxis("Vertical_P1") < 0) // go backward
-        {
-            direction = -transform.forward;
-            total += direction;
-        }
-
-    }
-
-    void GetInputPlayer2()
-    {
-
-        if (Input.GetKey(KeyCode.UpArrow) || Input.GetAxis("Vertical_P2") > 0) // go forward
-        {
-            direction = transform.forward;
-            total += direction;
-
-        }
-        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetAxis("Horizontal_P2") < 0) // turns counter-clockwise
-        {
-            angleToRotate = Quaternion.Euler(0, angleToRotate.y - turnSpeed, 0);
-            totalRotation -= turnSpeed;
-        }
-        if (Input.GetKey(KeyCode.RightArrow) || Input.GetAxis("Horizontal_P2") > 0) // turns clockwise
-        {
-            angleToRotate = Quaternion.Euler(0, angleToRotate.y + turnSpeed, 0);
-            totalRotation += turnSpeed;
-        }
-        if (Input.GetKey(KeyCode.DownArrow) || Input.GetAxis("Vertical_P2") < 0) // go backward
-        {
-            direction = -transform.forward;
-            total += direction;
-        }
-
     }
 }
