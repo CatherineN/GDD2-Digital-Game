@@ -30,6 +30,13 @@ public class VehicleMovement : MonoBehaviour {
     void Start () {
         position = transform.position;
 	}
+
+    // public getter for velocity
+    // Used by Collsion.cs
+    public Vector3 Velocity
+    {
+        get { return velocity; }
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -115,7 +122,7 @@ public class VehicleMovement : MonoBehaviour {
     /// Applies any Vector3 force to the acceleration vector
     /// </summary>
     /// <param name="force">Force.</param>
-    protected void ApplyForce(Vector3 force)
+    public void ApplyForce(Vector3 force)
     {
         acceleration += force;
     }
@@ -154,10 +161,6 @@ public class VehicleMovement : MonoBehaviour {
         // take the magnitude squared and combine it with the standard friction
         return (rejetion.sqrMagnitude * force) + coeff;
     }
-
-<<<<<<< HEAD
-}
-=======
 
     void GetInputPlayer1()
     {
@@ -213,4 +216,3 @@ public class VehicleMovement : MonoBehaviour {
 
     }
 }
->>>>>>> fc8b2e6678e2706fc9a10ea57b6ed96e3b96f88c
