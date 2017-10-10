@@ -12,10 +12,15 @@ public abstract class VehicleMovement : MonoBehaviour {
     protected Vector3 position;
     protected Vector3 direction;
     protected Vector3 velocity;
-    protected Vector3 desiredVelocity;
+    private Vector3 desiredVelocity;
     protected Vector3 acceleration;
     protected Vector3 total;//total force acting on the gameobject every frame
     protected Quaternion angleToRotate;//how far to rotate this frame
+
+    //num to determine how long between getting target's future pos
+    public float timeDelay;
+    //Vector3 to keep track of future position
+    protected Vector3 futPos;
 
     public float maxForce;
     protected float maxSpeed = .75f;
@@ -24,9 +29,12 @@ public abstract class VehicleMovement : MonoBehaviour {
     protected float totalRotation = 0; // add or subtract 1 when rotating the bumper car
     protected float damping = 5; // this will slow down the bumper car as we turn
 
+    protected CarManager cM;
+
     // Use this for initialization
     public virtual void Start () {
         position = transform.position;
+        cM = GameObject.Find("SceneManager").GetComponent<CarManager>();
 	}
 
     // public getter for velocity
@@ -74,6 +82,8 @@ public abstract class VehicleMovement : MonoBehaviour {
         direction = velocity.normalized;
         //zero out acceleration
         acceleration = Vector3.zero;
+        //calc future position at this speed over the specified time period
+        futPos = position + velocity * timeDelay;
     }
 
 
@@ -86,6 +96,7 @@ public abstract class VehicleMovement : MonoBehaviour {
         transform.forward = direction;
 
         transform.position = position;
+        if(tag == "Player")
         transform.rotation = Quaternion.Euler(0, totalRotation, 0);
     }
 
@@ -133,4 +144,80 @@ public abstract class VehicleMovement : MonoBehaviour {
         // take the magnitude squared and combine it with the standard friction
         return (rejetion.sqrMagnitude * force) + coeff;
     }
+
+    #region SteeringForces
+    /// <summary>
+    /// calculates the force to cause current object to seek a target
+    /// </summary>
+    /// <param name="targetPosition">position of object being saught</param>
+    /// <returns>Seek force</returns>
+    protected Vector3 Seek(Vector3 targetPosition)
+    {
+        //step 1: calculate desired velocity
+        //vector from myself to the target
+        desiredVelocity = targetPosition - position;
+        //step 2: scale to maxspeed
+        desiredVelocity = maxSpeed * desiredVelocity.normalized;
+        //step 3: calculate the steering force
+        desiredVelocity -= velocity;
+        //step 4: return steering force
+        return desiredVelocity;
+    }
+
+    /// <summary>
+    /// calculates the force to cause current object to flee a target
+    /// </summary>
+    /// <param name="targetPosition">position of object currently fleeing from</param>
+    /// <returns>Flee force</returns>
+    protected Vector3 Flee(Vector3 targetPosition)
+    {
+        //step 1: calculate desired velocity
+        //vector from myself to the target - negated so it flees
+        desiredVelocity = -(targetPosition - position);
+        //step 2: scale to maxspeed
+        desiredVelocity = desiredVelocity.normalized * maxSpeed;
+        //step 3: calculate the steering force
+        desiredVelocity -= velocity;
+        //step 4: return steering force
+        return desiredVelocity;
+    }
+
+    /// <summary>
+    /// smart seek
+    /// </summary>
+    /// <param name="target"></param>
+    /// <returns></returns>
+    protected Vector3 Pursue(GameObject target)
+    {
+        //seek target's future position
+        return Seek(target.GetComponent<VehicleMovement>().futPos);
+    }
+
+    /// <summary>
+    /// smart flee
+    /// </summary>
+    /// <param name="target"></param>
+    /// <returns></returns>
+    protected Vector3 Evade(GameObject target)
+    {
+        //flee target's future position
+        return Flee(target.GetComponent<VehicleMovement>().futPos);
+    }
+
+    /// <summary>
+    /// stay in the bounds
+    /// </summary>
+    /// <returns></returns>
+    protected Vector3 StayInBounds()
+    {
+        //if agent is outside the acceptable bounds they should make their way back in
+        if (position.x > cM.arenaRadius*.6f || position.x < -cM.arenaRadius*.6f || position.z > cM.arenaRadius * .6f || position.z < -cM.arenaRadius * .6f)
+        {
+            //seek the center of the world
+            return Seek(Vector3.zero);
+        }
+        //if not out of bounds don't affect steering
+        return Vector3.zero;
+    }
+    #endregion
 }

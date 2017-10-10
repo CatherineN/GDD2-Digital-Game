@@ -41,7 +41,6 @@ public class Player : VehicleMovement {
 
         direction = Vector3.Lerp(angleToRotate * direction, transform.forward, Time.deltaTime * 0.5f);
         ApplyFriction(CalculateCoefficientFriction(0.5f, 2.0f));
-
     }
 
     /// <summary>
