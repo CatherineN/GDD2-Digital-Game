@@ -20,10 +20,10 @@ public class SmoothFollow : MonoBehaviour
     public float positionDamping = 2.0f;
     public float rotationDamping = 2.0f;
     public bool lookBehind;
+    public bool isPlayerOne;
 
-    //is this camera on top? or is it the bottom ;3c
-    //public bool topCam;
-
+    //toggle to switch from 3rd to 1st person, pretty easy
+    public bool firstPerson = false;
     // Use this for initialization
     void Start()
     {
@@ -31,8 +31,17 @@ public class SmoothFollow : MonoBehaviour
     }
 
     // Update is called once per frame
+    private void Update()
+    {
+        ListenForToggle();
+    }
     void LateUpdate()
     {
+        if (firstPerson)
+        {
+            positionDamping = 15f;
+        }
+
         // Early exit if there’s no target
         if (!target) return;
         float wantedHeight = target.position.y + height;
@@ -40,7 +49,13 @@ public class SmoothFollow : MonoBehaviour
         // Damp the height
         currentHeight = Mathf.Lerp(currentHeight, wantedHeight, heightDamping * Time.deltaTime);
         // Set the position of the camera 
-        Vector3 wantedPosition = target.position - target.forward * distance;
+
+        Vector3 wantedPosition = target.position;
+        if (!firstPerson)
+        {
+            wantedPosition = target.position - target.forward * distance;
+        }
+        
         transform.position = Vector3.Lerp(transform.position, wantedPosition, Time.deltaTime * positionDamping);
         // Adjust the height of the camera
         transform.position = new Vector3(transform.position.x , currentHeight, transform.position.z);
@@ -56,4 +71,32 @@ public class SmoothFollow : MonoBehaviour
         }
 
     }
+    void ListenForToggle()
+    {
+
+        if ((Input.GetKeyDown(KeyCode.Q) || Input.GetButtonDown("ToggleCamera1")) && isPlayerOne) //toggle first person with Q if player 1
+        {
+            if (firstPerson)
+            {
+                firstPerson = false;
+            }
+            else
+            {
+                firstPerson = true;
+            }
+        }
+        else if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetButtonDown("ToggleCamera2")) && !isPlayerOne) // toggle first person with numpad 0 if player 2
+        {
+            if (firstPerson)
+            {
+                firstPerson = false;
+            }
+            else
+            {
+                firstPerson = true;
+            }
+        }
+
+    }
+
 }
