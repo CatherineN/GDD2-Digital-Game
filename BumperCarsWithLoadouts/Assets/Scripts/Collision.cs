@@ -6,11 +6,11 @@ public class Collision : MonoBehaviour
 {
     public float impactForce;
 
-    private VehicleMovement vm;
+    private Rigidbody rb;
 	// Use this for initialization
 	void Start ()
     {
-        vm = gameObject.GetComponent<VehicleMovement>();
+        rb = gameObject.GetComponent<Rigidbody>();
 	}
 	
 	// Update is called once per frame
@@ -25,12 +25,12 @@ public class Collision : MonoBehaviour
             return;
 
         Vector3 between = Vector3.Normalize(collision.transform.position - transform.position);
-        float vProj = Vector3.Dot(vm.Velocity, between);
+        float vProj = Vector3.Dot(rb.velocity, between);
 
         Vector3 force = (vProj * between) * impactForce;
 
-        vm.ApplyForce(-force);
-        collision.gameObject.GetComponent<VehicleMovement>().ApplyForce(force);
+        rb.AddForce(-force);
+        collision.gameObject.GetComponent<Rigidbody>().AddForce(force);
         collision.transform.forward = Vector3.Lerp(collision.transform.forward, collision.transform.forward + force, Time.deltaTime);
 
         Debug.Log("Collision with force " + force);

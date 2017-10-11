@@ -39,8 +39,8 @@ public class CarManager : MonoBehaviour {
         {
             SpawnAI();
         }
-        cars.Add(GameObject.Find("Player 1"));
-        cars.Add(GameObject.Find("Player 2"));
+        cars.Add(GameObject.Find("PlayerCar"));
+        cars.Add(GameObject.Find("PlayerCar2"));
     }
 
     /// <summary>
