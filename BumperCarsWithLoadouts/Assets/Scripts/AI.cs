@@ -55,6 +55,7 @@ public class AI : VehicleMovement {
     
     private void SetTarget()
     {
+        Debug.Log("Finding Target");
         Vector3 closest = new Vector3(10000, 10000, 10000);
         //compare distance between zombie and each human
         for (int i = 0; i < cM.Cars.Count; ++i)
