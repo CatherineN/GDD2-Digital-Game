@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 /// <summary>
-/// Authors: Kat Weis & Erin Casicoli
+/// Authors: Kat Weis, Cameron Schlesinger & Erin Casicoli
 /// Purpose: To have a camera smoothly follow the average position of the flock around
 /// Bugs: The camera can go inside the terrain while the flockers are not inside the terrain making it look like it is glitching
 /// </summary>
@@ -30,6 +30,7 @@ public class SmoothFollow : MonoBehaviour
     public bool firstPerson = false;
 
     private Vector3 defaultPos = new Vector3(0, 24.5f, -63);
+    private bool wideSpec = true;
     //private Quaternion defaultRot = new Quaternion(23.992f, 0, 0, 0);
     // Use this for initialization
     void Start()
@@ -80,11 +81,42 @@ public class SmoothFollow : MonoBehaviour
                 transform.forward = Vector3.Lerp(transform.forward, target.forward, Time.deltaTime * rotationDamping);
             }
         }
-        else
+        else if (wideSpec)
         {
             gameObject.transform.position = defaultPos;
             gameObject.transform.LookAt(friend.transform);
             
+        }
+        else
+        {
+            // Early exit if there’s no target
+            if (!friend) return;
+            float wantedHeight = friend.transform.position.y + height;
+            float currentHeight = friend.transform.position.y;
+
+
+            // Damp the height
+            currentHeight = Mathf.Lerp(currentHeight, wantedHeight, heightDamping * Time.deltaTime);
+
+
+            // Set the position of the camera 
+            Vector3 wantedPosition = friend.transform.position - friend.transform.forward * distance;            
+            transform.position = Vector3.Lerp(transform.position, wantedPosition, Time.deltaTime * positionDamping);
+
+
+            // Adjust the height of the camera
+            transform.position = new Vector3(transform.position.x, currentHeight, transform.position.z);
+
+            if (lookBehind == true)
+            {
+                // Set the forward to rotate with time backwards if it is the background facing one
+                transform.forward = Vector3.Lerp(transform.forward, -friend.transform.forward, Time.deltaTime * rotationDamping);
+            }
+            else
+            {
+                // Set the forward to rotate with time
+                transform.forward = Vector3.Lerp(transform.forward, friend.transform.forward, Time.deltaTime * rotationDamping);
+            }
         }
 
     }
@@ -114,7 +146,32 @@ public class SmoothFollow : MonoBehaviour
                     firstPerson = true;
                 }
             }
-        }        
+        }
+        else
+        {
+            if ((Input.GetKeyDown(KeyCode.Q) || Input.GetButtonDown("ToggleCamera1")) && isPlayerOne) //toggle spectator mode with Q if player 1
+            {
+                if (wideSpec)
+                {
+                    wideSpec = false;
+                }
+                else
+                {
+                    wideSpec = true;
+                }
+            }
+            else if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetButtonDown("ToggleCamera2")) && !isPlayerOne) // toggle spectator mode with numpad 0 if player 2
+            {
+                if (wideSpec)
+                {
+                    wideSpec = false;
+                }
+                else
+                {
+                    wideSpec = true;
+                }
+            }
+        }
 
     }
     void ListenForDeath()
