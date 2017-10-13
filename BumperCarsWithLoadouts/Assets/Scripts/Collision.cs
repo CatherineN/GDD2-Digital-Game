@@ -34,9 +34,10 @@ public class Collision : MonoBehaviour
 
         Vector3 force = vProj * rb.velocity * impactForce;
 
-        p.ApplyForce(-force);
-        collision.gameObject.GetComponent<Player>().ApplyForce(force);
-        collision.transform.forward = Vector3.Lerp(collision.transform.forward, collision.transform.forward + force, Time.deltaTime);
+        rb.AddForce(-force);
+        collision.gameObject.GetComponent<Rigidbody>().AddForce(force);
+        //collision.transform.forward = Vector3.Lerp(collision.transform.forward, collision.transform.forward + force, Time.deltaTime);
+        collision.gameObject.GetComponent<Rigidbody>().AddTorque(new Vector3(0, Vector3.Cross(collision.gameObject.transform.forward, force).sqrMagnitude * 100.0f, 0), ForceMode.Impulse);
 
         Debug.Log("Collision");
 

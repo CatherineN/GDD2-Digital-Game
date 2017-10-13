@@ -30,12 +30,14 @@ public abstract class VehicleMovement : MonoBehaviour {
     protected float damping = 5; // this will slow down the bumper car as we turn
 
     protected CarManager cM;
+    protected Rigidbody rb;
 
     // Use this for initialization
     public virtual void Start () {
         position = transform.position;
         cM = GameObject.Find("SceneManager").GetComponent<CarManager>();
-	}
+        rb = gameObject.GetComponent<Rigidbody>();
+    }
 
     // public getter for velocity
     // Used by Collsion.cs
@@ -93,11 +95,11 @@ public abstract class VehicleMovement : MonoBehaviour {
     protected void SetTransform()
     {
         //set up vector equal to the seekers direction
-        transform.forward = direction;
+        //transform.forward = direction;
 
         transform.position = position;
         if(tag == "Player")
-        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, totalRotation, transform.rotation.eulerAngles.z);
+        rb.rotation = Quaternion.Euler(0, totalRotation, 0);
     }
 
 
