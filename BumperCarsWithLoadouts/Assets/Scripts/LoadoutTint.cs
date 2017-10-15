@@ -26,31 +26,31 @@ public class LoadoutTint : MonoBehaviour {
         switch(dropDownOne.captionText.text)
         {
             case "Red":
-                GameObject.Find("PlayerCar").GetComponent<Renderer>().material.color = Color.red;
+                GameObject.FindGameObjectWithTag("P1").GetComponent<Renderer>().material.color = Color.red;
                 break;
             case "Blue":
-                GameObject.Find("PlayerCar").GetComponent<Renderer>().material.color = Color.blue;
+                GameObject.FindGameObjectWithTag("P1").GetComponent<Renderer>().material.color = Color.blue;
                 break;
             case "Green":
-                GameObject.Find("PlayerCar").GetComponent<Renderer>().material.color = Color.green;
+                GameObject.FindGameObjectWithTag("P1").GetComponent<Renderer>().material.color = Color.green;
                 break;
             case "Yellow":
-                GameObject.Find("PlayerCar").GetComponent<Renderer>().material.color = Color.yellow;
+                GameObject.FindGameObjectWithTag("P1").GetComponent<Renderer>().material.color = Color.yellow;
                 break;
         }
         switch (dropDownTwo.captionText.text)
         {
             case "Red":
-                GameObject.Find("PlayerCar 2").GetComponent<Renderer>().material.color = Color.red;
+                GameObject.FindGameObjectWithTag("P2").GetComponent<Renderer>().material.color = Color.red;
                 break;
             case "Blue":
-                GameObject.Find("PlayerCar 2").GetComponent<Renderer>().material.color = Color.blue;
+                GameObject.FindGameObjectWithTag("P2").GetComponent<Renderer>().material.color = Color.blue;
                 break;
             case "Green":
-                GameObject.Find("PlayerCar 2").GetComponent<Renderer>().material.color = Color.green;
+                GameObject.FindGameObjectWithTag("P2").GetComponent<Renderer>().material.color = Color.green;
                 break;
             case "Yellow":
-                GameObject.Find("PlayerCar 2").GetComponent<Renderer>().material.color = Color.yellow;
+                GameObject.FindGameObjectWithTag("P2").GetComponent<Renderer>().material.color = Color.yellow;
                 break;
         }
 
