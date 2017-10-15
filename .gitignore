@@ -34,3 +34,4 @@ sysinfo.txt
 *.unitypackage
 BumperCarsWithLoadouts/Library/
 BumperCarsWithLoadouts/Temp/
+BumperCarsWithLoadouts/Playtest1_NonRbPhysics_Standalone/
