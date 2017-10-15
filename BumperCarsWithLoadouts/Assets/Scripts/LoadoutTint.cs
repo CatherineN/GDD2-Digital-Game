@@ -27,32 +27,40 @@ public class LoadoutTint : MonoBehaviour {
         {
             case "Red":
                 GameObject.FindGameObjectWithTag("P1").GetComponent<Renderer>().material.color = Color.red;
+                PlayerPrefs.SetString("color1", "red");
                 break;
             case "Blue":
                 GameObject.FindGameObjectWithTag("P1").GetComponent<Renderer>().material.color = Color.blue;
+                PlayerPrefs.SetString("color1", "blue");
                 break;
             case "Green":
                 GameObject.FindGameObjectWithTag("P1").GetComponent<Renderer>().material.color = Color.green;
+                PlayerPrefs.SetString("color1", "green");
                 break;
             case "Yellow":
                 GameObject.FindGameObjectWithTag("P1").GetComponent<Renderer>().material.color = Color.yellow;
+                PlayerPrefs.SetString("color1", "yellow");
                 break;
         }
+
         switch (dropDownTwo.captionText.text)
         {
             case "Red":
                 GameObject.FindGameObjectWithTag("P2").GetComponent<Renderer>().material.color = Color.red;
+                PlayerPrefs.SetString("color2", "red");
                 break;
             case "Blue":
                 GameObject.FindGameObjectWithTag("P2").GetComponent<Renderer>().material.color = Color.blue;
+                PlayerPrefs.SetString("color2", "blue");
                 break;
             case "Green":
                 GameObject.FindGameObjectWithTag("P2").GetComponent<Renderer>().material.color = Color.green;
+                PlayerPrefs.SetString("color2", "green");
                 break;
             case "Yellow":
                 GameObject.FindGameObjectWithTag("P2").GetComponent<Renderer>().material.color = Color.yellow;
+                PlayerPrefs.SetString("color2", "yellow");
                 break;
         }
-
     }
 }
