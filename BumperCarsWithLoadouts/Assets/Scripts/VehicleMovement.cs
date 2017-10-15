@@ -45,6 +45,12 @@ public abstract class VehicleMovement : MonoBehaviour {
     {
         get { return velocity; }
     }
+
+    public float TotalRotation
+    {
+        get { return totalRotation; }
+        set { totalRotation = value; }
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -98,8 +104,8 @@ public abstract class VehicleMovement : MonoBehaviour {
         //transform.forward = direction;
 
         transform.position = position;
-        if(tag == "Player")
-        rb.rotation = Quaternion.Euler(0, totalRotation, 0);
+        if (tag == "Player")
+            transform.rotation = Quaternion.Euler(0, totalRotation, 0);
     }
 
 
