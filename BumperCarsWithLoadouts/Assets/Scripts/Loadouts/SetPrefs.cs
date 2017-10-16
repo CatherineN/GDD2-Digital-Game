@@ -8,6 +8,8 @@ public class SetPrefs : MonoBehaviour {
     string color2;
     float weight1;
     float weight2;
+    string weapon1;
+    string weapon2;
 
     private void Awake()
     {
@@ -20,7 +22,8 @@ public class SetPrefs : MonoBehaviour {
         weight2 = PlayerPrefs.GetFloat("weight2");
 
         // load the player weapon
-
+        weapon1 = PlayerPrefs.GetString("weapon1");
+        weapon2 = PlayerPrefs.GetString("weapon2");
     }
 
     // Use this for initialization
@@ -44,6 +47,17 @@ public class SetPrefs : MonoBehaviour {
 
                 case "yellow":
                     gameObject.GetComponent<Renderer>().material.color = Color.yellow;
+                    break;
+            }
+            // loads in the saved weapon
+            switch (weapon1)
+            {
+                case "Plow":
+                    transform.FindChild("Plow").gameObject.SetActive(true);
+                    break;
+
+                case "Cannon":
+                    transform.FindChild("Plow").gameObject.SetActive(false);
                     break;
             }
 
@@ -70,6 +84,17 @@ public class SetPrefs : MonoBehaviour {
 
                 case "yellow":
                     gameObject.GetComponent<Renderer>().material.color = Color.yellow;
+                    break;
+            }
+            // loads in the saved weapon
+            switch (weapon2)
+            {
+                case "Plow":
+                    transform.FindChild("Plow").gameObject.SetActive(true);
+                    break;
+
+                case "Cannon":
+                    transform.FindChild("Plow").gameObject.SetActive(false);
                     break;
             }
 
