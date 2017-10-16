@@ -36,13 +36,15 @@ public class Collision : MonoBehaviour
 
         Vector3 force = vProj * p.Velocity * impactForce;
 
-        rb.AddForce(-force);
-        collision.gameObject.GetComponent<Rigidbody>().AddForce(force);
+        //p.ApplyForce(-force * (collision.gameObject.GetComponent<Rigidbody>().mass / rb.mass));
+        //collision.gameObject.GetComponent<VehicleMovement>().ApplyForce(force * (rb.mass / collision.gameObject.GetComponent<Rigidbody>().mass));
+        rb.AddForceAtPosition(-force, transform.position, ForceMode.Impulse);
+        collision.gameObject.GetComponent<Rigidbody>().AddForceAtPosition(force, collision.transform.position, ForceMode.Impulse);
         //collision.transform.forward = Vector3.Lerp(collision.transform.forward, collision.transform.forward + force, Time.deltaTime);
         //collision.gameObject.GetComponent<Rigidbody>().AddTorque(new Vector3(0, Vector3.Cross(collision.gameObject.transform.forward, force).sqrMagnitude * 100.0f, 0), ForceMode.Impulse);
 
         // Calculate the "torque" force
-        float right = 0.0f;
+        /*float right = 0.0f;
         if (Vector3.Dot(force, collision.transform.forward) > 0)
             right = 1.0f;
         else
@@ -52,8 +54,8 @@ public class Collision : MonoBehaviour
         Quaternion goal = Quaternion.Euler(collision.transform.rotation.eulerAngles.x, collision.transform.rotation.eulerAngles.y + angle, collision.transform.rotation.eulerAngles.z);
 
         // stop any current torque calculations
-        StartCoroutine(ApplyTorque(goal, Mathf.Abs(angle) * timeStep, collision.gameObject));
-        Debug.Log("Collision");
+        StartCoroutine(ApplyTorque(goal, Mathf.Abs(angle) * timeStep, collision.gameObject));*/
+        Debug.Log("Force: " + force.sqrMagnitude);
 
         collisionCount++;
     }
