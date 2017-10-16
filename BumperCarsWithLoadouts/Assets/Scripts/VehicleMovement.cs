@@ -85,7 +85,7 @@ public abstract class VehicleMovement : MonoBehaviour {
         velocity.y = 0;
         //add velocity to position
         position += velocity;
-        //position.y = 0;
+        position.y = Mathf.Clamp(position.y, int.MinValue, .1f);
         //calculate direction from velocity
         direction = velocity.normalized;
         //zero out acceleration
