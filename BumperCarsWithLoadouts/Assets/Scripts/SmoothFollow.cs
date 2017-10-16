@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 /// <summary>
 /// Authors: Kat Weis, Cameron Schlesinger & Erin Casicoli
 /// Purpose: To have a camera smoothly follow the average position of the flock around
@@ -43,6 +44,10 @@ public class SmoothFollow : MonoBehaviour
     {
         ListenForToggle();
         ListenForDeath();
+        if (ListenForGameOver())
+        {
+            SceneManager.LoadScene("GameOver");
+        }
     }
     void LateUpdate()
     {
@@ -181,5 +186,16 @@ public class SmoothFollow : MonoBehaviour
             isDead = true;
         }
     }
-
+    bool ListenForGameOver()
+    {
+        if (isDead)
+        {
+            if(friend.transform.position.y < -10)
+            {
+                return true;
+            }
+        }
+        return false;
+        
+    }
 }
