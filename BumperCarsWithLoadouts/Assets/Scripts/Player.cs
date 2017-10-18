@@ -49,28 +49,61 @@ public class Player : VehicleMovement {
     /// </summary>
     void GetInputPlayer1()
     {
+        //only check for joystick input if there are joysticks plugged in
+        if (Input.GetJoystickNames().Length != 0)
+        {
+            //determine how far player is pushing joystick/trigger
+            float hr = Input.GetAxis("Horizontal_P1");
+            float vt = Input.GetAxis("Vertical_P1");
 
-        if (Input.GetKey(KeyCode.W) || Input.GetAxis("Vertical_P1") > 0) // go forward
-        {
-            direction = transform.forward;
-            total += direction;
+            //use spectrum of input strength to reflect in how fast change is in acceleration & turning
 
+            if (vt > 0) // go forward
+            {
+                direction = transform.forward;
+                total += direction * vt;
+            }
+            if (vt < 0) // turns counter-clockwise
+            {
+                direction = transform.forward;
+                total += direction * vt;
+            }
+            if (hr < 0) // turns clockwise
+            {
+                angleToRotate = Quaternion.Euler(0, angleToRotate.y + turnSpeed*hr, 0);
+                totalRotation += turnSpeed*hr;
+            }
+            if (hr > 0) // go backward
+            {
+                angleToRotate = Quaternion.Euler(0, angleToRotate.y + turnSpeed*hr, 0);
+                totalRotation += turnSpeed*hr;
+            }
         }
-        if (Input.GetKey(KeyCode.A) || Input.GetAxis("Horizontal_P1") < 0) // turns counter-clockwise
+        else
         {
-            angleToRotate = Quaternion.Euler(0, angleToRotate.y - turnSpeed, 0);
-            totalRotation -= turnSpeed;
+            if (Input.GetKey(KeyCode.W)) // go forward
+            {
+                direction = transform.forward;
+                total += direction;
+
+            }
+            if (Input.GetKey(KeyCode.A)) // turns counter-clockwise
+            {
+                angleToRotate = Quaternion.Euler(0, angleToRotate.y - turnSpeed, 0);
+                totalRotation -= turnSpeed;
+            }
+            if (Input.GetKey(KeyCode.D)) // turns clockwise
+            {
+                angleToRotate = Quaternion.Euler(0, angleToRotate.y + turnSpeed, 0);
+                totalRotation += turnSpeed;
+            }
+            if (Input.GetKey(KeyCode.S)) // go backward
+            {
+                direction = -transform.forward;
+                total += direction;
+            }
         }
-        if (Input.GetKey(KeyCode.D) || Input.GetAxis("Horizontal_P1") > 0) // turns clockwise
-        {
-            angleToRotate = Quaternion.Euler(0, angleToRotate.y + turnSpeed, 0);
-            totalRotation += turnSpeed;
-        }
-        if (Input.GetKey(KeyCode.S) || Input.GetAxis("Vertical_P1") < 0) // go backward
-        {
-            direction = -transform.forward;
-            total += direction;
-        }
+        
 
     }
 
@@ -80,27 +113,59 @@ public class Player : VehicleMovement {
     /// </summary>
     void GetInputPlayer2()
     {
+        //only check for joystick input if there are joysticks plugged in
+        if (Input.GetJoystickNames().Length != 0)
+        {
+            //determine how far player is pushing joystick/trigger
+            float hr = Input.GetAxis("Horizontal_P2");
+            float vt = Input.GetAxis("Vertical_P2");
 
-        if (Input.GetKey(KeyCode.UpArrow) || Input.GetAxis("Vertical_P2") > 0) // go forward
-        {
-            direction = transform.forward;
-            total += direction;
+            //use spectrum of input strength to reflect in how fast change is in acceleration & turning
 
+            if (vt > 0) // go forward
+            {
+                direction = transform.forward;
+                total += direction * vt;
+            }
+            if (vt < 0)// go backward
+            {
+                direction = transform.forward;
+                total += direction * vt;
+            }
+            if (hr < 0)// turns counter-clockwise
+            {
+                angleToRotate = Quaternion.Euler(0, angleToRotate.y + turnSpeed * hr, 0);
+                totalRotation += turnSpeed * hr;
+            }
+            if (hr > 0)// turns clockwise
+            {
+                angleToRotate = Quaternion.Euler(0, angleToRotate.y + turnSpeed * hr, 0);
+                totalRotation += turnSpeed * hr;
+            }
         }
-        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetAxis("Horizontal_P2") < 0) // turns counter-clockwise
+        else
         {
-            angleToRotate = Quaternion.Euler(0, angleToRotate.y - turnSpeed, 0);
-            totalRotation -= turnSpeed;
-        }
-        if (Input.GetKey(KeyCode.RightArrow) || Input.GetAxis("Horizontal_P2") > 0) // turns clockwise
-        {
-            angleToRotate = Quaternion.Euler(0, angleToRotate.y + turnSpeed, 0);
-            totalRotation += turnSpeed;
-        }
-        if (Input.GetKey(KeyCode.DownArrow) || Input.GetAxis("Vertical_P2") < 0) // go backward
-        {
-            direction = -transform.forward;
-            total += direction;
+            if (Input.GetKey(KeyCode.UpArrow)) // go forward
+            {
+                direction = transform.forward;
+                total += direction;
+
+            }
+            if (Input.GetKey(KeyCode.LeftArrow)) // turns counter-clockwise
+            {
+                angleToRotate = Quaternion.Euler(0, angleToRotate.y - turnSpeed, 0);
+                totalRotation -= turnSpeed;
+            }
+            if (Input.GetKey(KeyCode.RightArrow)) // turns clockwise
+            {
+                angleToRotate = Quaternion.Euler(0, angleToRotate.y + turnSpeed, 0);
+                totalRotation += turnSpeed;
+            }
+            if (Input.GetKey(KeyCode.DownArrow)) // go backward
+            {
+                direction = -transform.forward;
+                total += direction;
+            }
         }
 
     }
