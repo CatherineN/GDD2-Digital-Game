@@ -20,12 +20,14 @@ public class CarAbility : MonoBehaviour {
         switch (topDropdown.captionText.text)
         {
             case "Plow": // activate the plow
+                GameObject.FindGameObjectWithTag("P1").transform.FindChild("Cannon").gameObject.SetActive(false);
                 GameObject.FindGameObjectWithTag("P1").transform.FindChild("Plow").gameObject.SetActive(true);
                 PlayerPrefs.SetString("weapon1", "Plow");
                 break;
 
             case "Cannon": // inactivate the plow
                 GameObject.FindGameObjectWithTag("P1").transform.FindChild("Plow").gameObject.SetActive(false);
+                GameObject.FindGameObjectWithTag("P1").transform.FindChild("Cannon").gameObject.SetActive(true);
                 PlayerPrefs.SetString("weapon1", "Cannon");
                 break;
         }
@@ -34,12 +36,14 @@ public class CarAbility : MonoBehaviour {
         switch (bottomDropdown.captionText.text)
         {
             case "Plow":
+                GameObject.FindGameObjectWithTag("P2").transform.FindChild("Cannon").gameObject.SetActive(false);
                 GameObject.FindGameObjectWithTag("P2").transform.FindChild("Plow").gameObject.SetActive(true);
                 PlayerPrefs.SetString("weapon2", "Plow");
                 break;
 
             case "Cannon":
                 GameObject.FindGameObjectWithTag("P2").transform.FindChild("Plow").gameObject.SetActive(false);
+                GameObject.FindGameObjectWithTag("P2").transform.FindChild("Cannon").gameObject.SetActive(true);
                 PlayerPrefs.SetString("weapon2", "Cannon");
                 break;
         }

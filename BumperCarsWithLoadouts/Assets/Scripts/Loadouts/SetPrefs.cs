@@ -11,6 +11,11 @@ public class SetPrefs : MonoBehaviour {
     string weapon1;
     string weapon2;
 
+    public Texture2D red;
+    public Texture2D yellow;
+    public Texture2D green;
+    public Texture2D blue;
+
     private void Awake()
     {
         // load the player color
@@ -34,19 +39,19 @@ public class SetPrefs : MonoBehaviour {
             switch(color1)
             {
                 case "red":
-                    gameObject.GetComponent<Renderer>().material.color = Color.red;
+                    gameObject.GetComponent<Renderer>().material.mainTexture = red;
                     break;
 
                 case "green":
-                    gameObject.GetComponent<Renderer>().material.color = Color.green;
+                    gameObject.GetComponent<Renderer>().material.mainTexture = green;
                     break;
 
                 case "blue":
-                    gameObject.GetComponent<Renderer>().material.color = Color.blue;
+                    gameObject.GetComponent<Renderer>().material.mainTexture = blue;
                     break;
 
                 case "yellow":
-                    gameObject.GetComponent<Renderer>().material.color = Color.yellow;
+                    gameObject.GetComponent<Renderer>().material.mainTexture = yellow;
                     break;
             }
             // loads in the saved weapon
@@ -71,19 +76,19 @@ public class SetPrefs : MonoBehaviour {
             switch (color2)
             {
                 case "red":
-                    gameObject.GetComponent<Renderer>().material.color = Color.red;
+                    gameObject.GetComponent<Renderer>().material.mainTexture = red;
                     break;
 
                 case "green":
-                    gameObject.GetComponent<Renderer>().material.color = Color.green;
+                    gameObject.GetComponent<Renderer>().material.mainTexture = green;
                     break;
 
                 case "blue":
-                    gameObject.GetComponent<Renderer>().material.color = Color.blue;
+                    gameObject.GetComponent<Renderer>().material.mainTexture = blue;
                     break;
 
                 case "yellow":
-                    gameObject.GetComponent<Renderer>().material.color = Color.yellow;
+                    gameObject.GetComponent<Renderer>().material.mainTexture = yellow;
                     break;
             }
             // loads in the saved weapon

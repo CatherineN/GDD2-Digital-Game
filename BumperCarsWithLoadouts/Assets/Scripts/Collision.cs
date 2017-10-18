@@ -7,6 +7,7 @@ public class Collision : MonoBehaviour
     public float impactForce;
     public float torqueAngle;
     public float timeStep;
+    public float carLength;
 
     private Rigidbody rb;
     private Player p;
@@ -26,12 +27,13 @@ public class Collision : MonoBehaviour
         collisionCount = 0;
 	}
 
-    public void OnCollisionEnter(UnityEngine.Collision collision)
+    public void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.tag == "Terrain" ||collisionCount > 0)
+        if (other.gameObject.tag == "Terrain" || other.gameObject.tag == "Projectile" || collisionCount > 0)
             return;
 
-        Vector3 between = Vector3.Normalize(collision.transform.position - transform.position);
+        #region Obsolete Code
+        /*Vector3 between = Vector3.Normalize(collision.transform.position - transform.position);
         float vProj = Vector3.Dot(p.Velocity, between);
 
         Vector3 force = vProj * p.Velocity * impactForce;
@@ -54,11 +56,18 @@ public class Collision : MonoBehaviour
         Quaternion goal = Quaternion.Euler(collision.transform.rotation.eulerAngles.x, collision.transform.rotation.eulerAngles.y + angle, collision.transform.rotation.eulerAngles.z);
 
         // stop any current torque calculations
-        StartCoroutine(ApplyTorque(goal, Mathf.Abs(angle) * timeStep, collision.gameObject));*/
-        Debug.Log("Force: " + force.sqrMagnitude);
+        StartCoroutine(ApplyTorque(goal, Mathf.Abs(angle) * timeStep, collision.gameObject));
+        Debug.Log("Force: " + force.sqrMagnitude);*/
+        #endregion
+
+        ResetCar(other);
+
+        Debug.Log("Trigger");
 
         collisionCount++;
     }
+
+
 
     IEnumerator ApplyTorque(Quaternion toRotate, float time, GameObject target)
     {
@@ -67,5 +76,16 @@ public class Collision : MonoBehaviour
             target.GetComponent<Player>().TotalRotation = Mathf.LerpAngle(target.GetComponent<Player>().TotalRotation, toRotate.eulerAngles.y, time);
             yield return null;
         }
+    }
+
+    public void ResetCar(Collider other)
+    {
+        /*RaycastHit hit;
+        if(!other.Raycast(new Ray(transform.position, transform.forward), out hit, 100.0f))
+        {
+            other.Raycast(new Ray(transform.position, -transform.forward), out hit, 100.0f);
+        }
+        transform.position = hit.point;*/
+        transform.position += -(p.Velocity);
     }
 }
