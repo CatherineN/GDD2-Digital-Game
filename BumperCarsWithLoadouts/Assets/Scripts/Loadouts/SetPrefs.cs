@@ -58,11 +58,13 @@ public class SetPrefs : MonoBehaviour {
             switch (weapon1)
             {
                 case "Plow":
+                    transform.FindChild("Cannon").gameObject.SetActive(false);
                     transform.FindChild("Plow").gameObject.SetActive(true);
                     break;
 
                 case "Cannon":
                     transform.FindChild("Plow").gameObject.SetActive(false);
+                    transform.FindChild("Cannon").gameObject.SetActive(true);
                     break;
             }
 
@@ -95,11 +97,13 @@ public class SetPrefs : MonoBehaviour {
             switch (weapon2)
             {
                 case "Plow":
+                    transform.FindChild("Cannon").gameObject.SetActive(false);
                     transform.FindChild("Plow").gameObject.SetActive(true);
                     break;
 
                 case "Cannon":
                     transform.FindChild("Plow").gameObject.SetActive(false);
+                    transform.FindChild("Cannon").gameObject.SetActive(true);
                     break;
             }
 
