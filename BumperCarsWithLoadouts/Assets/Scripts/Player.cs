@@ -5,7 +5,8 @@ using UnityEngine;
 public class Player : VehicleMovement {
 
     public int playerID;//which player the script is on
-
+    public float frictionCoef = .5f;
+    public float frictionForce = 2f;
     // Use this for initialization
     public override void Start () {
         base.Start();
@@ -40,7 +41,7 @@ public class Player : VehicleMovement {
         ApplyForce(total);
 
         direction = Vector3.Lerp(angleToRotate * direction, transform.forward, Time.deltaTime * 0.5f);
-        ApplyFriction(CalculateCoefficientFriction(0.5f, 2.0f));
+        ApplyFriction(CalculateCoefficientFriction(frictionCoef, frictionForce));
     }
 
     /// <summary>
