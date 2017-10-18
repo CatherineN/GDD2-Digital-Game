@@ -31,4 +31,13 @@ public class LoadScene : MonoBehaviour
 
     }
 
+    // load the main menu when button on game over scene is pressed
+    void Load()
+    {
+        if(gameObject.tag == "gameOver")
+        {
+            SceneManager.LoadScene("Start");
+        }
+    }
+
 }
