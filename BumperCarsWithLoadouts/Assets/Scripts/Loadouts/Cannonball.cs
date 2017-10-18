@@ -8,6 +8,7 @@ public class Cannonball : MonoBehaviour
     private float speed;
     private Vector3 velocity;
     public Vector3 direction;
+    int timer;
 	// Use this for initialization
 	void Start ()
     {
@@ -19,5 +20,8 @@ public class Cannonball : MonoBehaviour
     {
         velocity = direction * speed;
         transform.position += velocity;
+        if (timer == 100)
+            Destroy(gameObject);
+        timer++;
 	}
 }
