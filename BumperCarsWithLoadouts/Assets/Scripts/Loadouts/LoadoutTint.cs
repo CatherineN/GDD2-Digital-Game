@@ -9,8 +9,13 @@ public class LoadoutTint : MonoBehaviour {
     //Create left and right buttons that will change tint
     public Dropdown dropDownOne;
     public Dropdown dropDownTwo;
+
+    public Texture2D red;
+    public Texture2D yellow;
+    public Texture2D green;
+    public Texture2D blue;
     //Create array of colors
-	void Start ()
+    void Start ()
     {
 	    //Assign values in array
 	}
@@ -26,19 +31,19 @@ public class LoadoutTint : MonoBehaviour {
         switch(dropDownOne.captionText.text)
         {
             case "Red":
-                GameObject.FindGameObjectWithTag("P1").GetComponent<Renderer>().material.color = Color.red;
+                GameObject.FindGameObjectWithTag("P1").GetComponent<Renderer>().material.mainTexture = red;
                 PlayerPrefs.SetString("color1", "red");
                 break;
             case "Blue":
-                GameObject.FindGameObjectWithTag("P1").GetComponent<Renderer>().material.color = Color.blue;
+                GameObject.FindGameObjectWithTag("P1").GetComponent<Renderer>().material.mainTexture = blue;
                 PlayerPrefs.SetString("color1", "blue");
                 break;
             case "Green":
-                GameObject.FindGameObjectWithTag("P1").GetComponent<Renderer>().material.color = Color.green;
+                GameObject.FindGameObjectWithTag("P1").GetComponent<Renderer>().material.mainTexture = green;
                 PlayerPrefs.SetString("color1", "green");
                 break;
             case "Yellow":
-                GameObject.FindGameObjectWithTag("P1").GetComponent<Renderer>().material.color = Color.yellow;
+                GameObject.FindGameObjectWithTag("P1").GetComponent<Renderer>().material.mainTexture = yellow;
                 PlayerPrefs.SetString("color1", "yellow");
                 break;
         }
@@ -46,19 +51,19 @@ public class LoadoutTint : MonoBehaviour {
         switch (dropDownTwo.captionText.text)
         {
             case "Red":
-                GameObject.FindGameObjectWithTag("P2").GetComponent<Renderer>().material.color = Color.red;
+                GameObject.FindGameObjectWithTag("P2").GetComponent<Renderer>().material.mainTexture = red;
                 PlayerPrefs.SetString("color2", "red");
                 break;
             case "Blue":
-                GameObject.FindGameObjectWithTag("P2").GetComponent<Renderer>().material.color = Color.blue;
+                GameObject.FindGameObjectWithTag("P2").GetComponent<Renderer>().material.mainTexture = blue;
                 PlayerPrefs.SetString("color2", "blue");
                 break;
             case "Green":
-                GameObject.FindGameObjectWithTag("P2").GetComponent<Renderer>().material.color = Color.green;
+                GameObject.FindGameObjectWithTag("P2").GetComponent<Renderer>().material.mainTexture = green;
                 PlayerPrefs.SetString("color2", "green");
                 break;
             case "Yellow":
-                GameObject.FindGameObjectWithTag("P2").GetComponent<Renderer>().material.color = Color.yellow;
+                GameObject.FindGameObjectWithTag("P2").GetComponent<Renderer>().material.mainTexture = yellow;
                 PlayerPrefs.SetString("color2", "yellow");
                 break;
         }
