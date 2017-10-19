@@ -33,14 +33,14 @@ public class Collision : MonoBehaviour
             return;
 
         #region Obsolete Code
-        /*Vector3 between = Vector3.Normalize(collision.transform.position - transform.position);
+        Vector3 between = Vector3.Normalize(other.transform.position - transform.position);
         float vProj = Vector3.Dot(p.Velocity, between);
 
         Vector3 force = vProj * p.Velocity * impactForce;
 
-        //p.ApplyForce(-force * (collision.gameObject.GetComponent<Rigidbody>().mass / rb.mass));
-        //collision.gameObject.GetComponent<VehicleMovement>().ApplyForce(force * (rb.mass / collision.gameObject.GetComponent<Rigidbody>().mass));
-        rb.AddForceAtPosition(-force, transform.position, ForceMode.Impulse);
+        p.ApplyForce(-force * (other.gameObject.GetComponent<Rigidbody>().mass / rb.mass) * 0.5f);
+        other.gameObject.GetComponent<VehicleMovement>().ApplyForce(force * (rb.mass / other.gameObject.GetComponent<Rigidbody>().mass));
+        /*rb.AddForceAtPosition(-force, transform.position, ForceMode.Impulse);
         collision.gameObject.GetComponent<Rigidbody>().AddForceAtPosition(force, collision.transform.position, ForceMode.Impulse);
         //collision.transform.forward = Vector3.Lerp(collision.transform.forward, collision.transform.forward + force, Time.deltaTime);
         //collision.gameObject.GetComponent<Rigidbody>().AddTorque(new Vector3(0, Vector3.Cross(collision.gameObject.transform.forward, force).sqrMagnitude * 100.0f, 0), ForceMode.Impulse);
