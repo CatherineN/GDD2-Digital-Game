@@ -5,9 +5,8 @@ using UnityEngine;
 public class Collision : MonoBehaviour
 {
     public float impactForce;
-    public float torqueAngle;
-    public float timeStep;
-    public float carLength;
+    public float impactReduction;
+    public float stageRadius;
 
     private Rigidbody rb;
     private Player p;
@@ -25,21 +24,36 @@ public class Collision : MonoBehaviour
 	void Update ()
     {
         collisionCount = 0;
+        CheckFallOff();
 	}
 
     public void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Terrain" || other.gameObject.tag == "Projectile" || collisionCount > 0)
             return;
+        Rigidbody otherRB = other.gameObject.GetComponent<Rigidbody>();
+        VehicleMovement otherVM = other.gameObject.GetComponent<VehicleMovement>();
+        
+        Vector3 between = Vector3.Normalize(other.transform.position - transform.position);
+        float vProjThis = Vector3.Dot(p.Velocity.normalized, between) * rb.mass;
+        float vProjOther = Vector3.Dot(otherVM.Velocity.normalized, between) * otherRB.mass;
+
+        if(vProjThis > vProjOther)
+        {
+            // this is doing the bumping
+            Vector3 force = vProjThis * impactForce * p.Velocity;
+            p.ApplyForce(-force * impactReduction);
+            otherVM.ApplyForce(force);
+        }
+        else
+        {
+            // this is getting hit
+            Vector3 force = vProjOther * impactForce * otherVM.Velocity;
+            p.ApplyForce(force);
+            otherVM.ApplyForce(-force * impactReduction);
+        }
 
         #region Obsolete Code
-        Vector3 between = Vector3.Normalize(other.transform.position - transform.position);
-        float vProj = Vector3.Dot(p.Velocity, between);
-
-        Vector3 force = vProj * p.Velocity * impactForce;
-
-        p.ApplyForce(-force * (other.gameObject.GetComponent<Rigidbody>().mass / rb.mass) * 0.5f);
-        other.gameObject.GetComponent<VehicleMovement>().ApplyForce(force * (rb.mass / other.gameObject.GetComponent<Rigidbody>().mass));
         /*rb.AddForceAtPosition(-force, transform.position, ForceMode.Impulse);
         collision.gameObject.GetComponent<Rigidbody>().AddForceAtPosition(force, collision.transform.position, ForceMode.Impulse);
         //collision.transform.forward = Vector3.Lerp(collision.transform.forward, collision.transform.forward + force, Time.deltaTime);
@@ -67,25 +81,16 @@ public class Collision : MonoBehaviour
         collisionCount++;
     }
 
-
-
-    IEnumerator ApplyTorque(Quaternion toRotate, float time, GameObject target)
+    public void CheckFallOff()
     {
-        while(target.transform.rotation.eulerAngles.y < toRotate.eulerAngles.y - 1.0f || target.transform.rotation.eulerAngles.y > toRotate.eulerAngles.y + 1.0f)
+        if((new Vector3(0,0.1f,0) - transform.position).sqrMagnitude > stageRadius * stageRadius)
         {
-            target.GetComponent<Player>().TotalRotation = Mathf.LerpAngle(target.GetComponent<Player>().TotalRotation, toRotate.eulerAngles.y, time);
-            yield return null;
+            rb.useGravity = true;
         }
     }
 
     public void ResetCar(Collider other)
     {
-        /*RaycastHit hit;
-        if(!other.Raycast(new Ray(transform.position, transform.forward), out hit, 100.0f))
-        {
-            other.Raycast(new Ray(transform.position, -transform.forward), out hit, 100.0f);
-        }
-        transform.position = hit.point;*/
         transform.position += -(p.Velocity);
     }
 }
