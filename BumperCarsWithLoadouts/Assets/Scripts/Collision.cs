@@ -7,6 +7,7 @@ public class Collision : MonoBehaviour
     public float impactForce;
     public float impactReduction;
     public float stageRadius;
+    public float cannonImpact;
 
     private Rigidbody rb;
     private Player p;
@@ -29,8 +30,15 @@ public class Collision : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Terrain" || other.gameObject.tag == "Projectile" || collisionCount > 0)
+        if (other.gameObject.tag == "Terrain" || collisionCount > 0)
             return;
+
+        if (other.gameObject.tag == "Projectile")
+        {
+            ProjectileHit(other);
+            return;
+        }
+
         Rigidbody otherRB = other.gameObject.GetComponent<Rigidbody>();
         VehicleMovement otherVM = other.gameObject.GetComponent<VehicleMovement>();
         
@@ -92,5 +100,11 @@ public class Collision : MonoBehaviour
     public void ResetCar(Collider other)
     {
         transform.position += -(p.Velocity);
+    }
+
+    public void ProjectileHit(Collider other)
+    {
+        p.ApplyForce(other.GetComponent<Cannonball>().velocity.normalized * cannonImpact);
+        Destroy(other.gameObject);
     }
 }

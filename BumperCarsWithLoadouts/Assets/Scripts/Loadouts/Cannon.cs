@@ -21,8 +21,22 @@ public class Cannon : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.E) || Input.GetButtonDown("Fire3"))
         {
             //Create a cannonball at the mouth of the cannon. The cannon is rotated, so we use the transform.up
-            GameObject cannonballInstance = Instantiate(cannonball, gameObject.transform.position + transform.up, new Quaternion(0,0,0,0));
+            GameObject cannonballInstance = Instantiate(cannonball, gameObject.transform.position + (transform.up * 1.5f), new Quaternion(0,0,0,0));
             cannonballInstance.GetComponent<Cannonball>().direction = transform.up;
+            StartCoroutine(Fire());
         }
+    }
+
+    IEnumerator Fire()
+    {
+        GameObject p = transform.GetChild(0).gameObject;
+        ParticleSystem pSystem = p.GetComponent<ParticleSystem>();
+        ParticleSystem.EmissionModule em = pSystem.emission;
+        for (int i = 0; i < 20; i++)
+        {
+            em.enabled = true;
+            yield return null;
+        }
+        em.enabled = false;
     }
 }
