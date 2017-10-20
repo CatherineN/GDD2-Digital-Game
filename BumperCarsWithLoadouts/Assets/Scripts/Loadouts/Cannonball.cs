@@ -26,10 +26,13 @@ public class Cannonball : MonoBehaviour
 
         // check for a collision
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, -velocity, out hit, speed))
+        if (Physics.Raycast(transform.position, velocity, out hit, speed))
         {
             if (hit.collider.tag == "Player")
+            {
                 hit.collider.gameObject.GetComponent<Collision>().ProjectileHit(this.GetComponent<SphereCollider>());
+                transform.position = hit.point;
+            }
         }
 	}
 }
