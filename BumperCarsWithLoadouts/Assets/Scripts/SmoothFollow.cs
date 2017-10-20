@@ -140,7 +140,7 @@ public class SmoothFollow : MonoBehaviour
                     firstPerson = true;
                 }
             }
-            else if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetButtonDown("ToggleCamera2")) && !isPlayerOne) // toggle first person with numpad 0 if player 2
+            else if ((Input.GetKeyDown(KeyCode.Keypad1) || Input.GetButtonDown("ToggleCamera2")) && !isPlayerOne) // toggle first person with numpad 0 if player 2
             {
                 if (firstPerson)
                 {
