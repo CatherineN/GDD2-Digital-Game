@@ -10,14 +10,14 @@ public class Bomb : MonoBehaviour {
     public float radius;
     //How long it will take for the bomb to explode
     public float timer;
-    //array to collect every collider inside the radius
+    //force vector
+    private Vector3 explosionForce;
+    private float magnitude;
 
 
     void Start ()
     {
-        force = 20f;
-        radius = 2f;
-        timer = 300f;
+
 	}
 	
 	// Update is called once per frame
@@ -36,8 +36,14 @@ public class Bomb : MonoBehaviour {
                 //If they don't have a rigidbody, ignore them
                 if (c.GetComponent<Rigidbody>() == null)
                     continue;
-                //If they do, add an explosion force. Thiiiiiiis doesn't quite work yet. Need to tweak...something.
-                c.GetComponent<Rigidbody>().AddExplosionForce(force, transform.position, radius, 120f, ForceMode.Impulse);
+                //Get the square magnitude
+                magnitude = (transform.position - c.transform.position).sqrMagnitude;
+                //Generate the explosion force
+                explosionForce = (c.transform.position - transform.position).normalized * (1 / magnitude) * force;
+                //Make sure they dont FLY TO THE MOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOON
+                explosionForce.y = 0;
+                //Apply the explosion force
+                c.GetComponent<Player>().ApplyForce(explosionForce);
             }
             //Get rid of it
             Destroy(gameObject);
