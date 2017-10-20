@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CarManager : MonoBehaviour {
 
@@ -12,6 +13,8 @@ public class CarManager : MonoBehaviour {
     private List<GameObject> cars;//keeps track of all the cars on the arena
     private bool haveSpawned;//determines if the AI have been spawned in yet
 
+    private int carsLeft;//how many cars are left in the scene
+
 	// Use this for initialization
 	void Start () {
 		
@@ -19,7 +22,7 @@ public class CarManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+        GetAliveCars();
 	}
 
     //propeties
@@ -58,5 +61,29 @@ public class CarManager : MonoBehaviour {
             cars.Add(carInstance);
         }
         haveSpawned = true;
+    }
+
+    /// <summary>
+    /// Determines how many cars are remaining on the arena
+    /// Subtracts the amount of dead cars from the total amount of cars in the scene
+    /// </summary>
+    private void GetAliveCars()
+    {
+        carsLeft = cars.Count - GameObject.FindGameObjectsWithTag("Dead").Length;
+        if (carsLeft == 1)
+        {
+            SceneManager.LoadScene("GameOver");
+        }
+    }
+
+    /// <summary>
+    /// Displays the number of cars left on the arena
+    /// </summary>
+    public void OnGUI()
+    {
+        GUIStyle mystyle = new GUIStyle();
+        mystyle.fontSize = 25;
+        GUI.Label(new Rect(10, 10, 300, 100), "Cars Remaining: " + carsLeft, mystyle);
+        GUI.Label(new Rect(10, 280, 300, 100), "Cars Remaining: " + carsLeft, mystyle);
     }
 }

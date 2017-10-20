@@ -8,6 +8,7 @@ public class AI : VehicleMovement {
     public float playerWeight; //--2-- how much preference is given to players when ai decides who to attack
     public float nearEdgeWeight; //--3-- how much being near the edge of the map plays into ai's decision on who to attack
     public float boundsWeight; //--2-- how strong the force is to keep the AI on the platform
+    public bool isDead = false;
 
     private GameObject target; //the gameobject that the agent is chasing
 
@@ -73,6 +74,17 @@ public class AI : VehicleMovement {
                 target = cM.Cars[i];
                 break;
             }
+        }
+    }
+    /// <summary>
+    /// Checks whether the AI car has fallen off the arena
+    /// </summary>
+    private void CheckAlive()
+    {
+        if (gameObject.transform.position.y < -10)
+        {
+            isDead = true;
+            tag = "Dead";
         }
     }
 }

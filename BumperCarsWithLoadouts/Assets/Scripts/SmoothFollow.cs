@@ -184,6 +184,7 @@ public class SmoothFollow : MonoBehaviour
         if (gameObject.transform.position.y < -10)
         {
             isDead = true;
+            target.gameObject.tag = "Dead";
         }
     }
     bool ListenForGameOver()
