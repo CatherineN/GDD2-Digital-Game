@@ -6,7 +6,7 @@ public class Cannonball : MonoBehaviour
 {
     //variables for speed and velocity
     private float speed;
-    private Vector3 velocity;
+    public Vector3 velocity;
     public Vector3 direction;
     int timer;
 	// Use this for initialization
@@ -23,5 +23,13 @@ public class Cannonball : MonoBehaviour
         if (timer == 100)
             Destroy(gameObject);
         timer++;
+
+        // check for a collision
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, -velocity, out hit, speed))
+        {
+            if (hit.collider.tag == "Player")
+                hit.collider.gameObject.GetComponent<Collision>().ProjectileHit(this.GetComponent<SphereCollider>());
+        }
 	}
 }

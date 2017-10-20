@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Cannon : MonoBehaviour {
+public class BombDropper : MonoBehaviour {
 
     // Use this for initialization
-    public GameObject cannonball;
+    public GameObject bomb;
     private int playerID;
-    void Start ()
+    void Start()
     {
         gameObject.GetComponent<Renderer>().material.color = transform.GetComponentInParent<Renderer>().material.color;
         //set the player id
@@ -15,7 +15,7 @@ public class Cannon : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update ()
+    void Update()
     {
         gameObject.GetComponent<Renderer>().material.color = transform.parent.GetComponentInParent<Renderer>().material.color;
         switch (playerID)
@@ -25,9 +25,7 @@ public class Cannon : MonoBehaviour {
                 if (Input.GetKeyDown(KeyCode.E) || Input.GetButtonDown("Fire3"))
                 {
                     //Create a cannonball at the mouth of the cannon. The cannon is rotated, so we use the transform.up
-                    GameObject cannonballInstance = Instantiate(cannonball, gameObject.transform.position + (transform.up * 1.5f), new Quaternion(0, 0, 0, 0));
-                    cannonballInstance.GetComponent<Cannonball>().direction = transform.up;
-                    StartCoroutine(Fire());
+                    GameObject bombInstance = Instantiate(bomb, gameObject.transform.position - (transform.up * transform.localScale.y), new Quaternion(0, 0, 0, 0));
                 }
                 break;
             case 2:
@@ -35,24 +33,10 @@ public class Cannon : MonoBehaviour {
                 if (Input.GetKeyDown(KeyCode.Keypad0) || Input.GetButtonDown("Fire2"))
                 {
                     //Create a cannonball at the mouth of the cannon. The cannon is rotated, so we use the transform.up
-                    GameObject cannonballInstance = Instantiate(cannonball, gameObject.transform.position + (transform.up * 1.5f), new Quaternion(0, 0, 0, 0));
-                    cannonballInstance.GetComponent<Cannonball>().direction = transform.up;
-                    StartCoroutine(Fire());
+                    GameObject bombInstance = Instantiate(bomb, gameObject.transform.position - (transform.up * transform.localScale.y), new Quaternion(0, 0, 0, 0));
                 }
                 break;
         }
-    }
-
-    IEnumerator Fire()
-    {
-        GameObject p = transform.GetChild(0).gameObject;
-        ParticleSystem pSystem = p.GetComponent<ParticleSystem>();
-        ParticleSystem.EmissionModule em = pSystem.emission;
-        for (int i = 0; i < 20; i++)
-        {
-            em.enabled = true;
-            yield return null;
-        }
-        em.enabled = false;
+        
     }
 }
