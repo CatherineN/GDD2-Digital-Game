@@ -103,19 +103,19 @@ public class SetPrefs : MonoBehaviour {
                     break;
             }
             // loads in the saved weapon
-           /* switch (weapon1)
+           switch (weapon1)
             {
                 case "Bomb":
-                    transform.FindChild("Bomb").gameObject.SetActive(false);
+                    transform.FindChild("Bomb Dropper").gameObject.SetActive(false);
                     transform.FindChild("Plow").gameObject.SetActive(true);
                     break;
 
                 case "Cannon":
-                    transform.FindChild("Bomb").gameObject.SetActive(false);
+                    transform.FindChild("Bomb Dropper").gameObject.SetActive(false);
                     transform.FindChild("Cannon").gameObject.SetActive(true);
                     break;
             }
-            */ 
+            
 
             // loads in the saved weight
             gameObject.GetComponent<Rigidbody>().mass = weight1;
@@ -166,13 +166,13 @@ public class SetPrefs : MonoBehaviour {
             // loads in the saved weapon
             switch (weapon2)
             {
-                case "Plow":
+                case "Bomb":
                     transform.FindChild("Cannon").gameObject.SetActive(false);
-                    transform.FindChild("Plow").gameObject.SetActive(true);
+                    transform.FindChild("Bomb Dropper").gameObject.SetActive(true);
                     break;
 
                 case "Cannon":
-                    transform.FindChild("Plow").gameObject.SetActive(false);
+                    transform.FindChild("Bomb Dropper").gameObject.SetActive(false);
                     transform.FindChild("Cannon").gameObject.SetActive(true);
                     break;
             }
