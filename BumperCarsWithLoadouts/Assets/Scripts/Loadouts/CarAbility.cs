@@ -21,12 +21,12 @@ public class CarAbility : MonoBehaviour {
         {
             case "Plow": // activate the plow
                 GameObject.FindGameObjectWithTag("P1").transform.FindChild("Cannon").gameObject.SetActive(false);
-                GameObject.FindGameObjectWithTag("P1").transform.FindChild("Plow").gameObject.SetActive(true);
-                PlayerPrefs.SetString("weapon1", "Plow");
+                GameObject.FindGameObjectWithTag("P1").transform.FindChild("Bomb Dropper").gameObject.SetActive(true);
+                PlayerPrefs.SetString("weapon1", "Bomb Dropper");
                 break;
 
             case "Cannon": // inactivate the plow
-                GameObject.FindGameObjectWithTag("P1").transform.FindChild("Plow").gameObject.SetActive(false);
+                GameObject.FindGameObjectWithTag("P1").transform.FindChild("Bomb Dropper").gameObject.SetActive(false);
                 GameObject.FindGameObjectWithTag("P1").transform.FindChild("Cannon").gameObject.SetActive(true);
                 PlayerPrefs.SetString("weapon1", "Cannon");
                 break;
@@ -37,12 +37,12 @@ public class CarAbility : MonoBehaviour {
         {
             case "Plow":
                 GameObject.FindGameObjectWithTag("P2").transform.FindChild("Cannon").gameObject.SetActive(false);
-                GameObject.FindGameObjectWithTag("P2").transform.FindChild("Plow").gameObject.SetActive(true);
-                PlayerPrefs.SetString("weapon2", "Plow");
+                GameObject.FindGameObjectWithTag("P2").transform.FindChild("Bomb Dropper").gameObject.SetActive(true);
+                PlayerPrefs.SetString("weapon2", "Bomb Dropper");
                 break;
 
             case "Cannon":
-                GameObject.FindGameObjectWithTag("P2").transform.FindChild("Plow").gameObject.SetActive(false);
+                GameObject.FindGameObjectWithTag("P2").transform.FindChild("Bomb Dropper").gameObject.SetActive(false);
                 GameObject.FindGameObjectWithTag("P2").transform.FindChild("Cannon").gameObject.SetActive(true);
                 PlayerPrefs.SetString("weapon2", "Cannon");
                 break;
