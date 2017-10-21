@@ -38,9 +38,9 @@ public abstract class VehicleMovement : MonoBehaviour {
         cM = GameObject.Find("SceneManager").GetComponent<CarManager>();
         rb = gameObject.GetComponent<Rigidbody>();
 
+        //set the max speed and turning speed to be affected by the mass of the car
         maxSpeed *= 50 / rb.mass;
         turnSpeed *= 50 / rb.mass;
-        Debug.LogWarning(maxSpeed);
     }
 
     // public getter for velocity
@@ -91,7 +91,7 @@ public abstract class VehicleMovement : MonoBehaviour {
         position += velocity;
         position.y = Mathf.Clamp(position.y, int.MinValue, .1f);
         //calculate direction from velocity
-        direction = velocity.normalized;
+        //direction = velocity.normalized;
         //zero out acceleration
         acceleration = Vector3.zero;
         //calc future position at this speed over the specified time period
@@ -217,13 +217,14 @@ public abstract class VehicleMovement : MonoBehaviour {
     }
 
     /// <summary>
-    /// stay in the bounds
+    /// Steers the gameobject back towards the center if they get too close to the edge
     /// </summary>
-    /// <returns></returns>
-    protected Vector3 StayInBounds()
+    /// <param name="percentSafe">What percentage of the arena will the gameobject ignore the danger of the edge</param>
+    /// <returns>Force towards the center if too close to the edge, otherwise a zero vector</returns>
+    protected Vector3 StayInBounds(float percentSafe)
     {
         //if agent is outside the acceptable bounds they should make their way back in
-        if (position.x > cM.arenaRadius*.6f || position.x < -cM.arenaRadius*.6f || position.z > cM.arenaRadius * .6f || position.z < -cM.arenaRadius * .6f)
+        if (position.x > cM.arenaRadius*percentSafe || position.x < -cM.arenaRadius* percentSafe || position.z > cM.arenaRadius * percentSafe || position.z < -cM.arenaRadius * percentSafe)
         {
             //seek the center of the world
             return Seek(Vector3.zero);

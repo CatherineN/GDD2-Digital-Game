@@ -5,9 +5,10 @@ using UnityEngine;
 public class AI : VehicleMovement {
 
     public float detectRadius; //--5-- distance from the AI where player will be sought out
-    public float playerWeight; //--2-- how much preference is given to players when ai decides who to attack
-    public float nearEdgeWeight; //--3-- how much being near the edge of the map plays into ai's decision on who to attack
+    public float playerWeight; //--2-- how much preference is given to players when ai decides who to attack -- not being used
+    public float nearEdgeWeight; //--3-- how much being near the edge of the map plays into ai's decision on who to attack --  not being used
     public float boundsWeight; //--2-- how strong the force is to keep the AI on the platform
+    public float ignoreBoundsArea; //--.75-- the percent of the radius of the arena where the ai will ignore the edge
     public bool isDead = false;
 
     private GameObject target; //the gameobject that the agent is chasing
@@ -24,9 +25,10 @@ public class AI : VehicleMovement {
     /// </summary>
     protected override void CalcSteeringForces()
     {
+        CheckAlive();
 
         // this is for our rotation
-        angleToRotate = Quaternion.Euler(0, 0, 0);
+        //angleToRotate = Quaternion.Euler(0, 0, 0);
 
         // this is the sum of all the forces
         total = Vector3.zero;
@@ -34,21 +36,30 @@ public class AI : VehicleMovement {
         //actual adding of forces to the total force
         //set the target of the Autonomous Agent
         SetTarget();
+        //check how close target and distance self if extremely close
+        Vector3 adjustForce = AdjustPosition();
+        if (adjustForce != Vector3.zero)
+        {
+            Debug.Log("adjusting");
+            total += 3 * adjustForce;
+        }
         //seek its target
-        if (target != null)
+        else if (target != null)
         {
             //add seeking force to ultimate force
             total += 3 * Pursue(target);
         }
         //add force away from edges
-        total += boundsWeight * StayInBounds();
+        total += boundsWeight * StayInBounds(ignoreBoundsArea);
 
         //clamp the total force to maxForce
         total = Vector3.ClampMagnitude(total, maxForce);
         // apply the sum of the forces to our bumper car
         ApplyForce(total);
 
-        direction = Vector3.Lerp(angleToRotate * direction, transform.forward, Time.deltaTime * 0.5f);
+        direction = Vector3.Lerp(direction, total.normalized, Time.deltaTime * 0.5f);
+        transform.forward = direction;
+
         ApplyFriction(CalculateCoefficientFriction(0.5f, 2.0f));
 
     }
@@ -58,7 +69,7 @@ public class AI : VehicleMovement {
     {
         Debug.Log("Finding Target");
         Vector3 closest = new Vector3(10000, 10000, 10000);
-        //compare distance between zombie and each human
+        //compare distance between this car and every other car
         for (int i = 0; i < cM.Cars.Count; ++i)
         {
             //get distance between
@@ -86,5 +97,15 @@ public class AI : VehicleMovement {
             isDead = true;
             tag = "Dead";
         }
+    }
+
+    private Vector3 AdjustPosition()
+    {
+        //if the ai is too close to its target, it won't be able to actually bump it, so move it back
+        if((target.transform.position - gameObject.transform.position).magnitude < 5f && velocity.magnitude < .1f)
+        {
+            return Flee(target.transform.position);
+        }
+        return Vector3.zero;
     }
 }

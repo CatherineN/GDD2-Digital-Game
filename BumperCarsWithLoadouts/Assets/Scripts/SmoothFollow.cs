@@ -3,13 +3,12 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 /// <summary>
 /// Authors: Kat Weis, Cameron Schlesinger & Erin Casicoli
-/// Purpose: To have a camera smoothly follow the average position of the flock around
-/// Bugs: The camera can go inside the terrain while the flockers are not inside the terrain making it look like it is glitching
+/// Purpose: To have a camera smoothly follow the target around
 /// </summary>
 
 // This camera smoothes out rotation around the y-axis and height.
 // Horizontal Distance to the target is always fixed.
-// Forevery one of those smoothed values, calculate the wanted value and the current value.
+// For every one of those smoothed values, calculate the wanted value and the current value.
 // Smooth it using the Lerp function and apply the smoothed values to the transform's position.
 public class SmoothFollow : MonoBehaviour
 {
