@@ -28,7 +28,7 @@ public class Cannonball : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(transform.position, velocity, out hit, speed))
         {
-            if (hit.collider.tag == "Player")
+            if (hit.collider.tag == "Player" || hit.collider.tag == "AI")
             {
                 hit.collider.gameObject.GetComponent<Collision>().ProjectileHit(this.GetComponent<SphereCollider>());
                 transform.position = hit.point;

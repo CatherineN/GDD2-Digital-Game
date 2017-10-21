@@ -43,7 +43,7 @@ public class Bomb : MonoBehaviour {
                 //Make sure they dont FLY TO THE MOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOON
                 explosionForce.y = 0;
                 //Apply the explosion force
-                c.GetComponent<Player>().ApplyForce(explosionForce);
+                c.GetComponent<VehicleMovement>().ApplyForce(explosionForce);
             }
             //Get rid of it
             Destroy(gameObject);

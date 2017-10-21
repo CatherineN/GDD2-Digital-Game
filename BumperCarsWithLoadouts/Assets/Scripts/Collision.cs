@@ -10,14 +10,18 @@ public class Collision : MonoBehaviour
     public float cannonImpact;
 
     private Rigidbody rb;
-    private Player p;
+    private VehicleMovement p;
+    private AI ai;
 
     private int collisionCount;
 	// Use this for initialization
 	void Start ()
     {
         rb = gameObject.GetComponent<Rigidbody>();
-        p = gameObject.GetComponent<Player>();
+        if (gameObject.tag == "Player")
+            p = gameObject.GetComponent<Player>();
+        else
+            p = gameObject.GetComponent<AI>();
         collisionCount = 0;
 	}
 	
