@@ -37,6 +37,10 @@ public abstract class VehicleMovement : MonoBehaviour {
         position = transform.position;
         cM = GameObject.Find("SceneManager").GetComponent<CarManager>();
         rb = gameObject.GetComponent<Rigidbody>();
+
+        maxSpeed *= 50 / rb.mass;
+        turnSpeed *= 50 / rb.mass;
+        Debug.LogWarning(maxSpeed);
     }
 
     // public getter for velocity

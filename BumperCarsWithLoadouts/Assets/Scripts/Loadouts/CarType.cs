@@ -37,7 +37,7 @@ public class CarType : MonoBehaviour {
         }
 
         // switch statement for player 2 selection
-        switch (topDropdown.captionText.text)
+        switch (bottomDropdown.captionText.text)
         {
             case "Lightweight (low mass)":
                 PlayerPrefs.SetFloat("weight2", 45f);
