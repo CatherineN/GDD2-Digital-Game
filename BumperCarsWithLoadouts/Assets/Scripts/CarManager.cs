@@ -72,6 +72,7 @@ public class CarManager : MonoBehaviour {
         carsLeft = cars.Count - GameObject.FindGameObjectsWithTag("Dead").Length;
         if (carsLeft == 1)
         {
+            PlayerPrefs.SetInt("winner", GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().playerID);
             SceneManager.LoadScene("GameOver");
         }
     }

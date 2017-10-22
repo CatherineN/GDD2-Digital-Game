@@ -12,6 +12,8 @@ public class AI : VehicleMovement {
     public bool isDead = false;
 
     private GameObject target; //the gameobject that the agent is chasing
+    private Vector3 adjustmentTarget; //the point in space that the AI will go to in order to build up speed before bumping the target
+    private bool tooClose = false;//determines whether or not the AI is too close to its target to bump effectively
 
     // Use this for initialization
     public override void Start()
@@ -37,11 +39,16 @@ public class AI : VehicleMovement {
         //set the target of the Autonomous Agent
         SetTarget();
         //check how close target and distance self if extremely close
-        Vector3 adjustForce = AdjustPosition();
-        if (adjustForce != Vector3.zero)
+        //Vector3 adjustForce = AdjustPosition();
+        AdjustPosition();
+        /*if (adjustForce != Vector3.zero)
         {
             Debug.Log("adjusting");
             total += 3 * adjustForce;
+        }*/
+        if(tooClose == true)
+        {
+            total += 3 * Seek(adjustmentTarget);
         }
         //seek its target
         else if (target != null)
@@ -99,13 +106,16 @@ public class AI : VehicleMovement {
         }
     }
 
-    private Vector3 AdjustPosition()
+    private void AdjustPosition()
     {
         //if the ai is too close to its target, it won't be able to actually bump it, so move it back
         if((target.transform.position - gameObject.transform.position).magnitude < 5f && velocity.magnitude < .1f)
         {
-            return Flee(target.transform.position);
+            //return Seek(gameObject.transform.position - gameObject.transform.forward *10);
+            tooClose = true;
+            adjustmentTarget = target.transform.position;
         }
-        return Vector3.zero;
+        //return Vector3.zero;
+        tooClose = false;
     }
 }
