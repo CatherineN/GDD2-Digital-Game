@@ -40,18 +40,13 @@ public class AI : VehicleMovement {
         SetTarget();
         //check how close target and distance self if extremely close
         //Vector3 adjustForce = AdjustPosition();
-        AdjustPosition();
-        /*if (adjustForce != Vector3.zero)
-        {
-            Debug.Log("adjusting");
-            total += 3 * adjustForce;
-        }*/
-        if (tooClose == true)
-        {
-            total += 3 * Seek(adjustmentTarget);
-        }
+        //AdjustPosition();
+        //if (tooClose == true)
+        //{
+        //    total += 2 * Seek(adjustmentTarget);
+        //}
         //seek its target
-        else if (target != null)
+        if (target != null)
         {
             //add seeking force to ultimate force
             total += 3 * Pursue(target);
@@ -61,6 +56,7 @@ public class AI : VehicleMovement {
 
         //clamp the total force to maxForce
         total = Vector3.ClampMagnitude(total, maxForce);
+        total.y = 0;
         // apply the sum of the forces to our bumper car
         ApplyForce(total);
 
@@ -82,7 +78,7 @@ public class AI : VehicleMovement {
             //get distance between
             Vector3 temp = cM.Cars[i].transform.position - position;
             //compare to see if is smaller than stored
-            if (temp.magnitude < closest.magnitude && temp.magnitude != 0)
+            if (temp.magnitude < closest.magnitude && temp.magnitude >= 2f)
             {
                 closest = temp;
                 target = cM.Cars[i];

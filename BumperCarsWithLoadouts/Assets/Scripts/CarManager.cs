@@ -59,10 +59,11 @@ public class CarManager : MonoBehaviour {
     {
         for (int i = 0; i < numAI; ++i)
         {
-            float xPos = arenaRadius* Mathf.Cos(2 * Mathf.PI * i / numAI);
-            float zPos = arenaRadius * Mathf.Sin(2 * Mathf.PI * i / numAI);
+            float xPos = arenaRadius* Mathf.Cos(2 * Mathf.PI * i / numAI)*.9f;
+            float zPos = arenaRadius * Mathf.Sin(2 * Mathf.PI * i / numAI) * .9f;
             //instantiate car
             GameObject carInstance = Instantiate(prefabAI, new Vector3(xPos, 0, zPos), Quaternion.identity) as GameObject;
+            carInstance.GetComponent<Collision>().stageRadius = arenaRadius;
             //add car to list
             cars.Add(carInstance);
         }
