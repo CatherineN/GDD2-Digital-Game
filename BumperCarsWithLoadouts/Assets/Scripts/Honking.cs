@@ -20,12 +20,12 @@ public class Honking : MonoBehaviour {
         if ((Input.GetKeyDown(KeyCode.F) || Input.GetButtonDown("Honk1")) && isPlayerOne)
         {
             currentHonk = honks[Random.Range(0, honks.Length - 1)];
-            gameObject.GetComponent<AudioSource>().PlayOneShot(currentHonk);
+            GameObject.Find("PlayerCar").GetComponent<AudioSource>().PlayOneShot(currentHonk);
         }
         else if((Input.GetKeyDown(KeyCode.RightControl) || Input.GetButtonDown("Honk2")) && !isPlayerOne)
         {
             currentHonk = honks[Random.Range(0, honks.Length - 1)];
-            gameObject.GetComponent<AudioSource>().PlayOneShot(currentHonk);
+            GameObject.Find("PlayerCar2").GetComponent<AudioSource>().PlayOneShot(currentHonk);
         }
     }
 }

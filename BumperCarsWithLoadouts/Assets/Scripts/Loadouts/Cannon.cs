@@ -13,7 +13,8 @@ public class Cannon : MonoBehaviour {
     private int playerID;
     public float cooldownTime;
     private float cooldown;
-
+    public AudioClip currentFire;
+    public AudioClip[] fireSounds = new AudioClip[5];
     void Start ()
     {
         gameObject.GetComponent<Renderer>().material.color = transform.GetComponentInParent<Renderer>().material.color;
@@ -21,6 +22,11 @@ public class Cannon : MonoBehaviour {
         playerID = GetComponentInParent<Player>().playerID;
         cooldown = cooldownTime;
         ability.sprite = sprite;
+        fireSounds[0] = Resources.Load("cannon sound 1") as AudioClip;
+        fireSounds[1] = Resources.Load("cannon sound 2") as AudioClip;
+        fireSounds[2] = Resources.Load("cannon sound 3") as AudioClip;
+        fireSounds[3] = Resources.Load("cannon sound 4") as AudioClip;
+        fireSounds[4] = Resources.Load("cannon sound 5") as AudioClip;
     }
 
     // Update is called once per frame
@@ -39,6 +45,9 @@ public class Cannon : MonoBehaviour {
                     cannonballInstance.GetComponent<Cannonball>().direction = transform.up;
                     StartCoroutine(Fire());
                     cooldown = 0.0f;
+
+                    currentFire = fireSounds[Random.Range(0, fireSounds.Length - 1)];
+                    GameObject.Find("PlayerCar").GetComponent<AudioSource>().PlayOneShot(currentFire);
                 }
                 break;
             case 2:
@@ -50,6 +59,9 @@ public class Cannon : MonoBehaviour {
                     cannonballInstance.GetComponent<Cannonball>().direction = transform.up;
                     StartCoroutine(Fire());
                     cooldown = 0.0f;
+
+                    currentFire = fireSounds[Random.Range(0, fireSounds.Length - 1)];
+                    GameObject.Find("PlayerCar2").GetComponent<AudioSource>().PlayOneShot(currentFire);
                 }
                 break;
         }
