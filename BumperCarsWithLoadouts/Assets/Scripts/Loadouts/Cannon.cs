@@ -22,11 +22,11 @@ public class Cannon : MonoBehaviour {
         playerID = GetComponentInParent<Player>().playerID;
         cooldown = cooldownTime;
         ability.sprite = sprite;
-        fireSounds[0] = (AudioClip) Resources.Load("canon sound 1");
-        fireSounds[1] = (AudioClip)Resources.Load("canon sound 2");
-        fireSounds[2] = (AudioClip)Resources.Load("canon sound 3");
-        fireSounds[3] = (AudioClip)Resources.Load("canon sound 4");
-        fireSounds[4] = (AudioClip)Resources.Load("canon sound 5");
+        fireSounds[0] = Resources.Load("cannon sound 1") as AudioClip;
+        fireSounds[1] = Resources.Load("cannon sound 2") as AudioClip;
+        fireSounds[2] = Resources.Load("cannon sound 3") as AudioClip;
+        fireSounds[3] = Resources.Load("cannon sound 4") as AudioClip;
+        fireSounds[4] = Resources.Load("cannon sound 5") as AudioClip;
     }
 
     // Update is called once per frame
