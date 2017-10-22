@@ -97,38 +97,38 @@ public class SetPrefs : MonoBehaviour {
         {
             case "red":
                 if (type == "medium")
-                    gameObject.GetComponent<Renderer>().material.mainTexture = redW;
+                    gameObject.GetComponent<Renderer>().material.mainTexture = red;
                 else if (type == "heavy")
                     gameObject.GetComponent<Renderer>().material.mainTexture = redM;
                 else
-                    gameObject.GetComponent<Renderer>().material.mainTexture = red;
+                    gameObject.GetComponent<Renderer>().material.mainTexture = redW;
                 break;
 
             case "green":
                 if (type == "medium")
-                    gameObject.GetComponent<Renderer>().material.mainTexture = greenW;
+                    gameObject.GetComponent<Renderer>().material.mainTexture = green;
                 else if (type == "heavy")
                     gameObject.GetComponent<Renderer>().material.mainTexture = greenM;
                 else
-                    gameObject.GetComponent<Renderer>().material.mainTexture = green;
+                    gameObject.GetComponent<Renderer>().material.mainTexture = greenW;
                 break;
 
             case "blue":
                 if (type == "medium")
-                    gameObject.GetComponent<Renderer>().material.mainTexture = blueW;
+                    gameObject.GetComponent<Renderer>().material.mainTexture = blue;
                 else if (type == "heavy")
                     gameObject.GetComponent<Renderer>().material.mainTexture = blueM;
                 else
-                    gameObject.GetComponent<Renderer>().material.mainTexture = blue;
+                    gameObject.GetComponent<Renderer>().material.mainTexture = blueW;
                 break;
 
             case "yellow":
                 if (type == "medium")
-                    gameObject.GetComponent<Renderer>().material.mainTexture = yellowW;
+                    gameObject.GetComponent<Renderer>().material.mainTexture = yellow;
                 else if (type == "heavy")
                     gameObject.GetComponent<Renderer>().material.mainTexture = yellowM;
                 else
-                    gameObject.GetComponent<Renderer>().material.mainTexture = yellow;
+                    gameObject.GetComponent<Renderer>().material.mainTexture = yellowW;
                 break;
         }
 
