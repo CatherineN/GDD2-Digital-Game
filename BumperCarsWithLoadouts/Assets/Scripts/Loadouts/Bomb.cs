@@ -24,9 +24,9 @@ public class Bomb : MonoBehaviour {
 	void Update ()
     {
         //Decrement the timer
-        timer--;
+        timer -= Time.deltaTime;
         //When it reaches 0...
-        if (timer == 0)
+        if (timer <= 0)
         {
             //Get every collider near it
             Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
