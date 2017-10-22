@@ -45,6 +45,7 @@ public class SmoothFollow : MonoBehaviour
         ListenForDeath();
         if (ListenForGameOver())
         {
+            PlayerPrefs.SetInt("winner", 3);
             SceneManager.LoadScene("GameOver");
         }
     }
