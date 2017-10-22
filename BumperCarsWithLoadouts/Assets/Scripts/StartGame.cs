@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class StartGame : MonoBehaviour {
+
+    public Dropdown stageSelect;
 
 	// Use this for initialization
 	void Start () {
@@ -19,7 +22,10 @@ public class StartGame : MonoBehaviour {
     {
         if (gameObject.tag == "Loadout Menu")
         {
-            SceneManager.LoadScene("Bob");
+            if (stageSelect.value == 0)
+                SceneManager.LoadScene("Bob");
+            else
+                SceneManager.LoadScene("CameraTest");
         }
     }
     
