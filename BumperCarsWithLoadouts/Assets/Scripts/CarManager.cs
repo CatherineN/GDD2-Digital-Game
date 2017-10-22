@@ -88,7 +88,7 @@ public class CarManager : MonoBehaviour {
     /// </summary>
     private void UpdateRemainingCarUI()
     {
-        NumCars1.text = "Cars Remaining - " + carsLeft;
-        NumCars2.text = "Cars Remaining - " + carsLeft;
+        NumCars1.text = "Cars Remaining: " + carsLeft;
+        NumCars2.text = "Cars Remaining: " + carsLeft;
     }
 }

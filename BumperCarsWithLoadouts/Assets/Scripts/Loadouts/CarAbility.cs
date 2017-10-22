@@ -19,7 +19,7 @@ public class CarAbility : MonoBehaviour {
         // switch statement for player 1 selection
         switch (topDropdown.captionText.text)
         {
-            case "Plow": // activate the plow
+            case "Bombs": // activate the plow
                 GameObject.FindGameObjectWithTag("P1").transform.FindChild("Cannon").gameObject.SetActive(false);
                 GameObject.FindGameObjectWithTag("P1").transform.FindChild("Bomb Dropper").gameObject.SetActive(true);
                 PlayerPrefs.SetString("weapon1", "Bomb Dropper");
@@ -35,7 +35,7 @@ public class CarAbility : MonoBehaviour {
         // switch statement for player 2 selection
         switch (bottomDropdown.captionText.text)
         {
-            case "Plow":
+            case "Bombs":
                 GameObject.FindGameObjectWithTag("P2").transform.FindChild("Cannon").gameObject.SetActive(false);
                 GameObject.FindGameObjectWithTag("P2").transform.FindChild("Bomb Dropper").gameObject.SetActive(true);
                 PlayerPrefs.SetString("weapon2", "Bomb Dropper");

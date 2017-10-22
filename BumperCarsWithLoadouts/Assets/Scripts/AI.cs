@@ -46,9 +46,9 @@ public class AI : VehicleMovement {
             Debug.Log("adjusting");
             total += 3 * adjustForce;
         }*/
-        if(tooClose == true)
+        if (tooClose == true)
         {
-            total += Seek(adjustmentTarget);
+            total += 3 * Seek(adjustmentTarget);
         }
         //seek its target
         else if (target != null)
@@ -113,10 +113,10 @@ public class AI : VehicleMovement {
         {
             //return Seek(gameObject.transform.position - gameObject.transform.forward *10);
             tooClose = true;
-            adjustmentTarget = gameObject.transform.position + (target.transform.position - gameObject.transform.forward*3);
+            adjustmentTarget = gameObject.transform.position + (target.transform.position - gameObject.transform.forward*5);
         }
         //return Vector3.zero;
-        if((gameObject.transform.position - adjustmentTarget).magnitude < 1f)
+        if((gameObject.transform.position - adjustmentTarget).magnitude < .01f)
         tooClose = false;
     }
 }
