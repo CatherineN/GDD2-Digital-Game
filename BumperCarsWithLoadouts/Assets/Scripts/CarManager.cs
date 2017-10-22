@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class CarManager : MonoBehaviour {
 
@@ -9,6 +10,10 @@ public class CarManager : MonoBehaviour {
     public GameObject prefabAI;
     //float to determine the extents of the arena
     public float arenaRadius;
+
+    //UI text components of canvas to display
+    public Text NumCars1;
+    public Text NumCars2;
 
     private List<GameObject> cars;//keeps track of all the cars on the arena
     private bool haveSpawned;//determines if the AI have been spawned in yet
@@ -23,6 +28,7 @@ public class CarManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         GetAliveCars();
+        UpdateRemainingCarUI();
 	}
 
     //propeties
@@ -79,11 +85,9 @@ public class CarManager : MonoBehaviour {
     /// <summary>
     /// Displays the number of cars left on the arena
     /// </summary>
-    public void OnGUI()
+    private void UpdateRemainingCarUI()
     {
-        GUIStyle mystyle = new GUIStyle();
-        mystyle.fontSize = 25;
-        GUI.Label(new Rect(10, 10, 300, 100), "Cars Remaining: " + carsLeft, mystyle);
-        GUI.Label(new Rect(10, 280, 300, 100), "Cars Remaining: " + carsLeft, mystyle);
+        NumCars1.text = "Cars Remaining - " + carsLeft;
+        NumCars2.text = "Cars Remaining - " + carsLeft;
     }
 }

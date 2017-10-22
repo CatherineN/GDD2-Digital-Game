@@ -48,7 +48,7 @@ public class AI : VehicleMovement {
         }*/
         if(tooClose == true)
         {
-            total += 3 * Seek(adjustmentTarget);
+            total += Seek(adjustmentTarget);
         }
         //seek its target
         else if (target != null)
@@ -113,9 +113,10 @@ public class AI : VehicleMovement {
         {
             //return Seek(gameObject.transform.position - gameObject.transform.forward *10);
             tooClose = true;
-            adjustmentTarget = target.transform.position;
+            adjustmentTarget = gameObject.transform.position + (target.transform.position - gameObject.transform.forward*3);
         }
         //return Vector3.zero;
+        if((gameObject.transform.position - adjustmentTarget).magnitude < 1f)
         tooClose = false;
     }
 }
