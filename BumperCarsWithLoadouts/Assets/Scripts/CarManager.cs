@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class CarManager : MonoBehaviour {
 
-    public int numAI; //how many AI cars are spawned in the arena
+    private int numAI; //how many AI cars are spawned in the arena
     public GameObject prefabAI;
     //float to determine the extents of the arena
     public float arenaRadius;
@@ -40,6 +40,7 @@ public class CarManager : MonoBehaviour {
 
     void Awake()
     {
+        numAI = PlayerPrefs.GetInt("numAI");
         //set to false until spawned
         haveSpawned = false;
         //initialize list
