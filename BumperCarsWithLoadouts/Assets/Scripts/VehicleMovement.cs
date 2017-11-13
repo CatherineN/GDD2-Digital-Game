@@ -5,26 +5,56 @@ using UnityEngine;
 
 // READ THE HHHfUCKING COMMENTS.
 //
-public class VehicleMovement : MonoBehaviour {
+public abstract class VehicleMovement : MonoBehaviour {
 
     // **For this, we are assuming that the mass of the bumper car will be 1**
     // variables
-    Vector3 position;
-    Vector3 direction;
-    Vector3 velocity;
-    Vector3 desiredVelocity;
-    Vector3 acceleration;
+    protected Vector3 position;
+    protected Vector3 direction;
+    protected Vector3 velocity;
+    private Vector3 desiredVelocity;
+    protected Vector3 acceleration;
+    protected Vector3 total;//total force acting on the gameobject every frame
+    protected Quaternion angleToRotate;//how far to rotate this frame
 
-    float maxSpeed = 1;
-    float minSpeed = 4;
-    float turnSpeed = 0.9f;
-    float totalRotation = 0; // add or subtract 1 when rotating the bumper car
-    float damping = 5; // this will slow down the bumper car as we turn
+    //num to determine how long between getting target's future pos
+    public float timeDelay;
+    //Vector3 to keep track of future position
+    protected Vector3 futPos;
+
+    public float maxForce;
+    protected float maxSpeed = .75f;
+    protected float minSpeed = .4f;
+    protected float turnSpeed = 1.9f;
+    protected float totalRotation = 0; // add or subtract 1 when rotating the bumper car
+    protected float damping = 5; // this will slow down the bumper car as we turn
+
+    protected CarManager cM;
+    protected Rigidbody rb;
 
     // Use this for initialization
-    void Start () {
+    public virtual void Start () {
         position = transform.position;
-	}
+        cM = GameObject.Find("SceneManager").GetComponent<CarManager>();
+        rb = gameObject.GetComponent<Rigidbody>();
+
+        //set the max speed and turning speed to be affected by the mass of the car
+        maxSpeed *= 50 / rb.mass;
+        turnSpeed *= 50 / rb.mass;
+    }
+
+    // public getter for velocity
+    // Used by Collsion.cs
+    public Vector3 Velocity
+    {
+        get { return velocity; }
+    }
+
+    public float TotalRotation
+    {
+        get { return totalRotation; }
+        set { totalRotation = value; }
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -37,44 +67,8 @@ public class VehicleMovement : MonoBehaviour {
     /// Takes player input and calculates the forces acting on it accordingly
     /// Needs a max force**
     /// </summary>
-    protected void CalcSteeringForces()
-    {
-        // this is for our rotation
-        Quaternion angleToRotate = Quaternion.Euler(0, 0, 0);
+    protected abstract void CalcSteeringForces();
 
-        // this is the sum of all the forces
-        Vector3 total = Vector3.zero;
-
-        Debug.Log("  Y: " + Input.GetAxis("Vertical") + "  X: " + Input.GetAxis("Horizontal"));
-
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow) || Input.GetAxis("Vertical") > 0) // go forward
-        {
-            direction = transform.forward;
-            total += direction;
-            
-        }
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow) || Input.GetAxis("Horizontal") < 0) // turns counter-clockwise
-        {
-            angleToRotate = Quaternion.Euler(0, angleToRotate.y - turnSpeed, 0);
-            totalRotation -= turnSpeed;
-        }
-        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow) || Input.GetAxis("Horizontal") > 0) // turns clockwise
-        {
-            angleToRotate = Quaternion.Euler(0, angleToRotate.y + turnSpeed, 0);
-            totalRotation += turnSpeed;
-        }
-        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow) || Input.GetAxis("Vertical") < 0) // go backward
-        {
-            direction = -transform.forward;
-            total += direction;
-        }
-
-        // apply the sum of the forces to our bumper car
-        ApplyForce(total);
-        direction = angleToRotate * direction;
-        ApplyFriction(.5f);
-
-    }
 
     /// <summary>
     /// UpdatePosition
@@ -87,15 +81,21 @@ public class VehicleMovement : MonoBehaviour {
         //add acceleration to velocity
         velocity += acceleration * Time.deltaTime;
         //clamp velocity
-        Vector3.ClampMagnitude(velocity, maxSpeed);
+        velocity = Vector3.ClampMagnitude(velocity, maxSpeed);
+        if(velocity.magnitude < .01f)
+        {
+            velocity = Vector3.zero;
+        }
         velocity.y = 0;
         //add velocity to position
         position += velocity;
-        position.y = 0;
+        position.y = Mathf.Clamp(position.y, int.MinValue, .1f);
         //calculate direction from velocity
-        direction = velocity.normalized;
+        //direction = velocity.normalized;
         //zero out acceleration
         acceleration = Vector3.zero;
+        //calc future position at this speed over the specified time period
+        futPos = position + velocity * timeDelay;
     }
 
 
@@ -105,10 +105,11 @@ public class VehicleMovement : MonoBehaviour {
     protected void SetTransform()
     {
         //set up vector equal to the seekers direction
-        transform.forward = direction;
+        //transform.forward = direction;
 
         transform.position = position;
-        transform.rotation = Quaternion.Euler(0, totalRotation, 0);
+        if (tag == "Player")
+            transform.rotation = Quaternion.Euler(0, totalRotation, 0);
     }
 
 
@@ -116,7 +117,7 @@ public class VehicleMovement : MonoBehaviour {
     /// Applies any Vector3 force to the acceleration vector
     /// </summary>
     /// <param name="force">Force.</param>
-    protected void ApplyForce(Vector3 force)
+    public void ApplyForce(Vector3 force)
     {
         acceleration += force;
     }
@@ -137,4 +138,99 @@ public class VehicleMovement : MonoBehaviour {
         acceleration += friction;
     }
 
+    /// <summary>
+    /// Uses a rejection to more realistically apply friction.
+    /// Cars sliding sideways have more friction than moving straight
+    /// </summary>
+    /// <param name="coeff">Standard coefficient of friction</param>
+    /// <param name="force">How tight or slidey the car is. Lower number = slidey, Higher number = tight</param>
+    /// <returns>The coefficient of friction to use</returns>
+    public float CalculateCoefficientFriction(float coeff, float force)
+    {
+        // find the projection of the forward onto velocity
+        Vector3 projection = Vector3.Dot(transform.forward, velocity.normalized) * velocity.normalized;
+
+        // find the rejection (perpendicular vector from velocity to direction)
+        Vector3 rejetion = transform.forward - projection;
+
+        // take the magnitude squared and combine it with the standard friction
+        return (rejetion.sqrMagnitude * force) + coeff;
+    }
+
+    #region SteeringForces
+    /// <summary>
+    /// calculates the force to cause current object to seek a target
+    /// </summary>
+    /// <param name="targetPosition">position of object being saught</param>
+    /// <returns>Seek force</returns>
+    protected Vector3 Seek(Vector3 targetPosition)
+    {
+        //step 1: calculate desired velocity
+        //vector from myself to the target
+        desiredVelocity = targetPosition - position;
+        //step 2: scale to maxspeed
+        desiredVelocity = maxSpeed * desiredVelocity.normalized;
+        //step 3: calculate the steering force
+        desiredVelocity -= velocity;
+        //step 4: return steering force
+        return desiredVelocity;
+    }
+
+    /// <summary>
+    /// calculates the force to cause current object to flee a target
+    /// </summary>
+    /// <param name="targetPosition">position of object currently fleeing from</param>
+    /// <returns>Flee force</returns>
+    protected Vector3 Flee(Vector3 targetPosition)
+    {
+        //step 1: calculate desired velocity
+        //vector from myself to the target - negated so it flees
+        desiredVelocity = -(targetPosition - position);
+        //step 2: scale to maxspeed
+        desiredVelocity = desiredVelocity.normalized * maxSpeed;
+        //step 3: calculate the steering force
+        desiredVelocity -= velocity;
+        //step 4: return steering force
+        return desiredVelocity;
+    }
+
+    /// <summary>
+    /// smart seek
+    /// </summary>
+    /// <param name="target"></param>
+    /// <returns></returns>
+    protected Vector3 Pursue(GameObject target)
+    {
+        //seek target's future position
+        return Seek(target.GetComponent<VehicleMovement>().futPos);
+    }
+
+    /// <summary>
+    /// smart flee
+    /// </summary>
+    /// <param name="target"></param>
+    /// <returns></returns>
+    protected Vector3 Evade(GameObject target)
+    {
+        //flee target's future position
+        return Flee(target.GetComponent<VehicleMovement>().futPos);
+    }
+
+    /// <summary>
+    /// Steers the gameobject back towards the center if they get too close to the edge
+    /// </summary>
+    /// <param name="percentSafe">What percentage of the arena will the gameobject ignore the danger of the edge</param>
+    /// <returns>Force towards the center if too close to the edge, otherwise a zero vector</returns>
+    protected Vector3 StayInBounds(float percentSafe)
+    {
+        //if agent is outside the acceptable bounds they should make their way back in
+        if (position.x > cM.arenaRadius*percentSafe || position.x < -cM.arenaRadius* percentSafe || position.z > cM.arenaRadius * percentSafe || position.z < -cM.arenaRadius * percentSafe)
+        {
+            //seek the center of the world
+            return Seek(Vector3.zero);
+        }
+        //if not out of bounds don't affect steering
+        return Vector3.zero;
+    }
+    #endregion
 }

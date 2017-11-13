@@ -34,4 +34,7 @@ sysinfo.txt
 *.unitypackage
 BumperCarsWithLoadouts/Library/
 BumperCarsWithLoadouts/Temp/
-BumperCarsWithLoadouts/.vs/BumperCarsWithLoadouts/v15/sqlite3/storage.ide
+BumperCarsWithLoadouts/Playtest1_NonRbPhysics_Standalone/
+BumperCarsWithLoadouts/Playtest2/
+BumperCarsWithLoadouts/Playtest2.zip
+BumperCarsWithLoadouts/BCWL_Final_Playtest_Data/
