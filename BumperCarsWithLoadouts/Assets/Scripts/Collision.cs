@@ -42,7 +42,11 @@ public class Collision : MonoBehaviour
             ProjectileHit(other);
             return;
         }
-
+        if(other.gameObject.tag == "Bomb")
+        {
+            return;
+        }
+        
         Rigidbody otherRB = other.gameObject.GetComponent<Rigidbody>();
         VehicleMovement otherVM = other.gameObject.GetComponent<VehicleMovement>();
         
