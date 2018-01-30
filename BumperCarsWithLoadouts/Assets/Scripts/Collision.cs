@@ -52,7 +52,7 @@ public class Collision : MonoBehaviour
         
         Vector3 between = Vector3.Normalize(other.transform.position - transform.position);
         float vProjThis = Vector3.Dot(p.Velocity.normalized, between) * rb.mass;
-        float vProjOther = Vector3.Dot(otherVM.Velocity.normalized, between) * otherRB.mass;
+        float vProjOther = Vector3.Dot(otherVM.Velocity.normalized, between) * otherRB.mass;////////////////////////causing issue when it is a projectile because the projectiles have no rbs
 
         if(vProjThis > vProjOther)
         {

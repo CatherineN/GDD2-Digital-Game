@@ -8,8 +8,10 @@ public class PaintBang : MonoBehaviour {
     private float speed;
     public Vector3 velocity;
     public Vector3 direction;
+    public Color parColor;
     void Start ()
     {
+        gameObject.GetComponent<Renderer>().material.color = parColor;
         speed = 0.5f;
 	}
 	

@@ -17,7 +17,7 @@ public class Cannon : MonoBehaviour {
     public AudioClip[] fireSounds = new AudioClip[5];
     void Start ()
     {
-        gameObject.GetComponent<Renderer>().material.color = transform.GetComponentInParent<Renderer>().material.color;
+        //gameObject.GetComponent<Renderer>().material.color = transform.GetComponentInParent<Renderer>().materials[1].color;
         //set the player id
         playerID = GetComponentInParent<Player>().playerID;
         cooldown = cooldownTime;
@@ -32,7 +32,7 @@ public class Cannon : MonoBehaviour {
     // Update is called once per frame
     void Update ()
     {
-        gameObject.GetComponent<Renderer>().material.color = transform.parent.GetComponentInParent<Renderer>().material.color;
+        gameObject.GetComponent<Renderer>().material.color = transform.parent.GetComponentInParent<Renderer>().materials[1].color;
         cooldown += Time.deltaTime;
         switch (playerID)
         {
