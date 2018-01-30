@@ -46,6 +46,10 @@ public class Collision : MonoBehaviour
         {
             return;
         }
+        if(other.gameObject.tag == "Paintbang")
+        {
+            return;
+        }
         
         Rigidbody otherRB = other.gameObject.GetComponent<Rigidbody>();
         VehicleMovement otherVM = other.gameObject.GetComponent<VehicleMovement>();
