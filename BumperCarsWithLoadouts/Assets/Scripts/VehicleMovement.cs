@@ -224,7 +224,7 @@ public abstract class VehicleMovement : MonoBehaviour {
     protected Vector3 StayInBounds(float percentSafe)
     {
         //if agent is outside the acceptable bounds they should make their way back in
-        if (position.x > cM.arenaRadius*percentSafe || position.x < -cM.arenaRadius* percentSafe || position.z > cM.arenaRadius * percentSafe || position.z < -cM.arenaRadius * percentSafe)
+        if (position.x > cM.ArenaRadius*percentSafe || position.x < -cM.ArenaRadius* percentSafe || position.z > cM.ArenaRadius * percentSafe || position.z < -cM.ArenaRadius * percentSafe)
         {
             //seek the center of the world
             return Seek(Vector3.zero);

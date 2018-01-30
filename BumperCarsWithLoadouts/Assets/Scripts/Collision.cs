@@ -6,7 +6,7 @@ public class Collision : MonoBehaviour
 {
     public float impactForce;
     public float impactReduction;
-    public float stageRadius;
+    private float stageRadius;
     public float cannonImpact;
 
     private Rigidbody rb;
@@ -14,6 +14,12 @@ public class Collision : MonoBehaviour
     private AI ai;
 
     private int collisionCount;
+
+    public float StageRadius
+    {
+        get { return stageRadius; }
+        set {stageRadius =value; }
+    }
 	// Use this for initialization
 	void Start ()
     {
@@ -23,7 +29,10 @@ public class Collision : MonoBehaviour
         else
             p = gameObject.GetComponent<AI>();
         collisionCount = 0;
-	}
+
+        stageRadius = GameObject.Find("SceneManager").GetComponent<CarManager>().ArenaRadius;
+
+    }
 	
 	// Update is called once per frame
 	void Update ()
