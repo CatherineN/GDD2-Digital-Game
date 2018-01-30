@@ -22,7 +22,8 @@ public class CarManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+        arenaRadius = GameObject.Find("Arena Model").transform.lossyScale.x * 32 / 5f;
+        Debug.LogWarning(arenaRadius);
 	}
 	
 	// Update is called once per frame
