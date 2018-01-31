@@ -43,7 +43,7 @@ public class Bomb : MonoBehaviour {
         foreach (Collider c in colliders)
         {
             //If they don't have a rigidbody, ignore them
-            if (c.GetComponent<Rigidbody>() == null)
+            if (c.GetComponent<Rigidbody>() == null || c.tag == "Paintbang")
                 continue;
             //Get the square magnitude
             magnitude = (transform.position - c.transform.position).sqrMagnitude;

@@ -9,15 +9,49 @@ public class PaintBang : MonoBehaviour {
     public Vector3 velocity;
     public Vector3 direction;
     public Color parColor;
+    private float radius;
     void Start ()
     {
         gameObject.GetComponent<Renderer>().material.color = parColor;
-        speed = 0.5f;
-	}
+        speed = 8.5f;
+        radius = GameObject.Find("PlayerCar").GetComponent<Collision>().StageRadius;
+
+    }
 	
 	// Update is called once per frame
 	void Update ()
     {
-		
-	}
+        velocity = direction * speed;
+        transform.forward = direction;
+        transform.position += velocity * Time.deltaTime;
+        if(transform.position.y < 0 && transform.position.sqrMagnitude < radius * radius)
+        {
+            GetComponent<Rigidbody>().useGravity = false;
+            GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY;
+            speed = 0;
+            Debug.Log(velocity);
+        }
+    }
+
+    public void OnTriggerEnter(Collider car)
+    {
+        /*//If the bomb has not collided with the starting car yet
+        if (!dropped)
+        {
+            //Set droppedBy to the dropping car's playerID, and make sure it doesn't happen again.
+            droppedBy = car.gameObject.GetComponent<Player>().playerID;
+            dropped = true;
+        }
+        //If the numbers don't match, explode
+        if (droppedBy != car.gameObject.GetComponent<Player>().playerID)
+            Explode();*/
+        if(car.GetComponent<Player>().playerID == 1 && car.gameObject.GetComponent<Renderer>().materials[1].color != parColor)
+        {
+            GameObject.Find("top cam").transform.GetChild(0).gameObject.SetActive(true);
+        }
+        if(car.GetComponent<Player>().playerID == 2 && car.gameObject.GetComponent<Renderer>().materials[1].color != parColor)
+        {
+            GameObject.Find("bot cam").transform.GetChild(0).gameObject.SetActive(true);
+        }
+    }
 }
