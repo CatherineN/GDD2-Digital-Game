@@ -101,16 +101,35 @@ public class TwoPlayerSelect : MonoBehaviour {
             if (tagTracker < 4)
             {
                 Slider s = currentActiveElement.GetComponent<Slider>();
-                float slideInput = Input.GetAxis("Vertical_P1");
-                s.value += slideInput / 10;
-                Debug.Log(slideInput);
+                if(Input.GetAxis("Vertical_P1") > .2 || Input.GetAxis("Vertical_P1") < -.2)
+                {
+                    float slideInput = Input.GetAxis("Vertical_P1");
+                    s.value += slideInput / 10;
+                    Debug.Log(slideInput);
+                }
+                else if (Input.GetAxis("Horizontal_P1") > .2 || Input.GetAxis("Horizontal_P1") < -.2)
+                {
+                    float slideInput = Input.GetAxis("Horizontal_P1");
+                    s.value += slideInput / 10;
+                    Debug.Log(slideInput);
+                }
+                
             }
             else
             {
                 Slider s = currentActiveElement.GetComponent<Slider>();
-                float slideInput = Input.GetAxis("Vertical_P2");
-                s.value += slideInput / 10;
-                Debug.Log(slideInput);
+                if (Input.GetAxis("Vertical_P2") > .2 || Input.GetAxis("Vertical_P2") < -.2)
+                {
+                    float slideInput = Input.GetAxis("Vertical_P2");
+                    s.value += slideInput / 10;
+                    Debug.Log(slideInput);
+                }
+                else if (Input.GetAxis("Horizontal_P2") > .2 || Input.GetAxis("Horizontal_P2") < -.2)
+                {
+                    float slideInput = Input.GetAxis("Horizontal_P2");
+                    s.value += slideInput / 10;
+                    Debug.Log(slideInput);
+                }
             }
         
         }
@@ -174,6 +193,7 @@ public class TwoPlayerSelect : MonoBehaviour {
         }
         if(tagTracker == 11)
         {
+            /* this code should be uncommented after PLAYTEST 1
             Toggle t = currentActiveElement.GetComponent<Toggle>();
             float slideInput = Input.GetAxis("Vertical_P1");
 
@@ -196,6 +216,7 @@ public class TwoPlayerSelect : MonoBehaviour {
             {
                 istheDAMNtriggerinuse = false;
             }
+            */
         }
         if(tagTracker == 12)
         {
@@ -243,6 +264,8 @@ public class TwoPlayerSelect : MonoBehaviour {
                 
                 s.interactable = true;
                 currentActiveElement = s;
+
+   
             }
             else
             {
