@@ -45,6 +45,8 @@ public class PBLauncher : MonoBehaviour {
                 {
                     //Create a cannonball at the mouth of the cannon. The cannon is rotated, so we use the transform.up
                     GameObject paintbangInstance = Instantiate(paintbang, gameObject.transform.position + (transform.up / 2.5f), new Quaternion(0, 0, 0, 0));
+                    paintbangInstance.GetComponent<PaintBang>().direction = transform.up;
+                    paintbangInstance.GetComponent<PaintBang>().parColor = gameObject.GetComponent<Renderer>().material.color;
                     cooldown = 0.0f;
                 }
                 break;
