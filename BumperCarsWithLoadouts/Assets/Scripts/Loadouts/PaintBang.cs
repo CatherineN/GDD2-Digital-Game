@@ -11,6 +11,8 @@ public class PaintBang : MonoBehaviour {
     public Color parColor;
     private float radius;
     private float fadeTime;
+
+    
     void Start ()
     {
         gameObject.GetComponent<Renderer>().material.color = parColor;
@@ -49,23 +51,23 @@ public class PaintBang : MonoBehaviour {
         {
             if (car.GetComponent<Player>().playerID == 1 && car.gameObject.GetComponent<Renderer>().materials[1].color != parColor)
             {
-                GameObject.Find("top cam").transform.GetChild(0).gameObject.SetActive(true);
-                for(int i = 0; i < 6; i++)
+                GameObject.Find("top cam").transform.GetChild(0).gameObject.layer = 8;
+                for (int i = 0; i < 6; i++)
                 {
                     GameObject.Find("top cam").transform.GetChild(0).transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color = parColor;
-                    //Debug.Log("Hi");
-                    StartCoroutine(paintFade(GameObject.Find("top cam").transform.GetChild(0).transform.GetChild(i).gameObject));
+                    GameObject.Find("top cam").transform.GetChild(0).transform.GetChild(i).gameObject.layer = 8;
+                    GameObject.Find("top cam").transform.GetChild(0).transform.GetChild(i).gameObject.GetComponent<testCoroutine>().StartFade();
                 }
                 Destroy(gameObject);
             }
             if (car.GetComponent<Player>().playerID == 2 && car.gameObject.GetComponent<Renderer>().materials[1].color != parColor)
             {
-                GameObject.Find("bot cam").transform.GetChild(0).gameObject.SetActive(true);
+                GameObject.Find("bot cam").transform.GetChild(0).gameObject.layer = 9;
                 for (int i = 0; i < 6; i++)
                 {
                     GameObject.Find("bot cam").transform.GetChild(0).transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color = parColor;
-                    //Debug.Log("Hi");
-                    StartCoroutine(paintFade(GameObject.Find("bot cam").transform.GetChild(0).transform.GetChild(i).gameObject));
+                    GameObject.Find("bot cam").transform.GetChild(0).transform.GetChild(i).gameObject.layer = 9;
+                    GameObject.Find("bot cam").transform.GetChild(0).transform.GetChild(i).gameObject.GetComponent<testCoroutine>().StartFade();
                 }
                 Destroy(gameObject);
             }
@@ -73,20 +75,6 @@ public class PaintBang : MonoBehaviour {
         
        
     }
-    IEnumerator paintFade(GameObject go)
-    {
-        float time = 0;
-        float alpha = 1f;
-        fadeTime = 5f;
-        Color fadeColor = go.GetComponent<Renderer>().material.color;
-        while(time < fadeTime)
-        {
-            time += Time.deltaTime;
-            alpha -= 0.2f;
-            Debug.Log(time);
-            go.GetComponent<Renderer>().material.color = new Color(fadeColor.r, fadeColor.g, fadeColor.b, alpha);
-            yield return null;
-        }
-        
-    }
+
+    
 }

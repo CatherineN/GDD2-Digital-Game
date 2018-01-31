@@ -22,13 +22,22 @@ public class CarAbility : MonoBehaviour {
             case "Bombs": // activate the plow
                 GameObject.FindGameObjectWithTag("P1").transform.FindChild("Cannon").gameObject.SetActive(false);
                 GameObject.FindGameObjectWithTag("P1").transform.FindChild("Bomb Dropper").gameObject.SetActive(true);
+                GameObject.FindGameObjectWithTag("P1").transform.FindChild("Paintbang Launcher").gameObject.SetActive(false);
                 PlayerPrefs.SetString("weapon1", "Bomb Dropper");
                 break;
 
             case "Cannon": // inactivate the plow
                 GameObject.FindGameObjectWithTag("P1").transform.FindChild("Bomb Dropper").gameObject.SetActive(false);
                 GameObject.FindGameObjectWithTag("P1").transform.FindChild("Cannon").gameObject.SetActive(true);
+                GameObject.FindGameObjectWithTag("P1").transform.FindChild("Paintbang Launcher").gameObject.SetActive(false);
                 PlayerPrefs.SetString("weapon1", "Cannon");
+                break;
+
+            case "PaintBang": // inactivate the plow
+                GameObject.FindGameObjectWithTag("P1").transform.FindChild("Bomb Dropper").gameObject.SetActive(false);
+                GameObject.FindGameObjectWithTag("P1").transform.FindChild("Cannon").gameObject.SetActive(false);
+                GameObject.FindGameObjectWithTag("P1").transform.FindChild("Paintbang Launcher").gameObject.SetActive(true);
+                PlayerPrefs.SetString("weapon1", "PaintBang");
                 break;
         }
 
@@ -38,13 +47,23 @@ public class CarAbility : MonoBehaviour {
             case "Bombs":
                 GameObject.FindGameObjectWithTag("P2").transform.FindChild("Cannon").gameObject.SetActive(false);
                 GameObject.FindGameObjectWithTag("P2").transform.FindChild("Bomb Dropper").gameObject.SetActive(true);
+                GameObject.FindGameObjectWithTag("P2").transform.FindChild("Paintbang Launcher").gameObject.SetActive(false);
+
                 PlayerPrefs.SetString("weapon2", "Bomb Dropper");
                 break;
 
             case "Cannon":
                 GameObject.FindGameObjectWithTag("P2").transform.FindChild("Bomb Dropper").gameObject.SetActive(false);
                 GameObject.FindGameObjectWithTag("P2").transform.FindChild("Cannon").gameObject.SetActive(true);
+                GameObject.FindGameObjectWithTag("P2").transform.FindChild("Paintbang Launcher").gameObject.SetActive(false);
                 PlayerPrefs.SetString("weapon2", "Cannon");
+                break;
+
+            case "PaintBang":
+                GameObject.FindGameObjectWithTag("P2").transform.FindChild("Bomb Dropper").gameObject.SetActive(false);
+                GameObject.FindGameObjectWithTag("P2").transform.FindChild("Cannon").gameObject.SetActive(false);
+                GameObject.FindGameObjectWithTag("P2").transform.FindChild("Paintbang Launcher").gameObject.SetActive(true);
+                PlayerPrefs.SetString("weapon2", "PaintBang");
                 break;
         }
     }
