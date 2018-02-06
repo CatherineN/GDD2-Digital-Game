@@ -6,20 +6,21 @@ public class Collision : MonoBehaviour
 {
     public float impactForce;
     public float impactReduction;
-    private float stageRadius;
+    //private float stageRadius;
     public float cannonImpact;
 
     private Rigidbody rb;
     private VehicleMovement p;
     private AI ai;
+    private CarManager cM;
 
     private int collisionCount;
 
-    public float StageRadius
-    {
-        get { return stageRadius; }
-        set {stageRadius =value; }
-    }
+    //public float StageRadius
+    //{
+    //    get { return stageRadius; }
+    //    set {stageRadius =value; }
+    //}
 	// Use this for initialization
 	void Start ()
     {
@@ -30,7 +31,7 @@ public class Collision : MonoBehaviour
             p = gameObject.GetComponent<AI>();
         collisionCount = 0;
 
-        stageRadius = GameObject.Find("SceneManager").GetComponent<CarManager>().ArenaRadius;
+        cM = GameObject.Find("SceneManager").GetComponent<CarManager>();
 
     }
 	
@@ -112,7 +113,7 @@ public class Collision : MonoBehaviour
 
     public void CheckFallOff()
     {
-        if((new Vector3(0,0.1f,0) - transform.position).sqrMagnitude > stageRadius * stageRadius)
+        if((new Vector3(0,0.1f,0) - transform.position).sqrMagnitude > cM.ArenaRadius * cM.ArenaRadius)
         {
             rb.useGravity = true;
         }

@@ -17,7 +17,7 @@ public class PaintBang : MonoBehaviour {
     {
         gameObject.GetComponent<Renderer>().material.color = parColor;
         speed = 8.5f;
-        radius = GameObject.Find("PlayerCar").GetComponent<Collision>().StageRadius;
+        radius = GameObject.Find("SceneManager").GetComponent<CarManager>().ArenaRadius;
         fadeTime = 5f;
     }
 	
