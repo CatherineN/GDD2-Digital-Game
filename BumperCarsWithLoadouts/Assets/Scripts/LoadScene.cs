@@ -25,7 +25,7 @@ public class LoadScene : MonoBehaviour
             }
             else if (gameObject.tag == "Loadout Menu")
             {
-                SceneManager.LoadScene("Bob");
+                SceneManager.LoadScene("DefaultArena");
             }
         }
 

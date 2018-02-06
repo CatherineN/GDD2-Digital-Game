@@ -32,9 +32,9 @@ public class StartGame : MonoBehaviour {
         if (gameObject.tag == "Loadout Menu")
         {
             if (stageSelect.value == 0)
-                SceneManager.LoadScene("Bob");
+                SceneManager.LoadScene("DefaultArena");
             else
-                SceneManager.LoadScene("CameraTest");
+                SceneManager.LoadScene("IceArena");
         }
     }
     
