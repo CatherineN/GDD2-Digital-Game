@@ -26,9 +26,11 @@ public class ArenaShrink : MonoBehaviour {
         //make sure that the default size of the stage is correct at the start of the match
         transform.localScale = Vector3.one;
         //make the timer reflect the seconds until the arena shrinks
-        GameObject.Find("Canvas").GetComponent<Timer>().timeLeft = secsTilShrink;
+        GameObject.Find("topCanvas").GetComponent<Timer>().timeLeft = secsTilShrink;
+        GameObject.Find("bottomCanvas").GetComponent<Timer>().timeLeft = secsTilShrink;
         //make the timer reflect the curretn status of the stage shrinking
-        GameObject.Find("Canvas").GetComponent<Timer>().endMessage = "WARNING: Arena Shrinking!";
+        GameObject.Find("topCanvas").GetComponent<Timer>().endMessage = "WARNING: Arena Shrinking!";
+        GameObject.Find("bottomCanvas").GetComponent<Timer>().endMessage = "WARNING: Arena Shrinking!";
     }
 
     // Use this for initialization
