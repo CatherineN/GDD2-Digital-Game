@@ -23,9 +23,10 @@ public class CollapseArena : MonoBehaviour {
     IEnumerator Fall()
     {
         randomInt = rand.Next(0, transform.childCount);
-        transform.GetChild(randomInt).GetComponent<Renderer>().material.color = Color.red;
+        Transform faller = transform.GetChild(randomInt);
+        faller.GetComponent<Renderer>().material.color = Color.red;
         yield return new WaitForSeconds(2);
-        transform.GetChild(randomInt).GetComponent<Rigidbody>().useGravity = true;
+        faller.GetComponent<Rigidbody>().useGravity = true;
         yield return new WaitForSeconds(2);
         StartCoroutine(Fall());
     }

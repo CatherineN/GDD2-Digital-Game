@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Collision : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class Collision : MonoBehaviour
     public float impactReduction;
     //private float stageRadius;
     public float cannonImpact;
+    public LayerMask floorMask;
 
     private Rigidbody rb;
     private VehicleMovement p;
@@ -15,6 +17,7 @@ public class Collision : MonoBehaviour
     private CarManager cM;
 
     private int collisionCount;
+    private bool fallingStage = false;
 
     //public float StageRadius
     //{
@@ -31,8 +34,12 @@ public class Collision : MonoBehaviour
             p = gameObject.GetComponent<AI>();
         collisionCount = 0;
 
+        if (SceneManager.GetActiveScene().name == "CollapsingArena")
+            fallingStage = true;
+
         cM = GameObject.Find("SceneManager").GetComponent<CarManager>();
 
+        
     }
 	
 	// Update is called once per frame
@@ -66,7 +73,7 @@ public class Collision : MonoBehaviour
         
         Vector3 between = Vector3.Normalize(other.transform.position - transform.position);
         float vProjThis = Vector3.Dot(p.Velocity.normalized, between) * rb.mass;
-        float vProjOther = Vector3.Dot(otherVM.Velocity.normalized, between) * otherRB.mass;////////////////////////causing issue when it is a projectile because the projectiles have no rbs
+        float vProjOther = Vector3.Dot(otherVM.Velocity.normalized, between) * otherRB.mass;
 
         if(vProjThis > vProjOther)
         {
@@ -113,7 +120,15 @@ public class Collision : MonoBehaviour
 
     public void CheckFallOff()
     {
-        if((new Vector3(0,0.1f,0) - transform.position).sqrMagnitude > cM.ArenaRadius * cM.ArenaRadius)
+        if(fallingStage)
+        {
+            //Debug.DrawRay(transform.position, -transform.up, Color.red,100.0f);
+            if(!Physics.Raycast(transform.position, -transform.up, 0.5f, floorMask))
+            {
+                rb.useGravity = true;
+            }
+        }
+        else if((new Vector3(0,0.1f,0) - transform.position).sqrMagnitude > cM.ArenaRadius * cM.ArenaRadius)
         {
             rb.useGravity = true;
         }
