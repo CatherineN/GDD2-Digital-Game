@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Timer : MonoBehaviour {
 
-    public List<Text> timerLabels;//the UI element used to display the timer
+    public Text[] timerLabels;//the UI element used to display the timer
     public float timeLeft;//time in the timer in seconds
     public string endMessage;//the string that is displayed once the timer ticks down to 0
 
