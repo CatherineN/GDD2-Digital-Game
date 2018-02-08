@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class TwoPlayerSelect : MonoBehaviour {
 
     public Canvas menuSelect;
-    public Button startButton;
+    public MyButton startButton;
     private bool p1Active;
     private List<Selectable> elements;
     private Selectable currentActiveElement;
@@ -100,7 +100,7 @@ public class TwoPlayerSelect : MonoBehaviour {
         {
             if (tagTracker < 4)
             {
-                Slider s = currentActiveElement.GetComponent<Slider>();
+                Slider s = currentActiveElement.GetComponent<MySlider>();
                 if(Input.GetAxis("Vertical_P1") > .2 || Input.GetAxis("Vertical_P1") < -.2)
                 {
                     float slideInput = Input.GetAxis("Vertical_P1");
@@ -117,7 +117,7 @@ public class TwoPlayerSelect : MonoBehaviour {
             }
             else
             {
-                Slider s = currentActiveElement.GetComponent<Slider>();
+                Slider s = currentActiveElement.GetComponent<MySlider>();
                 if (Input.GetAxis("Vertical_P2") > .2 || Input.GetAxis("Vertical_P2") < -.2)
                 {
                     float slideInput = Input.GetAxis("Vertical_P2");
