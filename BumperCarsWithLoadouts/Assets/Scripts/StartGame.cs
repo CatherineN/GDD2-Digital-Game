@@ -33,8 +33,10 @@ public class StartGame : MonoBehaviour {
         {
             if (stageSelect.value == 0)
                 SceneManager.LoadScene("DefaultArena");
-            else
+            else if (stageSelect.value == 1)
                 SceneManager.LoadScene("IceArena");
+            else if (stageSelect.value == 2)
+                SceneManager.LoadScene("CollapsingArena");
         }
     }
     
