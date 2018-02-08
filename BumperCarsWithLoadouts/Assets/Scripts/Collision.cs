@@ -126,6 +126,7 @@ public class Collision : MonoBehaviour
             if(!Physics.Raycast(transform.position, -transform.up, 0.5f, floorMask))
             {
                 rb.useGravity = true;
+                Debug.Log("fall");
             }
         }
         else if((new Vector3(0,0.1f,0) - transform.position).sqrMagnitude > cM.ArenaRadius * cM.ArenaRadius)
