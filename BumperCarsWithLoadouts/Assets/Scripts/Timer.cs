@@ -28,9 +28,13 @@ public class Timer : MonoBehaviour {
             {
                 label.text = endMessage;
             }
-            else//else display the time remaining properly formatted
+            else if(minutes > 0)//else display the time remaining properly formatted
             {
                 label.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+            }
+            else
+            {
+                label.text = string.Format("{0:00}", seconds);
             }
         }
 
