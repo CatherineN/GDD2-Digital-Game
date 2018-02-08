@@ -17,9 +17,12 @@ public class ArenaOverview : MonoBehaviour {
     public float rotationDamping = 1.0f;
     public float positionDamping = .5f;
     private Transform target;
-    private int index;
+    private Vector3 start;//where the start point of the lerping between points in the path is
+    private int index;//index of the path that the camera is seeking
     private bool countdown;//whether the countdown is active or not
     private bool isStarted;//whether the overview and countdown for the current match are over
+
+    static float timer = 0;
 
     // Use this for initialization
     void Start () {
@@ -32,6 +35,8 @@ public class ArenaOverview : MonoBehaviour {
 
         p1.enabled = false;
         p2.enabled = false;
+
+        start = cam.transform.position;//set original start to the beginning
     }
 	
 	// Update is called once per frame
@@ -47,10 +52,11 @@ public class ArenaOverview : MonoBehaviour {
         {
             target = path[index].transform;
 
-            if (Vector3.Distance(cam.transform.position, target.position) < 5)
+            if (Vector3.Distance(cam.transform.position, target.position) < .05)
             {
                 index++;
-                Debug.LogWarning(index);
+                start = path[index - 1].transform.position;
+                timer = 0;
                 if (index >= path.Length - 1)
                 {
                     countdown = true;
@@ -60,13 +66,17 @@ public class ArenaOverview : MonoBehaviour {
                     GameObject.Find("ArenaOverview").SetActive(false);
                     topCanvas.SetActive(true);
                     botCanvas.SetActive(true);
+                    
                 }
             }
+            timer += Time.deltaTime;
+            
+            float timeToStop = 1.0f;
 
             // Set the forward to rotate with time
             cam.transform.LookAt(transform);
-            //cam.transform.forward = Vector3.Lerp(cam.transform.forward, target.forward, Time.deltaTime * rotationDamping);
-            cam.transform.position = Vector3.Lerp(cam.transform.position, target.position, Time.deltaTime * positionDamping);
+            float percentage = Utility.MapValue(timer, 0.0f, timeToStop, 0.0f, 1.0f);
+            cam.transform.position = Vector3.Lerp(start, target.position, percentage/* * positionDamping*/);
             return;
         }
 
