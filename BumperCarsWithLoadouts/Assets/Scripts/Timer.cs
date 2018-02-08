@@ -32,9 +32,13 @@ public class Timer : MonoBehaviour {
             {
                 label.text = string.Format("{0:00}:{1:00}", minutes, seconds);
             }
-            else
+            else if(seconds >= 10)
             {
                 label.text = string.Format("{0:00}", seconds);
+            }
+            else
+            {
+                label.text = string.Format("{0:0}", seconds);
             }
         }
 
