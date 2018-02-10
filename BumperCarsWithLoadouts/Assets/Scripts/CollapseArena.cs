@@ -8,16 +8,20 @@ public class CollapseArena : MonoBehaviour {
     // Use this for initialization
     System.Random rand;
     int randomInt;
+    private bool matchStart = false;
 	void Start ()
     {
         rand = new System.Random();
-        StartCoroutine(Fall());
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
-       
+       if(matchStart == false && GameObject.Find("PlayerCar").GetComponent<Player>().enabled)
+        {
+            matchStart = true;
+            StartCoroutine(Fall());
+        }
 	}
     
     IEnumerator Fall()
