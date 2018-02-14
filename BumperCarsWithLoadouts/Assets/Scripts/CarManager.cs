@@ -11,7 +11,7 @@ public class CarManager : MonoBehaviour {
     //float to determine the extents of the arena
     private float arenaRadius;
 
-    public float ArenaRadius { get { return arenaRadius; } }
+    public float ArenaRadius { get { return GameObject.Find("Arena").transform.lossyScale.x * 32; } }
 
     //UI text components of canvas to display
     public Text NumCars1;
@@ -42,11 +42,11 @@ public class CarManager : MonoBehaviour {
 
     void Awake()
     {
-        arenaRadius = GameObject.Find("Arena Model").transform.lossyScale.x * 32 / 5f;
+        //arenaRadius = GameObject.Find("Arena").transform.lossyScale.x * 32;
         Debug.LogWarning(arenaRadius);
         numAI = PlayerPrefs.GetInt("numAI");
         //set to false until spawned
-        haveSpawned = false;
+        haveSpawned = true;//false; ------------------------------------------------------------------set to true for now so AI do not spawn in arenas
         //initialize list
         cars = new List<GameObject>();
         if (haveSpawned == false)
@@ -64,11 +64,10 @@ public class CarManager : MonoBehaviour {
     {
         for (int i = 0; i < numAI; ++i)
         {
-            float xPos = arenaRadius* Mathf.Cos(2 * Mathf.PI * i / numAI)*.9f;
-            float zPos = arenaRadius * Mathf.Sin(2 * Mathf.PI * i / numAI) * .9f;
+            float xPos = ArenaRadius* Mathf.Cos(2 * Mathf.PI * i / numAI)*.9f;
+            float zPos = ArenaRadius * Mathf.Sin(2 * Mathf.PI * i / numAI) * .9f;
             //instantiate car
             GameObject carInstance = Instantiate(prefabAI, new Vector3(xPos, 0, zPos), Quaternion.identity) as GameObject;
-            carInstance.GetComponent<Collision>().StageRadius = arenaRadius;
             //add car to list
             cars.Add(carInstance);
         }

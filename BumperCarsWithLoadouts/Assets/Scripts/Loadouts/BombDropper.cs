@@ -10,6 +10,7 @@ public class BombDropper : MonoBehaviour {
     public Image slider;
     public Image ability;
     public Sprite sprite;
+    private Animator anim;
     private int playerID;
     public float cooldownTime;
     private float cooldown;
@@ -20,6 +21,7 @@ public class BombDropper : MonoBehaviour {
         playerID = GetComponentInParent<Player>().playerID;
         cooldown = cooldownTime;
         ability.sprite = sprite;
+        anim = gameObject.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -34,8 +36,10 @@ public class BombDropper : MonoBehaviour {
                 if ((Input.GetKeyDown(KeyCode.E) || Input.GetButtonDown("Fire3")) && cooldown >= cooldownTime)
                 {
                     //Create a cannonball at the mouth of the cannon. The cannon is rotated, so we use the transform.up
-                    GameObject bombInstance = Instantiate(bomb, gameObject.transform.position - (transform.up * transform.localScale.y), new Quaternion(0, 0, 0, 0));
+                    GameObject bombInstance = Instantiate(bomb, gameObject.transform.position - (transform.up * 0.25f), new Quaternion(0, 0, 0, 0));
                     cooldown = 0.0f;
+                    anim.SetTrigger("Active");
+                    
                 }
                 break;
             case 2:
@@ -43,8 +47,9 @@ public class BombDropper : MonoBehaviour {
                 if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetButtonDown("Fire2")) && cooldown >= cooldownTime)
                 {
                     //Create a cannonball at the mouth of the cannon. The cannon is rotated, so we use the transform.up
-                    GameObject bombInstance = Instantiate(bomb, gameObject.transform.position - (transform.up * transform.localScale.y), new Quaternion(0, 0, 0, 0));
+                    GameObject bombInstance = Instantiate(bomb, gameObject.transform.position - (transform.up * 0.25f), new Quaternion(0, 0, 0, 0));
                     cooldown = 0.0f;
+                    anim.SetTrigger("Active");
                 }
                 break;
         }

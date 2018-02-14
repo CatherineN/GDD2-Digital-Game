@@ -41,8 +41,8 @@ public class Cannon : MonoBehaviour {
                 if ((Input.GetKeyDown(KeyCode.E) || Input.GetButtonDown("Fire3")) && cooldown >= cooldownTime)
                 {
                     //Create a cannonball at the mouth of the cannon. The cannon is rotated, so we use the transform.up
-                    GameObject cannonballInstance = Instantiate(cannonball, gameObject.transform.position + (transform.up * 1.5f), new Quaternion(0, 0, 0, 0));
-                    cannonballInstance.GetComponent<Cannonball>().direction = transform.up;
+                    GameObject cannonballInstance = Instantiate(cannonball, gameObject.transform.position + (transform.right * -1.5f), new Quaternion(0, 0, 0, 0));
+                    cannonballInstance.GetComponent<Cannonball>().direction = -transform.right;
                     StartCoroutine(Fire());
                     cooldown = 0.0f;
 
@@ -55,8 +55,8 @@ public class Cannon : MonoBehaviour {
                 if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetButtonDown("Fire2")) && cooldown >= cooldownTime)
                 {
                     //Create a cannonball at the mouth of the cannon. The cannon is rotated, so we use the transform.up
-                    GameObject cannonballInstance = Instantiate(cannonball, gameObject.transform.position + (transform.up * 1.5f), new Quaternion(0, 0, 0, 0));
-                    cannonballInstance.GetComponent<Cannonball>().direction = transform.up;
+                    GameObject cannonballInstance = Instantiate(cannonball, gameObject.transform.position + (transform.right * -1.5f), new Quaternion(0, 0, 0, 0));
+                    cannonballInstance.GetComponent<Cannonball>().direction = -transform.right;
                     StartCoroutine(Fire());
                     cooldown = 0.0f;
 
