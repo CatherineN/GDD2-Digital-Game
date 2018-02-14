@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class StartGame : MonoBehaviour {
 
     public Dropdown stageSelect;
-    public Toggle enabledAI;
+    public Dropdown enabledAI;
 
 	// Use this for initialization
 	void Start () {
@@ -21,7 +21,7 @@ public class StartGame : MonoBehaviour {
 
     public void Load()
     {
-        if (enabledAI.isOn)
+        if (enabledAI.value == 1)
         {
             PlayerPrefs.SetInt("numAI", 5);
         }
