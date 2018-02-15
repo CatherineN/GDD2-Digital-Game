@@ -2,15 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : VehicleMovement {
-
+public class BumperPhysics : VehicleMovement
+{
     public int playerID;//which player the script is on
     public float frictionCoef = .5f;
     public float frictionForce = 2f;
+
+    private bool collidedThisFrame;
+
     // Use this for initialization
-    public override void Start () {
+    public override void Start()
+    {
+        Collider[] col = gameObject.GetComponents<Collider>();
+        Physics.IgnoreCollision(col[0], col[1], true);
+        Physics.IgnoreCollision(col[1], col[2], true);
+        Physics.IgnoreCollision(col[0], col[2], true);
+
+        collidedThisFrame = false;
+
         base.Start();
-	}
+    }
 
     /// <summary>
     /// Takes player input and calculates the forces acting on it accordingly
@@ -42,7 +53,26 @@ public class Player : VehicleMovement {
 
         direction = Vector3.Lerp(angleToRotate * direction, transform.forward, Time.deltaTime * 0.5f);
         ApplyFriction(CalculateCoefficientFriction(frictionCoef, frictionForce));
+
+        collidedThisFrame = false;
     }
+
+    private void ManageCollision(UnityEngine.Collision collision)
+    {
+        Debug.Log(collision.contacts.Length);
+
+        Transform otherT = collision.collider.transform;
+        Vector3 forceDir = collision.contacts[0].point - otherT.position;
+        float impact = Vector3.Dot(velocity, forceDir);
+        impact = impact * (rb.mass / collision.collider.GetComponent<Rigidbody>().mass);
+        if(impact == 0)
+        {
+            impact = 0.0000000001f;
+        }
+        Vector3 resultantForce = velocity * (1 / impact);
+    }
+
+    
 
     /// <summary>
     /// Calculates Forces based upon player input
@@ -71,13 +101,13 @@ public class Player : VehicleMovement {
             }
             if (hr < 0) // turns clockwise
             {
-                angleToRotate = Quaternion.Euler(0, angleToRotate.y + turnSpeed*hr, 0);
-                totalRotation += turnSpeed*hr;
+                angleToRotate = Quaternion.Euler(0, angleToRotate.y + turnSpeed * hr, 0);
+                totalRotation += turnSpeed * hr;
             }
             if (hr > 0) // go backward
             {
-                angleToRotate = Quaternion.Euler(0, angleToRotate.y + turnSpeed*hr, 0);
-                totalRotation += turnSpeed*hr;
+                angleToRotate = Quaternion.Euler(0, angleToRotate.y + turnSpeed * hr, 0);
+                totalRotation += turnSpeed * hr;
             }
         }
         else
@@ -104,10 +134,9 @@ public class Player : VehicleMovement {
                 total += direction;
             }
         }
-        
+
 
     }
-    
 
     /// <summary>
     /// Calculates Forces based upon player input
@@ -170,5 +199,14 @@ public class Player : VehicleMovement {
             }
         }
 
+    }
+
+    public void OnCollisionEnter(UnityEngine.Collision collision)
+    {
+        if(!collidedThisFrame)
+        {
+            collidedThisFrame = true;
+            ManageCollision(collision);
+        }
     }
 }
