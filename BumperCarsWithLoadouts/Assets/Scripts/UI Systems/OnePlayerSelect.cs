@@ -10,6 +10,7 @@ public class OnePlayerSelect : MonoBehaviour
     public Canvas menuSelect;
     public MyButton startButton;
     public MyEventSystem currentEventSystem;
+    public StartGame startTheDamnGamePlease;
     private bool p1Active;
     private List<Selectable> elements;
     private Selectable currentActiveElement;
@@ -113,12 +114,15 @@ public class OnePlayerSelect : MonoBehaviour
     {
         foreach (Selectable s in elements)
         {
-            if (s.tag == "" + 8 && tagTracker == 8)
+            if (tagTracker == 8)
             {
 
                 s.interactable = true;
                 s.Select();
-                ExecuteEvents.Execute(startButton.gameObject, new BaseEventData(EventSystem.current), ExecuteEvents.submitHandler);
+                Debug.Log("gay nerd button doesnt work");
+                var pointer = new PointerEventData(currentEventSystem);
+                ExecuteEvents.Execute(startButton.gameObject, pointer, ExecuteEvents.submitHandler);
+                startTheDamnGamePlease.Load();
 
             }
             if (s.tag == "" + tagTracker)
@@ -132,6 +136,11 @@ public class OnePlayerSelect : MonoBehaviour
             else
             {
                 s.interactable = false;
+            }
+
+            if (tagTracker > 8)
+            {
+                tagTracker = 8;
             }
 
         }

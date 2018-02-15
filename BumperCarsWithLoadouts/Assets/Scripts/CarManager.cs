@@ -18,9 +18,11 @@ public class CarManager : MonoBehaviour {
     public Text NumCars2;
 
     private List<GameObject> cars;//keeps track of all the cars on the arena
-    private bool haveSpawned;//determines if the AI have been spawned in yet
+    private bool haveSpawned = false;//determines if the AI have been spawned in yet
 
     private int carsLeft;//how many cars are left in the scene
+
+    public bool aiOn = false;//whether or not to use AI
 
 	// Use this for initialization
 	void Start () {
@@ -44,9 +46,13 @@ public class CarManager : MonoBehaviour {
     {
         //arenaRadius = GameObject.Find("Arena").transform.lossyScale.x * 32;
         Debug.LogWarning(arenaRadius);
-        numAI = PlayerPrefs.GetInt("numAI");
+        numAI = 5;//PlayerPrefs.GetInt("numAI");//------------------------------------------------------------------set to hard code for now
         //set to false until spawned
-        haveSpawned = true;//false; ------------------------------------------------------------------set to true for now so AI do not spawn in arenas
+        if (!aiOn)
+        {
+            haveSpawned = true;//------------------------------------------------------------------set to true for now so AI do not spawn in arenas
+        }
+        
         //initialize list
         cars = new List<GameObject>();
         if (haveSpawned == false)
