@@ -69,7 +69,6 @@ public abstract class VehicleMovement : MonoBehaviour {
     /// </summary>
     protected abstract void CalcSteeringForces();
 
-
     /// <summary>
     /// UpdatePosition
     /// Calculate the velocity and resulting position of a vehicle
