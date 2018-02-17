@@ -25,7 +25,8 @@ public class RPLauncher : MonoBehaviour {
                 {
                     //Create a ROKETTO PUUUUNCH. The launcher is rotated, so we use the transform.up
                     GameObject rocketPunchInstance = Instantiate(rocketPunch, gameObject.transform.position + (transform.up * -1.5f), new Quaternion(0, 0, 0, 0));
-                    rocketPunch.GetComponent<RocketPunch>().direction = -transform.up;
+                    rocketPunchInstance.GetComponent<RocketPunch>().direction = -transform.up;
+                    rocketPunchInstance.GetComponent<RocketPunch>().parentCarID = gameObject.GetComponentInParent<Player>().playerID;
                     //StartCoroutine(Fire());
                     //cooldown = 0.0f;
                     //currentFire = fireSounds[Random.Range(0, fireSounds.Length - 1)];
@@ -38,7 +39,8 @@ public class RPLauncher : MonoBehaviour {
                 {
                     //Create a ROKETTO PUUUUNCH. The launcher is rotated, so we use the transform.up
                     GameObject rocketPunchInstance = Instantiate(rocketPunch, gameObject.transform.position + (transform.right * -1.5f), new Quaternion(0, 0, 0, 0));
-                    rocketPunch.GetComponent<RocketPunch>().direction = -transform.right;
+                    rocketPunchInstance.GetComponent<RocketPunch>().direction = -transform.right;
+                    rocketPunchInstance.GetComponent<RocketPunch>().parentCarID = gameObject.GetComponentInParent<Player>().playerID;
                     //StartCoroutine(Fire());
                     //cooldown = 0.0f;
                     //currentFire = fireSounds[Random.Range(0, fireSounds.Length - 1)];
