@@ -12,14 +12,15 @@ public class RocketPunch : MonoBehaviour {
     int timer;
     private List<GameObject> carList;
     private bool targetLocked;
-    private Vector3 carToSeek;
+    private GameObject carToSeek;
+    private Vector3 carToSeekPos;
     public int parentCarID;
     private Vector3 acceleration;
     void Start ()
     {
-        speed = 1.1f;
+        speed = 0.2f;
         carList = GameObject.Find("SceneManager").GetComponent<CarManager>().Cars;
-        carToSeek = new Vector3(int.MaxValue, int.MaxValue, int.MaxValue);
+        carToSeekPos = new Vector3(int.MaxValue, int.MaxValue, int.MaxValue);
         targetLocked = false;
 	}
 	
@@ -28,38 +29,57 @@ public class RocketPunch : MonoBehaviour {
     {
         
         Vector3 ultimaForce = Vector3.zero;
-        if (!targetLocked)
-        {
-            for (int i = 0; i < carList.Count; i++)
-            {
-                Debug.Log("shiiiiiiiiiit");
-
-                if (parentCarID == carList[i].GetComponent<Player>().playerID)
-                {
-                    Debug.Log("waaaaaaaaaaaaaa");
-
-                    //carToSeek = carList[i+1].transform.position;
-                    continue;
-                }
-                GameObject tempTarget = carList[i];
-                if ((tempTarget.transform.position - transform.position).magnitude < (carToSeek - transform.position).magnitude)
-                {
-                    carToSeek = tempTarget.transform.position;
-                    Debug.Log("FUUUUUGGG");
-                }
-                    
-                targetLocked = true;
-            }
-        }
         
-        ultimaForce += Seek(carToSeek);
-        acceleration = ultimaForce;
-        velocity += acceleration;
-        //transform.forward = direction;
-        transform.position += velocity;
-        if (timer == 80)
+        if(timer < 20)
+        {
+            velocity = direction * speed;
+            transform.forward = direction;
+            transform.position += velocity;
+        }
+        else
+        {
+            if (!targetLocked)
+            {
+                for (int i = 0; i < carList.Count; i++)
+                {
+                    Debug.Log("shiiiiiiiiiit");
+
+                    if (parentCarID == carList[i].GetComponent<Player>().playerID)
+                    {
+                       // Debug.Log("waaaaaaaaaaaaaa");
+
+                        //carToSeekPos = carList[i+1].transform.position;
+                        continue;
+                    }
+                    GameObject tempTarget = carList[i];
+                    if ((tempTarget.transform.position - transform.position).magnitude < (carToSeekPos - transform.position).magnitude)
+                    {
+                        carToSeek = tempTarget;
+                        //Debug.Log("FUUUUUGGG");
+                    }
+
+                    targetLocked = true;
+                }
+            }
+            carToSeekPos = carToSeek.transform.position;
+            ultimaForce += Seek(carToSeekPos);
+            acceleration = ultimaForce;
+            velocity += acceleration;
+            transform.position += velocity;
+        }
+        if (timer == 120)
             Destroy(gameObject);
         timer++;
+
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, velocity, out hit, speed))
+        {
+            if (hit.collider.tag == "Player" || hit.collider.tag == "AI")
+            {
+                hit.collider.gameObject.GetComponent<Collision>().PunchHit(this.GetComponent<SphereCollider>());
+                transform.position = hit.point;
+            }
+        }
     }
     protected Vector3 Seek(Vector3 targetPosition)
     {
