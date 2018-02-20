@@ -18,11 +18,13 @@ public class ArenaOverview : MonoBehaviour {
     public float positionDamping = .5f;
     private Transform target;
     private Vector3 start;//where the start point of the lerping between points in the path is
+    private Quaternion rotStart;//where the start point of the lerping between roations
     private int index;//index of the path that the camera is seeking
     private bool countdown;//whether the countdown is active or not
     private bool isStarted;//whether the overview and countdown for the current match are over
 
     static float timer = 0;
+    private float percentage = 0;
 
     // Use this for initialization
     void Start () {
@@ -37,6 +39,7 @@ public class ArenaOverview : MonoBehaviour {
         p2.enabled = false;
 
         start = cam.transform.position;//set original start to the beginning
+
     }
 	
 	// Update is called once per frame
@@ -44,7 +47,7 @@ public class ArenaOverview : MonoBehaviour {
         //don't execute if the match has started
         if (isStarted)
             return;
-
+        
         //move the camera through the points at a reasonable speed
 
         //get the current target
@@ -52,10 +55,12 @@ public class ArenaOverview : MonoBehaviour {
         {
             target = path[index].transform;
 
-            if (Vector3.Distance(cam.transform.position, target.position) < .05)
+            if (percentage >= 1)
             {
+                rotStart = cam.transform.rotation;
                 index++;
-                start = path[index - 1].transform.position;
+                start = cam.transform.position;
+                target = path[index].transform;
                 timer = 0;
                 if (index >= path.Length - 1)
                 {
@@ -70,13 +75,18 @@ public class ArenaOverview : MonoBehaviour {
                 }
             }
             timer += Time.deltaTime;
-            
-            float timeToStop = 1.0f;
+
+            float timeToStop = 1.0f;// * Vector3.Magnitude(start-target.position)/50;
 
             // Set the forward to rotate with time
+
+            //float rotPercentage = Utility.MapValue(timer, 0.0f, timeToStop, 0.0f, 1.0f);
+            //cam.transform.rotation = Quaternion.Lerp(rotStart, Quaternion.FromToRotation(cam.transform.forward, transform.position - cam.transform.position), rotPercentage/* * positionDamping*/);
+
             cam.transform.LookAt(transform);
-            float percentage = Utility.MapValue(timer, 0.0f, timeToStop, 0.0f, 1.0f);
-            cam.transform.position = Vector3.Lerp(start, target.position, percentage/* * positionDamping*/);
+
+            percentage = Utility.MapValue(timer, 0.0f, timeToStop, 0.0f, 1.0f);
+            cam.transform.position = Vector3.Slerp(start, target.position, percentage/* * positionDamping*/);
             return;
         }
 
@@ -99,5 +109,10 @@ public class ArenaOverview : MonoBehaviour {
 
 
 
+    }
+
+    private void LateUpdate()
+    {
+        
     }
 }
