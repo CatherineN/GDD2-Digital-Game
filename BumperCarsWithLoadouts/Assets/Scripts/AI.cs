@@ -20,7 +20,6 @@ public class AI : VehicleMovement {
     {
         base.Start();
     }
-
     /// <summary>
     /// Takes player input and calculates the forces acting on it accordingly
     /// Needs a max force**

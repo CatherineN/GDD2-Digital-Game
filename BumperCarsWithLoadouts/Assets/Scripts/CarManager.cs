@@ -9,20 +9,24 @@ public class CarManager : MonoBehaviour {
     private int numAI; //how many AI cars are spawned in the arena
     public GameObject prefabAI;
     //float to determine the extents of the arena
-    public float arenaRadius;
+    private float arenaRadius;
+
+    public float ArenaRadius { get { return GameObject.Find("Arena").transform.lossyScale.x * 32; } }
 
     //UI text components of canvas to display
     public Text NumCars1;
     public Text NumCars2;
 
     private List<GameObject> cars;//keeps track of all the cars on the arena
-    private bool haveSpawned;//determines if the AI have been spawned in yet
+    private bool haveSpawned = false;//determines if the AI have been spawned in yet
 
     private int carsLeft;//how many cars are left in the scene
 
+    public bool aiOn = false;//whether or not to use AI
+
 	// Use this for initialization
 	void Start () {
-		
+        
 	}
 	
 	// Update is called once per frame
@@ -40,9 +44,15 @@ public class CarManager : MonoBehaviour {
 
     void Awake()
     {
-        numAI = PlayerPrefs.GetInt("numAI");
+        //arenaRadius = GameObject.Find("Arena").transform.lossyScale.x * 32;
+        Debug.LogWarning(arenaRadius);
+        numAI = 5;//PlayerPrefs.GetInt("numAI");//------------------------------------------------------------------set to hard code for now
         //set to false until spawned
-        haveSpawned = false;
+        if (!aiOn)
+        {
+            haveSpawned = true;//------------------------------------------------------------------set to true for now so AI do not spawn in arenas
+        }
+        
         //initialize list
         cars = new List<GameObject>();
         if (haveSpawned == false)
@@ -60,11 +70,10 @@ public class CarManager : MonoBehaviour {
     {
         for (int i = 0; i < numAI; ++i)
         {
-            float xPos = arenaRadius* Mathf.Cos(2 * Mathf.PI * i / numAI)*.9f;
-            float zPos = arenaRadius * Mathf.Sin(2 * Mathf.PI * i / numAI) * .9f;
+            float xPos = ArenaRadius* Mathf.Cos(2 * Mathf.PI * i / numAI)*.9f;
+            float zPos = ArenaRadius * Mathf.Sin(2 * Mathf.PI * i / numAI) * .9f;
             //instantiate car
             GameObject carInstance = Instantiate(prefabAI, new Vector3(xPos, 0, zPos), Quaternion.identity) as GameObject;
-            carInstance.GetComponent<Collision>().stageRadius = arenaRadius;
             //add car to list
             cars.Add(carInstance);
         }

@@ -25,19 +25,26 @@ public class LoadScene : MonoBehaviour
             }
             else if (gameObject.tag == "Loadout Menu")
             {
-                SceneManager.LoadScene("Bob");
+                SceneManager.LoadScene("DefaultArena");
+            }
+            else if(gameObject.tag == "gameOver")
+            {
+                SceneManager.LoadScene("Start");
             }
         }
-
+        else if(Input.GetButtonDown("Fire3"))
+        {
+            SceneManager.LoadScene(PlayerPrefs.GetString("previousScene"));
+        }
     }
 
     // load the main menu when button on game over scene is pressed
-    public void Load()
+    /*public void Load()
     {
         if(gameObject.tag == "gameOver")
         {
             SceneManager.LoadScene("Start");
         }
-    }
+    }*/
 
 }

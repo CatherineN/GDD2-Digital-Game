@@ -19,6 +19,7 @@ public class Cannonball : MonoBehaviour
 	void Update ()
     {
         velocity = direction * speed;
+        transform.forward = direction;
         transform.position += velocity;
         if (timer == 100)
             Destroy(gameObject);

@@ -1,19 +1,29 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Collision : MonoBehaviour
 {
     public float impactForce;
     public float impactReduction;
-    public float stageRadius;
+    //private float stageRadius;
     public float cannonImpact;
+    public LayerMask floorMask;
 
     private Rigidbody rb;
     private VehicleMovement p;
     private AI ai;
+    private CarManager cM;
 
     private int collisionCount;
+    private bool fallingStage = false;
+
+    //public float StageRadius
+    //{
+    //    get { return stageRadius; }
+    //    set {stageRadius =value; }
+    //}
 	// Use this for initialization
 	void Start ()
     {
@@ -23,7 +33,14 @@ public class Collision : MonoBehaviour
         else
             p = gameObject.GetComponent<AI>();
         collisionCount = 0;
-	}
+
+        if (SceneManager.GetActiveScene().name == "CollapsingArena")
+            fallingStage = true;
+
+        cM = GameObject.Find("SceneManager").GetComponent<CarManager>();
+
+        
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -42,7 +59,20 @@ public class Collision : MonoBehaviour
             ProjectileHit(other);
             return;
         }
-
+        if(other.gameObject.tag == "Bomb")
+        {
+            return;
+        }
+        if(other.gameObject.tag == "Paintbang")
+        {
+            return;
+        }
+        
+        if(other.gameObject.tag == "RocketPunch")
+        {
+            PunchHit(other);
+            return;
+        }
         Rigidbody otherRB = other.gameObject.GetComponent<Rigidbody>();
         VehicleMovement otherVM = other.gameObject.GetComponent<VehicleMovement>();
         
@@ -95,7 +125,16 @@ public class Collision : MonoBehaviour
 
     public void CheckFallOff()
     {
-        if((new Vector3(0,0.1f,0) - transform.position).sqrMagnitude > stageRadius * stageRadius)
+        if(fallingStage)
+        {
+            //Debug.DrawRay(transform.position, -transform.up, Color.red,100.0f);
+            if(!Physics.Raycast(transform.position, -transform.up, 0.5f, floorMask))
+            {
+                rb.useGravity = true;
+                Debug.Log("fall");
+            }
+        }
+        else if((new Vector3(0,0.1f,0) - transform.position).sqrMagnitude > cM.ArenaRadius * cM.ArenaRadius)
         {
             rb.useGravity = true;
         }
@@ -115,6 +154,11 @@ public class Collision : MonoBehaviour
         Destroy(other.gameObject);
     }
 
+    public void PunchHit(Collider other)
+    {
+        p.ApplyForce(other.GetComponent<RocketPunch>().velocity.normalized * (cannonImpact * 1.5f));
+        Destroy(other.gameObject);
+    }
     IEnumerator Hit()
     {
         GameObject p = transform.FindChild("HitByCannon").gameObject;
