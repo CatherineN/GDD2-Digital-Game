@@ -51,6 +51,8 @@ public class Collision : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
+        if (other.gameObject.layer == 15)
+            return;
         if (other.gameObject.tag == "Terrain" || collisionCount > 0)
             return;
 

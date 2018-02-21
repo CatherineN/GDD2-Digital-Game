@@ -30,7 +30,7 @@ public class PBLauncher : MonoBehaviour {
         {
             case 1:
                 //When the E key is pressed...
-                if ((Input.GetKeyDown(KeyCode.E) || Input.GetButtonDown("Fire3")) && cooldown >= cooldownTime)
+                if (((Input.GetKeyDown(KeyCode.E) || Input.GetButtonDown("Fire3")) && cooldown >= cooldownTime)&& gameObject.transform.parent.gameObject.GetComponent<Player>().enabled == true)
                 {
                     //Create a cannonball at the mouth of the cannon. The cannon is rotated, so we use the transform.up
                     GameObject paintbangInstance = Instantiate(paintbang, gameObject.transform.position + (transform.up / 2.5f), new Quaternion(0, 0, 0, 0));
@@ -41,7 +41,7 @@ public class PBLauncher : MonoBehaviour {
                 break;
             case 2:
                 //When the E key is pressed...
-                if ((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetButtonDown("Fire2")) && cooldown >= cooldownTime)
+                if (((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetButtonDown("Fire2")) && cooldown >= cooldownTime)&& gameObject.transform.parent.gameObject.GetComponent<Player>().enabled == true)
                 {
                     //Create a cannonball at the mouth of the cannon. The cannon is rotated, so we use the transform.up
                     GameObject paintbangInstance = Instantiate(paintbang, gameObject.transform.position + (transform.up / 2.5f), new Quaternion(0, 0, 0, 0));
