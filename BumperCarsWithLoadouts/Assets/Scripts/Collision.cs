@@ -68,6 +68,11 @@ public class Collision : MonoBehaviour
             return;
         }
         
+        if(other.gameObject.tag == "RocketPunch")
+        {
+            PunchHit(other);
+            return;
+        }
         Rigidbody otherRB = other.gameObject.GetComponent<Rigidbody>();
         VehicleMovement otherVM = other.gameObject.GetComponent<VehicleMovement>();
         
@@ -149,6 +154,11 @@ public class Collision : MonoBehaviour
         Destroy(other.gameObject);
     }
 
+    public void PunchHit(Collider other)
+    {
+        p.ApplyForce(other.GetComponent<RocketPunch>().velocity.normalized * (cannonImpact * 1.5f));
+        Destroy(other.gameObject);
+    }
     IEnumerator Hit()
     {
         GameObject p = transform.FindChild("HitByCannon").gameObject;

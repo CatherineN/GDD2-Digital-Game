@@ -27,7 +27,7 @@ public class CollapseArena : MonoBehaviour {
     IEnumerator Fall()
     {
         randomInt = rand.Next(0, transform.childCount);
-        Transform faller = transform.GetChild(randomInt);
+        Transform faller = transform.GetChild(0).GetChild(randomInt);
         faller.GetComponent<Renderer>().material.color = Color.red;
         yield return new WaitForSeconds(2);
         faller.GetComponent<Rigidbody>().useGravity = true;

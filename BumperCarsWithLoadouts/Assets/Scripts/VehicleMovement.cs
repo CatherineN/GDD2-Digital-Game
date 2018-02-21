@@ -22,7 +22,7 @@ public abstract class VehicleMovement : MonoBehaviour {
     //Vector3 to keep track of future position
     protected Vector3 futPos;
 
-    public float maxForce;
+    public float maxForce;//.6 for the AI
     protected float maxSpeed = .75f;
     protected float minSpeed = .4f;
     protected float turnSpeed = 1.9f;

@@ -18,38 +18,38 @@ public class CarType : MonoBehaviour {
 	void Update () {
 
         // switch statement for player 1 selection
-        switch (topDropdown.captionText.text)
+        switch (topDropdown.value)
         {
-            case "Lightweight (low mass)": // decrease mass of car: mass = 45
+            case 0: // decrease mass of car: mass = 45
                 PlayerPrefs.SetFloat("weight1", 45f);
                 PlayerPrefs.SetString("type1", "light");
                 break;
 
-            case "Normal (mass = 1)": // mass is default value: mass = 50
+            case 1: // mass is default value: mass = 50
                 PlayerPrefs.SetFloat("weight1", 50f);
                 PlayerPrefs.SetString("type1", "medium");
                 break;
 
-            case "Heavyweight (high mass)": // increase mass of car: mass = 55
+            case 2: // increase mass of car: mass = 55
                 PlayerPrefs.SetFloat("weight1", 55f);
                 PlayerPrefs.SetString("type1", "heavy");
                 break;
         }
 
         // switch statement for player 2 selection
-        switch (bottomDropdown.captionText.text)
+        switch (bottomDropdown.value)
         {
-            case "Lightweight (low mass)":
+            case 0:
                 PlayerPrefs.SetFloat("weight2", 45f);
                 PlayerPrefs.SetString("type2", "light");
                 break;
 
-            case "Normal (mass = 1)":
+            case 1:
                 PlayerPrefs.SetFloat("weight2", 50f);
                 PlayerPrefs.SetString("type2", "medium");
                 break;
 
-            case "Heavyweight (high mass)":
+            case 2:
                 PlayerPrefs.SetFloat("weight2", 55f);
                 PlayerPrefs.SetString("type2", "heavy");
                 break;

@@ -7,6 +7,7 @@ public class BumperPhysics : VehicleMovement
     public int playerID;//which player the script is on
     public float frictionCoef = .5f;
     public float frictionForce = 2f;
+    public float impactForce = 10.0f;
 
     private bool collidedThisFrame;
 
@@ -59,17 +60,26 @@ public class BumperPhysics : VehicleMovement
 
     private void ManageCollision(UnityEngine.Collision collision)
     {
-        Debug.Log(collision.contacts.Length);
-
+        // get the other collider
         Transform otherT = collision.collider.transform;
-        Vector3 forceDir = collision.contacts[0].point - otherT.position;
-        float impact = Vector3.Dot(velocity, forceDir);
+        // calculate the force direction
+        Vector3 forceDir = transform.position - otherT.position;
+        // get the projection
+        float impact = Vector3.Dot(velocity.normalized, forceDir.normalized);
+        // factor in mass
         impact = impact * (rb.mass / collision.collider.GetComponent<Rigidbody>().mass);
         if(impact == 0)
         {
-            impact = 0.0000000001f;
+            impact = 0.0001f;
         }
-        Vector3 resultantForce = velocity * (1 / impact);
+        // get the resultant force
+        Vector3 resultantForce = velocity * impact * impactForce;
+        Debug.Log(resultantForce);
+        // correct for being inside the rigidbody
+        //ApplyForce(-velocity);
+        transform.position = transform.position - (velocity * 2.0f);
+        // apply the force to the other object
+        collision.gameObject.GetComponent<BumperPhysics>().ApplyForce(resultantForce);
     }
 
     
