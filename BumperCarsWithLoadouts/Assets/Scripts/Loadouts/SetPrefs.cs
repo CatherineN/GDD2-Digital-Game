@@ -79,18 +79,27 @@ public class SetPrefs : MonoBehaviour {
             case "Bomb Dropper":
                 transform.FindChild("Cannon").gameObject.SetActive(false);
                 transform.FindChild("Paintbang Launcher").gameObject.SetActive(false);
+                transform.FindChild("Rocket Punch Launcher").gameObject.SetActive(false);
                 transform.FindChild("Bomb Dropper").gameObject.SetActive(true);
                 break;
 
             case "Cannon":
                 transform.FindChild("Bomb Dropper").gameObject.SetActive(false);
                 transform.FindChild("Paintbang Launcher").gameObject.SetActive(false);
+                transform.FindChild("Rocket Punch Launcher").gameObject.SetActive(false);
                 transform.FindChild("Cannon").gameObject.SetActive(true);
                 break;
             case "PaintBang":
                 transform.FindChild("Bomb Dropper").gameObject.SetActive(false);
                 transform.FindChild("Cannon").gameObject.SetActive(false);
+                transform.FindChild("Rocket Punch Launcher").gameObject.SetActive(false);
                 transform.FindChild("Paintbang Launcher").gameObject.SetActive(true);
+                break;
+            case "Rocket Punch":
+                transform.FindChild("Bomb Dropper").gameObject.SetActive(false);
+                transform.FindChild("Cannon").gameObject.SetActive(false);
+                transform.FindChild("Paintbang Launcher").gameObject.SetActive(false);
+                transform.FindChild("Rocket Punch Launcher").gameObject.SetActive(true);
                 break;
         }
 

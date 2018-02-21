@@ -22,6 +22,7 @@ public class CarAbility : MonoBehaviour {
             case "Bombs": // activate the plow
                 GameObject.FindGameObjectWithTag("P1").transform.FindChild("Cannon").gameObject.SetActive(false);
                 GameObject.FindGameObjectWithTag("P1").transform.FindChild("Bomb Dropper").gameObject.SetActive(true);
+                GameObject.FindGameObjectWithTag("P1").transform.FindChild("Rocket Punch Launcher").gameObject.SetActive(false);
                 GameObject.FindGameObjectWithTag("P1").transform.FindChild("Paintbang Launcher").gameObject.SetActive(false);
                 PlayerPrefs.SetString("weapon1", "Bomb Dropper");
                 break;
@@ -29,6 +30,7 @@ public class CarAbility : MonoBehaviour {
             case "Cannon": // inactivate the plow
                 GameObject.FindGameObjectWithTag("P1").transform.FindChild("Bomb Dropper").gameObject.SetActive(false);
                 GameObject.FindGameObjectWithTag("P1").transform.FindChild("Cannon").gameObject.SetActive(true);
+                GameObject.FindGameObjectWithTag("P1").transform.FindChild("Rocket Punch Launcher").gameObject.SetActive(false);
                 GameObject.FindGameObjectWithTag("P1").transform.FindChild("Paintbang Launcher").gameObject.SetActive(false);
                 PlayerPrefs.SetString("weapon1", "Cannon");
                 break;
@@ -36,8 +38,17 @@ public class CarAbility : MonoBehaviour {
             case "PaintBang": // inactivate the plow
                 GameObject.FindGameObjectWithTag("P1").transform.FindChild("Bomb Dropper").gameObject.SetActive(false);
                 GameObject.FindGameObjectWithTag("P1").transform.FindChild("Cannon").gameObject.SetActive(false);
+                GameObject.FindGameObjectWithTag("P1").transform.FindChild("Rocket Punch Launcher").gameObject.SetActive(false);
                 GameObject.FindGameObjectWithTag("P1").transform.FindChild("Paintbang Launcher").gameObject.SetActive(true);
                 PlayerPrefs.SetString("weapon1", "PaintBang");
+                break;
+
+            case "Rocket Punch": // inactivate the plow
+                GameObject.FindGameObjectWithTag("P1").transform.FindChild("Bomb Dropper").gameObject.SetActive(false);
+                GameObject.FindGameObjectWithTag("P1").transform.FindChild("Cannon").gameObject.SetActive(false);
+                GameObject.FindGameObjectWithTag("P1").transform.FindChild("Paintbang Launcher").gameObject.SetActive(false);
+                GameObject.FindGameObjectWithTag("P1").transform.FindChild("Rocket Punch Launcher").gameObject.SetActive(true);
+                PlayerPrefs.SetString("weapon1", "Rocket Punch");
                 break;
         }
 
@@ -46,6 +57,7 @@ public class CarAbility : MonoBehaviour {
         {
             case "Bombs":
                 GameObject.FindGameObjectWithTag("P2").transform.FindChild("Cannon").gameObject.SetActive(false);
+                GameObject.FindGameObjectWithTag("P2").transform.FindChild("Rocket Punch Launcher").gameObject.SetActive(false);
                 GameObject.FindGameObjectWithTag("P2").transform.FindChild("Bomb Dropper").gameObject.SetActive(true);
                 GameObject.FindGameObjectWithTag("P2").transform.FindChild("Paintbang Launcher").gameObject.SetActive(false);
 
@@ -55,6 +67,7 @@ public class CarAbility : MonoBehaviour {
             case "Cannon":
                 GameObject.FindGameObjectWithTag("P2").transform.FindChild("Bomb Dropper").gameObject.SetActive(false);
                 GameObject.FindGameObjectWithTag("P2").transform.FindChild("Cannon").gameObject.SetActive(true);
+                GameObject.FindGameObjectWithTag("P2").transform.FindChild("Rocket Punch Launcher").gameObject.SetActive(false);
                 GameObject.FindGameObjectWithTag("P2").transform.FindChild("Paintbang Launcher").gameObject.SetActive(false);
                 PlayerPrefs.SetString("weapon2", "Cannon");
                 break;
@@ -62,8 +75,17 @@ public class CarAbility : MonoBehaviour {
             case "PaintBang":
                 GameObject.FindGameObjectWithTag("P2").transform.FindChild("Bomb Dropper").gameObject.SetActive(false);
                 GameObject.FindGameObjectWithTag("P2").transform.FindChild("Cannon").gameObject.SetActive(false);
+                GameObject.FindGameObjectWithTag("P2").transform.FindChild("Rocket Punch Launcher").gameObject.SetActive(false);
                 GameObject.FindGameObjectWithTag("P2").transform.FindChild("Paintbang Launcher").gameObject.SetActive(true);
                 PlayerPrefs.SetString("weapon2", "PaintBang");
+                break;
+
+            case "Rocket Punch": // inactivate the plow
+                GameObject.FindGameObjectWithTag("P2").transform.FindChild("Bomb Dropper").gameObject.SetActive(false);
+                GameObject.FindGameObjectWithTag("P2").transform.FindChild("Cannon").gameObject.SetActive(false);
+                GameObject.FindGameObjectWithTag("P2").transform.FindChild("Paintbang Launcher").gameObject.SetActive(false);
+                GameObject.FindGameObjectWithTag("P2").transform.FindChild("Rocket Punch Launcher").gameObject.SetActive(true);
+                PlayerPrefs.SetString("weapon1", "Rocket Punch");
                 break;
         }
     }

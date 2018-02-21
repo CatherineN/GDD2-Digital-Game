@@ -17,6 +17,7 @@ public class RPLauncher : MonoBehaviour {
     {
         cooldown = cooldownTime;
         playerID = GetComponentInParent<Player>().playerID;
+        ability.sprite = sprite;
     }
 	
 	// Update is called once per frame
