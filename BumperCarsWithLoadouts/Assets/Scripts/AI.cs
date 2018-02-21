@@ -15,6 +15,8 @@ public class AI : VehicleMovement {
     private Vector3 adjustmentTarget; //the point in space that the AI will go to in order to build up speed before bumping the target
     private bool tooClose = false;//determines whether or not the AI is too close to its target to bump effectively
 
+    public Vector3 minVelocity; //the lowest possible velocity to make a significant bump
+
     // Use this for initialization
     public override void Start()
     {
@@ -76,6 +78,13 @@ public class AI : VehicleMovement {
         {
             //get distance between
             Vector3 temp = cM.Cars[i].transform.position - position;
+            //determine if they will reach adequate velocity and therefore adequate force by the time they arrive at the target's position
+            Vector3 futVelocity = GetFutureVelocity(cM.Cars[i].transform.position);
+            if(futVelocity.magnitude < minVelocity.magnitude)//make a fail check that continues to next target in loop if they won't reach necessary velocity
+            {
+                Debug.Log(gameObject.name + "'s gotta go faster");
+                continue;
+            }
             //compare to see if is smaller than stored
             if (temp.magnitude < closest.magnitude && temp.magnitude >= 2f)
             {
@@ -87,6 +96,10 @@ public class AI : VehicleMovement {
                 target = cM.Cars[i];
                 break;
             }
+        }
+        if(target == null)//do the loop around behavior to build up speed before chasing a target
+        {
+
         }
     }
     /// <summary>
@@ -113,5 +126,24 @@ public class AI : VehicleMovement {
         //return Vector3.zero;
         if((gameObject.transform.position - adjustmentTarget).magnitude < .01f)
         tooClose = false;
+    }
+
+    private Vector3 GetFutureVelocity(Vector3 tarPos)
+    {
+        //velocity += maxforce (can't do times deltaTime, so instead need the average framerate and then 1/that number)
+        //as many times as that takes to get to the target's location/cover the distance between them and that is the future velocity
+        float timePerFrame = Time.realtimeSinceStartup/Time.frameCount;//average time per frame during the project
+
+        Vector3 futVelocity = Vector3.zero;
+        Vector3 tempPos = transform.position;
+
+        while(Vector3.Distance(tempPos, tarPos) > 0)
+        {
+            futVelocity += (velocity + maxForce * transform.forward)*timePerFrame;
+            futVelocity = Vector3.ClampMagnitude(futVelocity, maxSpeed);
+            tempPos += futVelocity;
+        }
+
+        return futVelocity;
     }
 }
