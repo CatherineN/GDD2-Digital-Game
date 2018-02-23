@@ -20,4 +20,9 @@ public static class Utility {
     {
         return (value - inputFrom) / (inputTo - inputFrom) * (outputTo - outputFrom) + outputFrom;
     }
+
+    public static void SetPhysicsSettings()
+    {
+        Physics.IgnoreLayerCollision(15, 15, true);
+    }
 }

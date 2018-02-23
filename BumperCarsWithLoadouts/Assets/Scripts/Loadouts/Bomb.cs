@@ -21,7 +21,9 @@ public class Bomb : MonoBehaviour {
     void Start ()
     {
         dropped = false;
-	}
+        radius *= GameObject.Find("SceneManager").GetComponent<CarManager>().ArenaRadius;
+
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -36,7 +38,6 @@ public class Bomb : MonoBehaviour {
 	}
     private void Explode()
     {
-    
         //Get every collider near it
         Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
         //And for all of them...

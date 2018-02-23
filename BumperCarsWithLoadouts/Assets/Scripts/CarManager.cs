@@ -26,7 +26,7 @@ public class CarManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        
+        Utility.SetPhysicsSettings();
 	}
 	
 	// Update is called once per frame
