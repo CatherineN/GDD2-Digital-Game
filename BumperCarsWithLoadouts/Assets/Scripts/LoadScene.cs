@@ -32,7 +32,7 @@ public class LoadScene : MonoBehaviour
                 SceneManager.LoadScene("Start");
             }
         }
-        else if(Input.GetButtonDown("Fire3"))
+        else if(Input.GetButtonDown("Fire3") || Input.GetButtonDown("Fire2"))
         {
             SceneManager.LoadScene(PlayerPrefs.GetString("previousScene"));
         }

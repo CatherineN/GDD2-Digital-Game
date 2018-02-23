@@ -18,7 +18,7 @@ public class RocketPunch : MonoBehaviour {
     private Vector3 acceleration;
     void Start ()
     {
-        speed = 0.2f;
+        speed = 1.2f;
         carList = GameObject.Find("SceneManager").GetComponent<CarManager>().Cars;
         carToSeekPos = new Vector3(int.MaxValue, int.MaxValue, int.MaxValue);
         targetLocked = false;
@@ -30,7 +30,7 @@ public class RocketPunch : MonoBehaviour {
         
         Vector3 ultimaForce = Vector3.zero;
         
-        if(timer < 20)
+        if(timer < 10)
         {
             velocity = direction * speed;
             transform.forward = direction;
@@ -67,7 +67,7 @@ public class RocketPunch : MonoBehaviour {
             velocity += acceleration;
             transform.position += velocity;
         }
-        if (timer == 120)
+        if (timer == 70)
             Destroy(gameObject);
         timer++;
 
