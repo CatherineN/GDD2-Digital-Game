@@ -11,7 +11,12 @@ public class LoadScene : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        if (gameObject.tag == "Main Menu")
+        {
+            GameObject.Find("Start").GetComponent<Canvas>().enabled = true;
+            GameObject.Find("Controls").GetComponent<Canvas>().enabled = false;
+            controls = false;
+        }
     }
 
     // Update is called once per frame
@@ -19,14 +24,20 @@ public class LoadScene : MonoBehaviour
     {
         // to make this script adaptable, it looks at the tag of the scene, and
         // then loads the appropriate scene.
-        checkForControls();
+        if (gameObject.tag == "Main Menu")
+        {
+            checkForControls();
+        }
         if (Input.GetButtonDown("Start"))
         {
             
             if (gameObject.tag == "Main Menu")
             {
-                SceneManager.LoadScene("LoadOuts");
+                GameObject.Find("Start").GetComponent<Canvas>().enabled = true;
+                GameObject.Find("Controls").GetComponent<Canvas>().enabled = false;
                 controls = false;
+                SceneManager.LoadScene("LoadOuts");
+                
             }
             else if (gameObject.tag == "Loadout Menu")
             {
@@ -34,6 +45,7 @@ public class LoadScene : MonoBehaviour
             }
             else if(gameObject.tag == "gameOver")
             {
+                
                 SceneManager.LoadScene("Start");
             }
         }
@@ -44,7 +56,7 @@ public class LoadScene : MonoBehaviour
     }
     void checkForControls()
     {
-        if (Input.GetButtonDown("Select"))
+        if (Input.GetButtonDown("Select") && GameObject.Find("Start").GetComponent<Canvas>())
         {
             controls = !controls;
             if (controls)
