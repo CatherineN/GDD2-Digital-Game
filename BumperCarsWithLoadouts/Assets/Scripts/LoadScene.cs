@@ -26,6 +26,7 @@ public class LoadScene : MonoBehaviour
             if (gameObject.tag == "Main Menu")
             {
                 SceneManager.LoadScene("LoadOuts");
+                controls = false;
             }
             else if (gameObject.tag == "Loadout Menu")
             {
