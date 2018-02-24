@@ -24,6 +24,7 @@ public class PaintBang : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+        radius = GameObject.Find("SceneManager").GetComponent<CarManager>().ArenaRadius;
         velocity = direction * speed;
         transform.forward = direction;
         transform.position += velocity * Time.deltaTime;
