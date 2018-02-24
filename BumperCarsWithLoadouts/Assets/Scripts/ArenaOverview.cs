@@ -23,8 +23,22 @@ public class ArenaOverview : MonoBehaviour {
     private bool countdown;//whether the countdown is active or not
     private bool isStarted;//whether the overview and countdown for the current match are over
 
+    private int numPlayers = 2;//how many people are playing
+    private int votesToSkip = 0;//how many people want to skip
+    private bool p1Voted = false;
+    private bool p2Voted = false;
+
     static float timer = 0;
     private float percentage = 0;
+
+    public void Awake()
+    {
+        if(PlayerPrefs.GetString("previousScene") == "GameOver")
+        {
+            SkipToCountdown();
+            countdown = true;
+        }
+    }
 
     // Use this for initialization
     void Start () {
@@ -47,12 +61,15 @@ public class ArenaOverview : MonoBehaviour {
         //don't execute if the match has started
         if (isStarted)
             return;
+
         
+
         //move the camera through the points at a reasonable speed
 
         //get the current target
         if (!countdown)
         {
+            SkipToCountdown();
             target = path[index].transform;
 
             if (percentage >= 1)
@@ -65,13 +82,7 @@ public class ArenaOverview : MonoBehaviour {
                 if (index >= path.Length - 1)
                 {
                     countdown = true;
-                    //once the cam reaches the end of the path switch to the two individual cams
-                    topCam.SetActive(true);
-                    botCam.SetActive(true);
-                    GameObject.Find("ArenaOverview").SetActive(false);
-                    topCanvas.SetActive(true);
-                    botCanvas.SetActive(true);
-                    
+                    GoToCountdown();
                 }
             }
             timer += Time.deltaTime;
@@ -111,8 +122,33 @@ public class ArenaOverview : MonoBehaviour {
 
     }
 
-    private void LateUpdate()
+    private void SkipToCountdown()
     {
-        
+        if(Input.GetButtonDown("Honk1") && !p1Voted)
+        {
+            votesToSkip++;
+            p1Voted = true;
+        }
+        if (Input.GetButtonDown("Honk2") && !p2Voted)
+        {
+            votesToSkip++;
+            p2Voted = true;
+        }
+
+        if (votesToSkip >= (int)Mathf.Ceil(.66f * numPlayers))
+        {
+            countdown = true;
+            GoToCountdown();
+        }
+    }
+
+    private void GoToCountdown()
+    {
+        //once the cam reaches the end of the path switch to the two individual cams
+        topCam.SetActive(true);
+        botCam.SetActive(true);
+        GameObject.Find("ArenaOverview").SetActive(false);
+        topCanvas.SetActive(true);
+        botCanvas.SetActive(true);
     }
 }
