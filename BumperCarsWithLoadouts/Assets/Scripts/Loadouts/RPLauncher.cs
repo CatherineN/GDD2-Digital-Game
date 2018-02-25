@@ -35,8 +35,9 @@ public class RPLauncher : MonoBehaviour {
                     GameObject rocketPunchInstance = Instantiate(rocketPunch, gameObject.transform.position + (transform.up * -1.5f), new Quaternion(0, 0, 0, 0));
                     rocketPunchInstance.GetComponent<RocketPunch>().direction = -transform.up;
                     rocketPunchInstance.GetComponent<RocketPunch>().parentCarID = gameObject.GetComponentInParent<Player>().playerID;
-                    //StartCoroutine(Fire());
-                    cooldown = 0.0f;
+                    rocketPunchInstance.GetComponent<RocketPunch>().parentVelocity = gameObject.GetComponentInParent<Player>().Velocity;
+                   //StartCoroutine(Fire());
+                   cooldown = 0.0f;
                     //currentFire = fireSounds[Random.Range(0, fireSounds.Length - 1)];
                     //GameObject.Find("PlayerCar").GetComponent<AudioSource>().PlayOneShot(currentFire);
                 }
@@ -49,6 +50,7 @@ public class RPLauncher : MonoBehaviour {
                     GameObject rocketPunchInstance = Instantiate(rocketPunch, gameObject.transform.position + (transform.right * -1.5f), new Quaternion(0, 0, 0, 0));
                     rocketPunchInstance.GetComponent<RocketPunch>().direction = -transform.right;
                     rocketPunchInstance.GetComponent<RocketPunch>().parentCarID = gameObject.GetComponentInParent<Player>().playerID;
+                    rocketPunchInstance.GetComponent<RocketPunch>().parentVelocity = gameObject.GetComponentInParent<Player>().Velocity;
                     //StartCoroutine(Fire());
                     cooldown = 0.0f;
                     //currentFire = fireSounds[Random.Range(0, fireSounds.Length - 1)];

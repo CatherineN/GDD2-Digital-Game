@@ -12,16 +12,19 @@ public class OnePlayerSelect : MonoBehaviour
     public MyEventSystem currentEventSystem;
     public StartGame startTheDamnGamePlease;
     private bool p1Active;
-    private List<Selectable> elements;
+    public List<Selectable> elements;
     private Selectable currentActiveElement;
     private int tagTracker;
     private bool istheDAMNtriggerinuse = false;
+    private bool selected = false;
+    private bool horizontalInUse = false;
+    private bool verticalInUse = false;
+    public Selectable selectMan;
 
     // Use this for initialization
     void Start()
     {
-        elements = new List<Selectable>();
-        elements = Selectable.allSelectables;
+        
         tagTracker = 1;
         UpdateTagTracker();
 
@@ -35,22 +38,139 @@ public class OnePlayerSelect : MonoBehaviour
     }
     void ToggleManager()
     {
+        
         if (Input.GetButtonDown("Honk1") || Input.GetKeyDown(KeyCode.A))
-        {
-            tagTracker++;
-            UpdateTagTracker();
+        {            
+            selected = !selected;
+            if (selected)
+            {
+                currentActiveElement.Select();
+            }
+            else
+            {
+                Debug.Log("SELECT MANNNNN");
+                UpdateTagTracker();
+                selectMan.Select();
+            }
+            if(tagTracker == 8)
+            {
+                
+                Debug.Log("gay nerd button doesnt work");
+                var pointer = new PointerEventData(currentEventSystem);
+                ExecuteEvents.Execute(startButton.gameObject, pointer, ExecuteEvents.submitHandler);
+                startTheDamnGamePlease.Load();
+            }
 
         }
         if (Input.GetButtonDown("Cancel1") || Input.GetKeyDown(KeyCode.Space))
         {
-            if(tagTracker > 1)
+            if (selected)
             {
-                tagTracker--;
-                UpdateTagTracker();
-
+                selected = !selected;
             }
+            
         }
-        if (tagTracker == 8)
+        if (Input.GetAxisRaw("Vertical_UI1") != 0)
+        {
+           
+            if (verticalInUse == false)
+            {                
+                if (!selected)
+                {
+                    if (Input.GetAxisRaw("Vertical_UI1") > 0)
+                    {
+                        if (tagTracker < 4 && tagTracker > 1)
+                        {
+                            tagTracker--;
+                            UpdateTagTracker();
+                        }
+                        else if (tagTracker == 6)
+                        {
+                            tagTracker = 4;
+                            UpdateTagTracker();
+                        }
+                        else if (tagTracker == 7)
+                        {
+                            tagTracker = 5;
+                            UpdateTagTracker();
+                        }                        
+                    }
+                    else if (Input.GetAxisRaw("Vertical_UI1") < 0)
+                    {                     
+                        
+                        if (tagTracker < 4)
+                        {
+                            tagTracker++;
+                            UpdateTagTracker();
+                        }
+                        else if (tagTracker == 4)
+                        {
+                            tagTracker = 6;
+                            UpdateTagTracker();
+                        }
+                        else if (tagTracker == 5)
+                        {
+                            tagTracker = 7;
+                            UpdateTagTracker();
+                        }                       
+                    }
+                }            
+            }
+            verticalInUse = true;
+        }
+        else if (Input.GetAxisRaw("Vertical_UI1") == 0)
+        {
+            verticalInUse = false;
+        }
+
+        if (Input.GetAxisRaw("Horizontal_UI1") !=0) {
+           
+            if (horizontalInUse == false)
+            {
+                if (Input.GetAxisRaw("Horizontal_UI1") > 0)
+                {
+                    
+                    if (!selected)
+                    {
+                        if (tagTracker < 4)
+                        {
+
+                            tagTracker = 4;
+                            UpdateTagTracker();
+                        }
+                        else
+                        {
+                            tagTracker++;
+                            UpdateTagTracker();
+                        }
+                    }
+                }
+                else if (Input.GetAxisRaw("Horizontal_UI1") < 0)
+                {
+                    if (!selected)
+                    {
+
+                        if (tagTracker > 4)
+                        {
+                            tagTracker--;
+                            UpdateTagTracker();
+                        }
+                        else if (tagTracker == 4)
+                        {
+                            tagTracker = 1;
+                            UpdateTagTracker();
+                        }
+                    }
+                }
+            }
+
+            horizontalInUse = true;
+        }
+        else 
+        {
+            horizontalInUse = false;
+        }
+            if (tagTracker == 9)
         {
             //start the game dude
             if (Input.GetButtonDown("Honk1") || Input.GetKeyDown(KeyCode.A))
@@ -66,69 +186,72 @@ public class OnePlayerSelect : MonoBehaviour
 
         if (tagTracker < 4)
         {
-            Slider s = currentActiveElement.GetComponent<MySlider>();
-            if (Input.GetAxis("Vertical_P1") > .2 || Input.GetAxis("Vertical_P1") < -.2)
+            if (selected)
             {
-                float slideInput = Input.GetAxis("Vertical_P1");
-                s.value += slideInput / 10;
-                Debug.Log(slideInput);
+                Slider s = currentActiveElement.GetComponent<MySlider>();
+                if (Input.GetAxis("Vertical_UI1") > .2 || Input.GetAxis("Vertical_UI1") < -.2)
+                {
+                    float slideInput = Input.GetAxis("Vertical_UI1");
+                    s.value += slideInput / 10;
+
+                }
+                else if (Input.GetAxis("Horizontal_P1") > .2 || Input.GetAxis("Horizontal_P1") < -.2)
+                {
+                    float slideInput = Input.GetAxis("Horizontal_P1");
+                    s.value += slideInput / 10;
+
+                }
             }
-            else if (Input.GetAxis("Horizontal_P1") > .2 || Input.GetAxis("Horizontal_P1") < -.2)
-            {
-                float slideInput = Input.GetAxis("Horizontal_P1");
-                s.value += slideInput / 10;
-                Debug.Log(slideInput);
-            }
+            
 
         }        
         else if (tagTracker < 8)
         {
-            MyDropdown d = currentActiveElement.GetComponent<MyDropdown>();
-            float slideInput = Input.GetAxis("Vertical_P1");
-
-            if (Input.GetAxisRaw("Vertical_P1") != 0)
+            if (selected)
             {
-                if (istheDAMNtriggerinuse == false)
+                MyDropdown d = currentActiveElement.GetComponent<MyDropdown>();
+                float slideInput = Input.GetAxis("Vertical_UI1");
+
+                if (Input.GetAxisRaw("Vertical_UI1") != 0)
                 {
-                    if (d.value < (d.options.Count - 1))
+                    if (istheDAMNtriggerinuse == false)
                     {
-                        d.value++;
-                        d.RefreshShownValue();
+                        if (d.value < (d.options.Count - 1))
+                        {
+                            d.value++;
+                            d.RefreshShownValue();
+                        }
+                        else
+                        {
+                            d.value = 0;
+                            d.RefreshShownValue();
+                        }
+                        istheDAMNtriggerinuse = true;
                     }
-                    else
-                    {
-                        d.value = 0;
-                        d.RefreshShownValue();
-                    }
-                    istheDAMNtriggerinuse = true;
+                }
+                if (Input.GetAxisRaw("Vertical_UI1") == 0)
+                {
+                    istheDAMNtriggerinuse = false;
                 }
             }
-            if (Input.GetAxisRaw("Vertical_P1") == 0)
-            {
-                istheDAMNtriggerinuse = false;
-            }           
         }
+                
     }
-
+    
     void UpdateTagTracker()
     {
         foreach (Selectable s in elements)
         {
             if (tagTracker == 8)
             {
-
                 s.interactable = true;
                 s.Select();
-                Debug.Log("gay nerd button doesnt work");
-                var pointer = new PointerEventData(currentEventSystem);
-                ExecuteEvents.Execute(startButton.gameObject, pointer, ExecuteEvents.submitHandler);
-                startTheDamnGamePlease.Load();
-
             }
             if (s.tag == "" + tagTracker)
-            {
-
+            {                
+               
                 s.interactable = true;
+                
                 currentActiveElement = s;
 
 
