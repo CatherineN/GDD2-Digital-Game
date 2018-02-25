@@ -10,16 +10,16 @@ public class TwoPlayerSelect : MonoBehaviour
     public Canvas menuSelect;
     public MyButton startButton;
     private bool p1Active;
-    private List<Selectable> elements;
+    public List<Selectable> elements;
     private Selectable currentActiveElement;
     private int tagTracker;
     private bool istheDAMNtriggerinuse = false;
+    private bool selected = false;
 
     // Use this for initialization
     void Start()
     {
-        elements = new List<Selectable>();
-        elements = Selectable.allSelectables;
+        
         tagTracker = 9;
         UpdateTagTracker();
 
@@ -60,13 +60,13 @@ public class TwoPlayerSelect : MonoBehaviour
             {
                 float slideInput = Input.GetAxis("Vertical_P2");
                 s.value += slideInput / 10;
-                Debug.Log(slideInput);
+                
             }
             else if (Input.GetAxis("Horizontal_P2") > .2 || Input.GetAxis("Horizontal_P2") < -.2)
             {
                 float slideInput = Input.GetAxis("Horizontal_P2");
                 s.value += slideInput / 10;
-                Debug.Log(slideInput);
+                
             }
         }
         
@@ -110,6 +110,7 @@ public class TwoPlayerSelect : MonoBehaviour
             {
 
                 s.interactable = true;
+                s.Select();
                 currentActiveElement = s;
 
 

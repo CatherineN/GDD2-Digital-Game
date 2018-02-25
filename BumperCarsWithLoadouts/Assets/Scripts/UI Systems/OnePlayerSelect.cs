@@ -12,16 +12,16 @@ public class OnePlayerSelect : MonoBehaviour
     public MyEventSystem currentEventSystem;
     public StartGame startTheDamnGamePlease;
     private bool p1Active;
-    private List<Selectable> elements;
+    public List<Selectable> elements;
     private Selectable currentActiveElement;
     private int tagTracker;
     private bool istheDAMNtriggerinuse = false;
+    private bool selected = false;
 
     // Use this for initialization
     void Start()
     {
-        elements = new List<Selectable>();
-        elements = Selectable.allSelectables;
+        
         tagTracker = 1;
         UpdateTagTracker();
 
@@ -37,7 +37,8 @@ public class OnePlayerSelect : MonoBehaviour
     {
         if (Input.GetButtonDown("Honk1") || Input.GetKeyDown(KeyCode.A))
         {
-            tagTracker++;
+            
+            tagTracker++;            
             UpdateTagTracker();
 
         }
@@ -71,13 +72,13 @@ public class OnePlayerSelect : MonoBehaviour
             {
                 float slideInput = Input.GetAxis("Vertical_P1");
                 s.value += slideInput / 10;
-                Debug.Log(slideInput);
+               
             }
             else if (Input.GetAxis("Horizontal_P1") > .2 || Input.GetAxis("Horizontal_P1") < -.2)
             {
                 float slideInput = Input.GetAxis("Horizontal_P1");
                 s.value += slideInput / 10;
-                Debug.Log(slideInput);
+                
             }
 
         }        
@@ -129,6 +130,7 @@ public class OnePlayerSelect : MonoBehaviour
             {
 
                 s.interactable = true;
+                s.Select();
                 currentActiveElement = s;
 
 
