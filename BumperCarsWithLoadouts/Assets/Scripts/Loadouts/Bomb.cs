@@ -31,6 +31,11 @@ public class Bomb : MonoBehaviour {
         //Decrement the timer
         timer -= Time.deltaTime;
         //When it reaches 0...
+        if(timer <= 1)
+        {
+            gameObject.GetComponent<AudioSource>().Play();
+            gameObject.GetComponent<Renderer>().material.color = Color.red;
+        }
         if (timer <= 0)
         {
             Explode();

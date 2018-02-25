@@ -8,6 +8,7 @@ public class CollapseArena : MonoBehaviour {
     // Use this for initialization
     System.Random rand;
     int randomInt;
+    private Transform prevTransform;
     private bool matchStart = false;
 	void Start ()
     {
@@ -26,12 +27,18 @@ public class CollapseArena : MonoBehaviour {
     
     IEnumerator Fall()
     {
-        randomInt = rand.Next(0, transform.childCount);
+        randomInt = rand.Next(0, transform.GetChild(0).transform.childCount);
         Transform faller = transform.GetChild(0).GetChild(randomInt);
+        while(faller == prevTransform && transform.GetChild(0).transform.childCount > 1)
+        {
+            randomInt = rand.Next(0, transform.GetChild(0).transform.childCount);
+            faller = transform.GetChild(0).GetChild(randomInt);
+        }
+        prevTransform = faller;
         faller.GetComponent<Renderer>().material.color = Color.red;
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(0.5f);
         faller.GetComponent<Rigidbody>().useGravity = true;
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(0.5f);
         StartCoroutine(Fall());
     }
 }
