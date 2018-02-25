@@ -47,8 +47,8 @@ public class RPLauncher : MonoBehaviour {
                 if (((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetButtonDown("Fire2")) && cooldown >= cooldownTime)  && gameObject.transform.parent.gameObject.GetComponent<Player>().enabled == true)
                 {
                     //Create a ROKETTO PUUUUNCH. The launcher is rotated, so we use the transform.up
-                    GameObject rocketPunchInstance = Instantiate(rocketPunch, gameObject.transform.position + (transform.right * -1.5f), new Quaternion(0, 0, 0, 0));
-                    rocketPunchInstance.GetComponent<RocketPunch>().direction = -transform.right;
+                    GameObject rocketPunchInstance = Instantiate(rocketPunch, gameObject.transform.position + (transform.up * -1.5f), new Quaternion(0, 0, 0, 0));
+                    rocketPunchInstance.GetComponent<RocketPunch>().direction = -transform.up;
                     rocketPunchInstance.GetComponent<RocketPunch>().parentCarID = gameObject.GetComponentInParent<Player>().playerID;
                     rocketPunchInstance.GetComponent<RocketPunch>().parentVelocity = gameObject.GetComponentInParent<Player>().Velocity;
                     //StartCoroutine(Fire());

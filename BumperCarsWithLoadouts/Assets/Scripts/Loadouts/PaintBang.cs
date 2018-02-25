@@ -38,6 +38,7 @@ public class PaintBang : MonoBehaviour {
 
     public void OnTriggerEnter(Collider car)
     {
+        Debug.Log("PAINT");
         /*//If the bomb has not collided with the starting car yet
         if (!dropped)
         {
