@@ -77,33 +77,39 @@ public class SetPrefs : MonoBehaviour {
         switch (weapon)
         {
             case "Bomb Dropper":
-                transform.FindChild("Cannon").gameObject.SetActive(false);
-                transform.FindChild("Paintbang Launcher").gameObject.SetActive(false);
-                transform.FindChild("Rocket Punch Launcher").gameObject.SetActive(false);
-                transform.FindChild("Bomb Dropper").gameObject.SetActive(true);
+                transform.GetChild(0).gameObject.SetActive(false);//paintbang
+                transform.GetChild(1).gameObject.SetActive(false);//cannon
+                transform.GetChild(2).gameObject.SetActive(true);//bomb
+                transform.GetChild(3).gameObject.SetActive(false);//rocket punch
                 break;
 
             case "Cannon":
-                transform.FindChild("Bomb Dropper").gameObject.SetActive(false);
-                transform.FindChild("Paintbang Launcher").gameObject.SetActive(false);
-                transform.FindChild("Rocket Punch Launcher").gameObject.SetActive(false);
-                transform.FindChild("Cannon").gameObject.SetActive(true);
+                transform.GetChild(0).gameObject.SetActive(false);//paintbang
+                transform.GetChild(1).gameObject.SetActive(true);//cannon
+                transform.GetChild(2).gameObject.SetActive(false);//bomb
+                transform.GetChild(3).gameObject.SetActive(false);//rocket punch
                 break;
             case "PaintBang":
-                transform.FindChild("Bomb Dropper").gameObject.SetActive(false);
-                transform.FindChild("Cannon").gameObject.SetActive(false);
-                transform.FindChild("Rocket Punch Launcher").gameObject.SetActive(false);
-                transform.FindChild("Paintbang Launcher").gameObject.SetActive(true);
+                transform.GetChild(0).gameObject.SetActive(true);//paintbang
+                transform.GetChild(1).gameObject.SetActive(false);//cannon
+                transform.GetChild(2).gameObject.SetActive(false);//bomb
+                transform.GetChild(3).gameObject.SetActive(false);//rocket punch
                 break;
             case "Rocket Punch":
-                transform.FindChild("Bomb Dropper").gameObject.SetActive(false);
-                transform.FindChild("Cannon").gameObject.SetActive(false);
-                transform.FindChild("Paintbang Launcher").gameObject.SetActive(false);
-                transform.FindChild("Rocket Punch Launcher").gameObject.SetActive(true);
+                transform.GetChild(0).gameObject.SetActive(false);//paintbang
+                transform.GetChild(1).gameObject.SetActive(false);//cannon
+                transform.GetChild(2).gameObject.SetActive(false);//bomb
+                transform.GetChild(3).gameObject.SetActive(true);//rocket punch
                 break;
         }
 
+        float mass = gameObject.GetComponent<Rigidbody>().mass;
+        mass = weight;
+
         // loads in the saved weight
-        gameObject.GetComponent<Rigidbody>().mass = weight;
+        if (mass == 0)
+        {
+            mass = 50;
+        }
     }
 }

@@ -45,18 +45,18 @@ public class CarManager : MonoBehaviour {
     void Awake()
     {
         //arenaRadius = GameObject.Find("Arena").transform.lossyScale.x * 32;
-        Debug.LogWarning(arenaRadius);
         numAI = 5;//PlayerPrefs.GetInt("numAI");//------------------------------------------------------------------set to hard code for now
         //set to false until spawned
         if (!aiOn)
         {
             haveSpawned = true;//------------------------------------------------------------------set to true for now so AI do not spawn in arenas
         }
-        
+
         //initialize list
         cars = new List<GameObject>();
         if (haveSpawned == false)
         {
+            Debug.Log(numAI);
             SpawnAI();
         }
         cars.Add(GameObject.Find("PlayerCar"));
@@ -70,6 +70,7 @@ public class CarManager : MonoBehaviour {
     {
         for (int i = 0; i < numAI; ++i)
         {
+            Debug.Log(i);
             float xPos = ArenaRadius* Mathf.Cos(2 * Mathf.PI * i / numAI)*.9f;
             float zPos = ArenaRadius * Mathf.Sin(2 * Mathf.PI * i / numAI) * .9f;
             //instantiate car
