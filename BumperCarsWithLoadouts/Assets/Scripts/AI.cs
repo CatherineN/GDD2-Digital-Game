@@ -82,7 +82,7 @@ public class AI : VehicleMovement {
             Vector3 temp = cM.Cars[i].transform.position - position;
 
             //get the future velocity of the AI car when it reaches the other car's position
-            Vector3 futVelocity = new Vector3(5,0,5);//GetFutureVelocity(cM.Cars[i].transform.position);
+            Vector3 futVelocity = GetFutureVelocity(cM.Cars[i].transform.position);
 
             //compare to see if is smaller than stored
             if (temp.magnitude < closest.magnitude)
@@ -157,13 +157,28 @@ public class AI : VehicleMovement {
         Vector3 tempPos = transform.position;
         Vector3 dirToTar = (tarPos - tempPos).normalized;
 
-        while(Vector3.Distance(tempPos, tarPos) > futVelocity.magnitude)
+        int i = 0;//test
+
+        //assume max acceleration/force and know the distance between the two, know current velocity, want to know velocity when you reach it, know the time during which accelertion is added
+
+        while(i < 10)//Vector3.Distance(tempPos, tarPos) > futVelocity.magnitude)//breaking the AI code rn, infinite loop or at least it runs too many times to stick to 30fps
         {
-            futVelocity += (maxForce * dirToTar)*timePerFrame;
+            futVelocity += Seek(tarPos);//(maxForce * dirToTar)*timePerFrame;
             futVelocity = Vector3.ClampMagnitude(futVelocity, maxSpeed);
             tempPos += futVelocity;
+
+            //takes AI about 1.333 seconds to get to max speed
+
+            //v2 = a(t2 - t1) + v1
+            //a = .6, v1 = velocity, t1 = 0 or realTimeSinceStartup, t2 = ?, v2 = !?
+
+            //Debug.Log("Temp Position: " + tempPos);
+            Debug.Log("Future Velocity: " + futVelocity.magnitude);
+            //Debug.Log("Distance left: " + Vector3.Distance(tempPos, tarPos));
+
+            i++;
         }
-        Debug.Log("Here");
+        //Debug.Log("Here");
         return futVelocity;
     }
 }

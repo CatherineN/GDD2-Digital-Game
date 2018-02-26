@@ -150,7 +150,7 @@ public class Collision : MonoBehaviour
     public void ProjectileHit(Collider other)
     {
         p.ApplyForce(other.GetComponent<Cannonball>().velocity.normalized * cannonImpact);
-        GameObject pSystem = transform.FindChild("HitByCannon").gameObject;
+        GameObject pSystem = transform.GetChild(4).gameObject;//HitByCannon Particle effect
         pSystem.transform.localPosition = transform.InverseTransformPoint(other.transform.position);
         StartCoroutine(Hit());
         Destroy(other.gameObject);
@@ -163,7 +163,7 @@ public class Collision : MonoBehaviour
     }
     IEnumerator Hit()
     {
-        GameObject p = transform.FindChild("HitByCannon").gameObject;
+        GameObject p = transform.GetChild(4).gameObject;//HitByCannon Particle effect
         ParticleSystem pSystem = p.GetComponent<ParticleSystem>();
         ParticleSystem.EmissionModule em = pSystem.emission;
         for (int i = 0; i < 20; i++)
