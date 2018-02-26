@@ -20,6 +20,7 @@ public class OnePlayerSelect : MonoBehaviour
     private bool horizontalInUse = false;
     private bool verticalInUse = false;
     public Selectable selectMan;
+    
 
     // Use this for initialization
     void Start()
@@ -27,7 +28,6 @@ public class OnePlayerSelect : MonoBehaviour
         
         tagTracker = 1;
         UpdateTagTracker();
-
     }
 
     // Update is called once per frame
@@ -45,17 +45,14 @@ public class OnePlayerSelect : MonoBehaviour
             if (selected)
             {
                 currentActiveElement.Select();
+                elements[8].interactable = false;
             }
             else
-            {
-                Debug.Log("SELECT MANNNNN");
-                UpdateTagTracker();
-                selectMan.Select();
+            {                
+                currentEventSystem.SetSelectedGameObject(selectMan.gameObject);                                
             }
             if(tagTracker == 8)
-            {
-                
-                Debug.Log("gay nerd button doesnt work");
+            {                                
                 var pointer = new PointerEventData(currentEventSystem);
                 ExecuteEvents.Execute(startButton.gameObject, pointer, ExecuteEvents.submitHandler);
                 startTheDamnGamePlease.Load();
@@ -170,15 +167,6 @@ public class OnePlayerSelect : MonoBehaviour
         {
             horizontalInUse = false;
         }
-            if (tagTracker == 9)
-        {
-            //start the game dude
-            if (Input.GetButtonDown("Honk1") || Input.GetKeyDown(KeyCode.A))
-            {
-                UpdateTagTracker();
-
-            }
-        }
 
     }
     void SettingEditor()
@@ -240,12 +228,21 @@ public class OnePlayerSelect : MonoBehaviour
     
     void UpdateTagTracker()
     {
+        if (!selected)
+        {
+            foreach (Selectable s in elements)
+            {
+                s.interactable = false;
+            }         
+            
+        }
         foreach (Selectable s in elements)
         {
+            
             if (tagTracker == 8)
             {
-                s.interactable = true;
-                s.Select();
+                elements[7].interactable = true;
+                currentActiveElement = elements[7];
             }
             if (s.tag == "" + tagTracker)
             {                
