@@ -7,11 +7,17 @@ public class Player : VehicleMovement {
     public int playerID;//which player the script is on
     public float frictionCoef = .5f;
     public float frictionForce = 2f;
+    private bool lockRot = true;
     // Use this for initialization
     public override void Start () {
         base.Start();
 	}
 
+    public bool LockRot
+    {
+        get { return lockRot; }
+        set { lockRot = lockRotation = value; }
+    }
     /// <summary>
     /// Takes player input and calculates the forces acting on it accordingly
     /// Needs a max force**

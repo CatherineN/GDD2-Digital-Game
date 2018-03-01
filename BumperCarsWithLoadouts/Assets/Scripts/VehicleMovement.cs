@@ -32,6 +32,8 @@ public abstract class VehicleMovement : MonoBehaviour {
     protected CarManager cM;
     protected Rigidbody rb;
 
+    protected bool lockRotation = true;
+
     // Use this for initialization
     public virtual void Start () {
         position = transform.position;
@@ -107,7 +109,7 @@ public abstract class VehicleMovement : MonoBehaviour {
         //transform.forward = direction;
 
         transform.position = position;
-        if (tag == "Player")
+        if (tag == "Player" && lockRotation)
             transform.rotation = Quaternion.Euler(0, totalRotation, 0);
     }
 

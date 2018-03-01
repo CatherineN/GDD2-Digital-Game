@@ -133,6 +133,11 @@ public class Collision : MonoBehaviour
             if(!Physics.Raycast(transform.position, -transform.up, 0.5f, floorMask))
             {
                 rb.useGravity = true;
+                foreach(Collider col in gameObject.GetComponents<Collider>())
+                {
+                    col.isTrigger = false;
+                }
+                gameObject.GetComponent<Player>().LockRot = false;
                 Debug.Log("fall");
             }
         }
