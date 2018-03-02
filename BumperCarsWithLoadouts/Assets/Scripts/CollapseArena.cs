@@ -10,6 +10,7 @@ public class CollapseArena : MonoBehaviour {
     int randomInt;
     private Transform prevTransform;
     private bool matchStart = false;
+    public float fallTime;
 	void Start ()
     {
         rand = new System.Random();
@@ -36,9 +37,11 @@ public class CollapseArena : MonoBehaviour {
         }
         prevTransform = faller;
         faller.GetComponent<Renderer>().material.color = Color.red;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(fallTime);
         faller.GetComponent<Rigidbody>().useGravity = true;
-        yield return new WaitForSeconds(0.5f);
+        faller.GetComponent<Rigidbody>().isKinematic = false;
+        faller.GetComponent<Collider>().enabled = false;
+        yield return new WaitForSeconds(fallTime);
         StartCoroutine(Fall());
     }
 }
