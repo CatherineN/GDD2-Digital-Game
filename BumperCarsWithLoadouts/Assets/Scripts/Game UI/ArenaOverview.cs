@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ArenaOverview : MonoBehaviour {
 
@@ -11,6 +12,7 @@ public class ArenaOverview : MonoBehaviour {
     public GameObject botCam;
     public GameObject topCanvas;
     public GameObject botCanvas;
+    public GameObject introCanvas;
     private Player p1;
     private Player p2;
 
@@ -124,22 +126,27 @@ public class ArenaOverview : MonoBehaviour {
 
     private void SkipToCountdown()
     {
-        if(Input.GetButtonDown("Honk1") && !p1Voted)
+        //how many players to make majority vote
+        int numToSkip = (int)Mathf.Ceil(.66f * numPlayers);
+
+        if ((Input.GetButtonDown("Honk1") || Input.GetKeyDown(KeyCode.Space))&& !p1Voted)
         {
             votesToSkip++;
             p1Voted = true;
         }
-        if (Input.GetButtonDown("Honk2") && !p2Voted)
+        if ((Input.GetButtonDown("Honk2") || Input.GetKeyDown(KeyCode.Return)) && !p2Voted)
         {
             votesToSkip++;
             p2Voted = true;
         }
 
-        if (votesToSkip >= (int)Mathf.Ceil(.66f * numPlayers))
+        if (votesToSkip >= numToSkip)
         {
             countdown = true;
             GoToCountdown();
         }
+
+        introCanvas.GetComponentInChildren<Text>().text = "Press A to Skip Intro " + votesToSkip + "/" + numToSkip;
     }
 
     private void GoToCountdown()
@@ -147,8 +154,9 @@ public class ArenaOverview : MonoBehaviour {
         //once the cam reaches the end of the path switch to the two individual cams
         topCam.SetActive(true);
         botCam.SetActive(true);
-        GameObject.Find("ArenaOverview").SetActive(false);
+        GameObject.Find("ArenaCamera").SetActive(false);
         topCanvas.SetActive(true);
         botCanvas.SetActive(true);
+        introCanvas.SetActive(false);
     }
 }
