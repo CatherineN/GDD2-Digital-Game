@@ -204,17 +204,35 @@ public class OnePlayerSelect : MonoBehaviour
                 {
                     if (istheDAMNtriggerinuse == false)
                     {
-                        if (d.value < (d.options.Count - 1))
+                        if (Input.GetAxisRaw("Vertical_UI1") < 0)
                         {
-                            d.value++;
-                            d.RefreshShownValue();
+                            if (d.value < (d.options.Count - 1))
+                            {
+                                d.value++;
+                                d.RefreshShownValue();
+                            }
+                            else
+                            {
+                                d.value = 0;
+                                d.RefreshShownValue();
+                            }
+                            istheDAMNtriggerinuse = true;
                         }
                         else
                         {
-                            d.value = 0;
-                            d.RefreshShownValue();
+                            if (d.value > 0)
+                            {
+                                d.value--;
+                                d.RefreshShownValue();
+                            }
+                            else
+                            {
+                                d.value = d.options.Count - 1;
+                                d.RefreshShownValue();
+                            }
+                            istheDAMNtriggerinuse = true;
                         }
-                        istheDAMNtriggerinuse = true;
+                            
                     }
                 }
                 if (Input.GetAxisRaw("Vertical_UI1") == 0)
