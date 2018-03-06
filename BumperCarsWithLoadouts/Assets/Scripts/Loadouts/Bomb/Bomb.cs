@@ -16,6 +16,8 @@ public class Bomb : MonoBehaviour {
     private bool dropped;
     private Vector3 explosionForce;
     private float magnitude;
+    // explosion prefab
+    public GameObject explosion;
 
 
     void Start ()
@@ -60,6 +62,9 @@ public class Bomb : MonoBehaviour {
             //Apply the explosion force
             c.GetComponent<VehicleMovement>().ApplyForce(explosionForce);
         }
+        // spawn the explosion
+        GameObject e = Instantiate(explosion, transform.position, Quaternion.identity);
+        //e.GetComponent<Explosion>().SetRadius(radius);
         //Get rid of it
         Destroy(gameObject);
     }
