@@ -23,7 +23,7 @@ public class Bomb : MonoBehaviour {
     void Start ()
     {
         dropped = false;
-        radius *= GameObject.Find("SceneManager").GetComponent<CarManager>().ArenaRadius;
+        radius *= GameObject.Find("Arena").transform.localScale.x;
 
     }
 	
@@ -64,7 +64,7 @@ public class Bomb : MonoBehaviour {
         }
         // spawn the explosion
         GameObject e = Instantiate(explosion, transform.position, Quaternion.identity);
-        //e.GetComponent<Explosion>().SetRadius(radius);
+        e.GetComponent<Explosion>().SetRadius(radius);
         //Get rid of it
         Destroy(gameObject);
     }

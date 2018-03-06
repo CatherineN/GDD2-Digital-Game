@@ -34,6 +34,11 @@ public class PaintBang : MonoBehaviour {
             GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY;
             speed = 0;
         }
+        else
+        {
+            GetComponent<Rigidbody>().useGravity = true;
+            GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+        }
     }
 
     public void OnTriggerEnter(Collider car)

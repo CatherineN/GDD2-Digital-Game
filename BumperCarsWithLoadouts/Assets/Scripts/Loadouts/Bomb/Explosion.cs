@@ -37,6 +37,6 @@ public class Explosion : MonoBehaviour
 
     public void SetRadius(float rad)
     {
-        maxRadius = rad / 50.0f;
+        maxRadius = rad / 10;
     }
 }
