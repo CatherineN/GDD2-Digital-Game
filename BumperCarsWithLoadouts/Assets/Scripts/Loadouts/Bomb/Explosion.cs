@@ -15,7 +15,6 @@ public class Explosion : MonoBehaviour
         radius = 1.0f;
         alpha = 1.0f;
         mat = gameObject.GetComponent<MeshRenderer>().material;
-        randDir = new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), Random.Range(-1, 1));
 	}
 	
 	// Update is called once per frame
@@ -33,7 +32,7 @@ public class Explosion : MonoBehaviour
                 Destroy(gameObject);
             mat.SetFloat("_Transparency", alpha);
         }
-        transform.Rotate(randDir, 2.5f);
+        transform.Rotate(transform.up, 2.5f);
 	}
 
     public void SetRadius(float rad)

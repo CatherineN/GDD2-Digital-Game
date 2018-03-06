@@ -21,7 +21,7 @@ Shader "Cell Shader"
     {
         Tags { "RenderType"="Opaque" }
 		LOD 250 
-        Lighting Off
+        Lighting On
         Fog { Mode Off }
         
         UsePass "TSF/Base1/BASE"
