@@ -3,14 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class StarScroller : MonoBehaviour {
+    public float scrollSpeed;
+    public float tileSizeZ;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    private Vector3 startPosition;
+
+    void Start()
+    {
+        startPosition = transform.position;
+    }
+
+    void Update()
+    {
+        float newPosition = Time.deltaTime * scrollSpeed * 100;
+        transform.position = transform.position + Vector3.right * newPosition;
+        if(transform.position.x > 1000)
+        {
+            transform.position = new Vector3 (-944 + (transform.position.x-1000), transform.position.y, transform.position.z);
+        }
+    }
 }
