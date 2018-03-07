@@ -16,7 +16,11 @@ public class Player : VehicleMovement {
     public bool LockRot
     {
         get { return lockRot; }
-        set { lockRot = lockRotation = value; }
+        set
+        {
+            lockRot = value;
+            lockRotation = value;
+        }
     }
     /// <summary>
     /// Takes player input and calculates the forces acting on it accordingly
@@ -24,7 +28,7 @@ public class Player : VehicleMovement {
     /// </summary>
     protected override void CalcSteeringForces()
     {
-
+        if (!lockRot) return;
         // this is for our rotation
         angleToRotate = Quaternion.Euler(0, 0, 0);
 

@@ -20,7 +20,7 @@ public class RocketPunch : MonoBehaviour {
     public GameObject reticle;
     void Start ()
     {
-        speed = 0.3f;
+        speed = 0.5f;
         carList = GameObject.Find("SceneManager").GetComponent<CarManager>().Cars;
         carToSeekPos = new Vector3(int.MaxValue, int.MaxValue, int.MaxValue);
         targetLocked = false;
@@ -32,7 +32,7 @@ public class RocketPunch : MonoBehaviour {
         
         Vector3 ultimaForce = Vector3.zero;
         
-        if(timer < 10)
+        if(timer < 5)
         {
             velocity = direction * speed + parentVelocity;
             transform.forward = direction;
