@@ -55,7 +55,8 @@ Shader "Cell Shader"
             {
                 v2f o;
 			    o.pos = v.vertex;
-			    o.pos.xyz += normalize(v.normal.xyz) *_Outline*0.01;
+				float3 normal = normalize(v.normal);
+				o.pos += float4(normal, 0.0) *_Outline * 0.01;
 			    o.pos = UnityObjectToClipPos(o.pos);
 			    return o;
             }

@@ -12,11 +12,12 @@ public class RocketPunch : MonoBehaviour {
     int timer;
     private List<GameObject> carList;
     private bool targetLocked;
-    private GameObject carToSeek;
+    public GameObject carToSeek;
     private Vector3 carToSeekPos;
     public int parentCarID;
     private Vector3 acceleration;
     public Vector3 parentVelocity;
+    public GameObject reticle;
     void Start ()
     {
         speed = 0.3f;
@@ -39,7 +40,7 @@ public class RocketPunch : MonoBehaviour {
         }
         else
         {
-            if (!targetLocked)
+            /*if (!targetLocked)
             {
                 for (int i = 0; i < carList.Count; i++)
                 {
@@ -61,7 +62,7 @@ public class RocketPunch : MonoBehaviour {
 
                     targetLocked = true;
                 }
-            }
+            }*/
             carToSeekPos = carToSeek.transform.position;
             ultimaForce += Seek(carToSeekPos);
             acceleration = ultimaForce;
@@ -79,6 +80,7 @@ public class RocketPunch : MonoBehaviour {
             {
                 hit.collider.gameObject.GetComponent<Collision>().PunchHit(this.GetComponent<SphereCollider>());
                 transform.position = hit.point;
+                reticle.gameObject.SetActive(false);
             }
         }
     }
@@ -86,6 +88,11 @@ public class RocketPunch : MonoBehaviour {
     {
         //Step 1: Calculate desired velocity : From myself to target
         Vector3 desiredVelocity = targetPosition - transform.position;
+        if (Vector3.Angle(desiredVelocity, velocity) > 45f)
+        {
+            reticle.gameObject.SetActive(false);
+            return Vector3.zero;
+        }
         //Step 2: Scale the max speed : limit steering force to vehicle capabilities
         //desiredVelocity = Vector3.ClampMagnitude (desiredVelocity, maxSpeed);
         desiredVelocity.Normalize();

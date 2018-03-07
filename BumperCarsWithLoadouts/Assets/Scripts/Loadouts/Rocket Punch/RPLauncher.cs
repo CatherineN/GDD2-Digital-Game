@@ -10,14 +10,21 @@ public class RPLauncher : MonoBehaviour {
     public Image slider;
     public Image ability;
     public Sprite sprite;
+    private float targetAngle;
     public float cooldownTime;
     private float cooldown;
     private int playerID;
-	void Start ()
+    private List<GameObject> carList;
+    private GameObject targetCar;
+    public GameObject reticle;
+    void Start ()
     {
         cooldown = cooldownTime;
         playerID = GetComponentInParent<Player>().playerID;
         ability.sprite = sprite;
+        carList = GameObject.Find("SceneManager").GetComponent<CarManager>().Cars;
+        targetAngle = 45f;
+        targetCar = null;
     }
 	
 	// Update is called once per frame
@@ -25,11 +32,12 @@ public class RPLauncher : MonoBehaviour {
     {
         //gameObject.GetComponent<Renderer>().material.color = transform.parent.GetComponentInParent<Renderer>().materials[1].color;
         cooldown += Time.deltaTime;
+        FindTarget();
         switch (playerID)
         {
             case 1:
                 //When the E key is pressed...
-                if (((Input.GetKeyDown(KeyCode.E) || Input.GetButtonDown("Fire3")) && cooldown >= cooldownTime) && gameObject.transform.parent.gameObject.GetComponent<Player>().enabled == true)
+                if (((Input.GetKeyDown(KeyCode.E) || Input.GetButtonDown("Fire3")) && cooldown >= cooldownTime) && gameObject.transform.parent.gameObject.GetComponent<Player>().enabled == true && targetCar != null)
                 {
                     //Create a ROKETTO PUUUUNCH. The launcher is rotated, so we use the transform.up
                     GameObject rocketPunchInstance = Instantiate(rocketPunch, gameObject.transform.position + (transform.right * -1.5f), new Quaternion(0, 0, 0, 0));
@@ -38,21 +46,25 @@ public class RPLauncher : MonoBehaviour {
                     rocketPunchInstance.GetComponent<RocketPunch>().direction = -transform.right;
                     rocketPunchInstance.GetComponent<RocketPunch>().parentCarID = gameObject.GetComponentInParent<Player>().playerID;
                     rocketPunchInstance.GetComponent<RocketPunch>().parentVelocity = gameObject.GetComponentInParent<Player>().Velocity;
-                   //StartCoroutine(Fire());
-                   cooldown = 0.0f;
+                    rocketPunchInstance.GetComponent<RocketPunch>().carToSeek = targetCar;
+                    rocketPunchInstance.GetComponent<RocketPunch>().reticle = reticle;
+                    //StartCoroutine(Fire());
+                    cooldown = 0.0f;
                     //currentFire = fireSounds[Random.Range(0, fireSounds.Length - 1)];
                     //GameObject.Find("PlayerCar").GetComponent<AudioSource>().PlayOneShot(currentFire);
                 }
                 break;
             case 2:
                 //When the E key is pressed...
-                if (((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetButtonDown("Fire2")) && cooldown >= cooldownTime)  && gameObject.transform.parent.gameObject.GetComponent<Player>().enabled == true)
+                if (((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetButtonDown("Fire2")) && cooldown >= cooldownTime)  && gameObject.transform.parent.gameObject.GetComponent<Player>().enabled == true && targetCar != null)
                 {
                     //Create a ROKETTO PUUUUNCH. The launcher is rotated, so we use the transform.up
                     GameObject rocketPunchInstance = Instantiate(rocketPunch, gameObject.transform.position + (transform.right * -1.5f), new Quaternion(0, 0, 0, 0));
                     rocketPunchInstance.GetComponent<RocketPunch>().direction = -transform.right;
                     rocketPunchInstance.GetComponent<RocketPunch>().parentCarID = gameObject.GetComponentInParent<Player>().playerID;
                     rocketPunchInstance.GetComponent<RocketPunch>().parentVelocity = gameObject.GetComponentInParent<Player>().Velocity;
+                    rocketPunchInstance.GetComponent<RocketPunch>().carToSeek = targetCar;
+                    rocketPunchInstance.GetComponent<RocketPunch>().reticle = reticle;
                     //StartCoroutine(Fire());
                     cooldown = 0.0f;
                     //currentFire = fireSounds[Random.Range(0, fireSounds.Length - 1)];
@@ -75,6 +87,43 @@ public class RPLauncher : MonoBehaviour {
         }
 
         slider.fillAmount = percent;
+    }
+
+    private void FindTarget()
+    {
+        // only find a target if the rocket is ready to go
+        if (cooldown < cooldownTime) return;
+        GameObject target = null;
+        float closestMag = float.MaxValue;
+
+        // loop through the cars to find the closest in range
+        foreach(GameObject other in carList)
+        {
+            if (other == transform.parent.gameObject) continue;
+
+            Vector3 vecTo = other.transform.position - transform.position;
+            float angle = Vector3.Angle(vecTo, transform.parent.transform.forward);
+            if(angle <= targetAngle)
+            {
+                if(vecTo.sqrMagnitude < closestMag)
+                {
+                    target = other;
+                    closestMag = vecTo.sqrMagnitude;
+                }
+            }
+        }
+
+        if (target != null)
+        {
+            targetCar = target;
+            reticle.SetActive(true);
+            reticle.GetComponent<TargetUI>().target = target;
+        }
+        else
+        {
+            targetCar = null;
+            reticle.SetActive(false);
+        }
     }
 }
 

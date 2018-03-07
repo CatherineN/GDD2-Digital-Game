@@ -36,7 +36,11 @@ public class Bomb : MonoBehaviour {
         if(timer <= 1)
         {
             gameObject.GetComponent<AudioSource>().Play();
-            gameObject.GetComponent<Renderer>().material.color = Color.red;
+
+            if (timer % 0.2f < 0.1)
+                gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
+            else
+                gameObject.GetComponent<MeshRenderer>().material.color = Color.black;
         }
         if (timer <= 0)
         {
