@@ -18,6 +18,7 @@ public class Collision : MonoBehaviour
 
     private int collisionCount;
     private bool fallingStage = false;
+    private bool wasFalling = false;
 
     //public float StageRadius
     //{
@@ -130,20 +131,35 @@ public class Collision : MonoBehaviour
         if(fallingStage)
         {
             //Debug.DrawRay(transform.position, -transform.up, Color.red,100.0f);
-            if(!Physics.Raycast(transform.position, -transform.up, 0.5f, floorMask))
+            if (!Physics.Raycast(transform.position, Vector3.down, 1f, floorMask))
             {
                 rb.useGravity = true;
-                foreach(Collider col in gameObject.GetComponents<Collider>())
+                foreach (Collider col in gameObject.GetComponents<Collider>())
                 {
                     col.isTrigger = false;
                 }
                 gameObject.GetComponent<Player>().LockRot = false;
-                Debug.Log("fall");
+                wasFalling = true;
             }
+            else if(wasFalling)
+            {
+                rb.useGravity = false;
+                foreach (Collider col in gameObject.GetComponents<Collider>())
+                {
+                    col.isTrigger = true;
+                }
+                gameObject.GetComponent<Player>().LockRot = true;
+                wasFalling = false;
+            } 
         }
         else if((new Vector3(0,0.1f,0) - transform.position).sqrMagnitude > cM.ArenaRadius * cM.ArenaRadius)
         {
             rb.useGravity = true;
+            foreach (Collider col in gameObject.GetComponents<Collider>())
+            {
+                col.isTrigger = false;
+            }
+            gameObject.GetComponent<Player>().LockRot = false;
         }
     }
 

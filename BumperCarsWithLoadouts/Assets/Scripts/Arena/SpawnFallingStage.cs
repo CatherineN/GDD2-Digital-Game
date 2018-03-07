@@ -8,6 +8,7 @@ public class SpawnFallingStage : MonoBehaviour
     private float zOffset = 0.2466f;
     private float halfX;
     private float halfZ;
+    private float yVal;
     public int tiles = 60;
     public int maxPerRow = 7;
     public GameObject tilePrefab;
@@ -17,6 +18,7 @@ public class SpawnFallingStage : MonoBehaviour
     {
         halfX = xOffset / 2.0f;
         halfZ = zOffset / 2.0f;
+        yVal = -0.139f;
         MakeStage();
 	}
 	
@@ -55,7 +57,7 @@ public class SpawnFallingStage : MonoBehaviour
         float currentZ = z;
         for (int i = 0; i < maxPerRow; i++)
         {
-            Vector3 pos = new Vector3(currentX, -0.1382384f, currentZ);
+            Vector3 pos = new Vector3(currentX, yVal, currentZ);
             GameObject clone = Instantiate(tilePrefab, pos, Quaternion.identity, gameObject.transform);
             clone.transform.localPosition = pos;
             currentZ += zOffset;
@@ -68,7 +70,7 @@ public class SpawnFallingStage : MonoBehaviour
         float currentZ = z;
         for (int i = 0; i < maxPerRow - 1; i++)
         {
-            Vector3 pos = new Vector3(currentX, -0.1382384f, currentZ);
+            Vector3 pos = new Vector3(currentX, yVal, currentZ);
             GameObject clone = Instantiate(tilePrefab, pos, Quaternion.identity, gameObject.transform);
             clone.transform.localPosition = pos;
             currentZ += zOffset;
