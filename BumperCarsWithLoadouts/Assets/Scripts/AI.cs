@@ -91,7 +91,7 @@ public class AI : VehicleMovement {
                 closestObject = cM.Cars[i]; //always set the closest object even if they can't build up to effective velocity to allow for repositioning
 
                 //determine if they will reach adequate velocity and therefore adequate force by the time they arrive at the target's position
-                if (velocity.magnitude < minVelocity && temp < minDistance)//make a fail check that continues to next target in loop if they won't reach necessary velocity
+                if (velocity.magnitude < minVelocity && temp.magnitude < minDistance)//make a fail check that continues to next target in loop if they won't reach necessary velocity
                 {
                     Debug.Log(gameObject.name + "'s gotta go faster");
                     continue;
@@ -106,7 +106,7 @@ public class AI : VehicleMovement {
                 closestObject = cM.Cars[i];//always set the closest object even if they can't build up to effective velocity to allow for repositioning
 
                 //determine if they will reach adequate velocity and therefore adequate force by the time they arrive at the target's position
-                if (velocity.magnitude < minVelocity && temp < minDistance)//make a fail check that continues to next target in loop if they won't reach necessary velocity
+                if (velocity.magnitude < minVelocity && temp.magnitude < minDistance)//make a fail check that continues to next target in loop if they won't reach necessary velocity
                 {
                     Debug.Log(gameObject.name + "'s gotta go faster");
                     continue;

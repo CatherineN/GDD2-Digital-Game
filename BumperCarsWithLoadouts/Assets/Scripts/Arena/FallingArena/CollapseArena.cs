@@ -28,6 +28,7 @@ public class CollapseArena : MonoBehaviour {
     
     IEnumerator Fall()
     {
+        if (transform.GetChild(0).transform.childCount == 0) yield return null;
         randomInt = rand.Next(0, transform.GetChild(0).transform.childCount);
         Transform faller = transform.GetChild(0).GetChild(randomInt);
         while(faller == prevTransform && transform.GetChild(0).transform.childCount > 1)
@@ -36,11 +37,13 @@ public class CollapseArena : MonoBehaviour {
             faller = transform.GetChild(0).GetChild(randomInt);
         }
         prevTransform = faller;
-        faller.GetComponent<Renderer>().material.color = Color.red;
+        faller.gameObject.GetComponent<FlashColor>().enabled = true;
         yield return new WaitForSeconds(fallTime);
+        faller.gameObject.GetComponent<FlashColor>().enabled = false;
         faller.GetComponent<Rigidbody>().useGravity = true;
         faller.GetComponent<Rigidbody>().isKinematic = false;
         faller.GetComponent<Collider>().enabled = false;
+        faller.gameObject.GetComponent<MeshRenderer>().material.color = Color.black;
         yield return new WaitForSeconds(fallTime);
         StartCoroutine(Fall());
     }

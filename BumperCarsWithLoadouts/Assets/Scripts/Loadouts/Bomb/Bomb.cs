@@ -30,6 +30,7 @@ public class Bomb : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+        CheckOnStage();
         //Decrement the timer
         timer -= Time.deltaTime;
         //When it reaches 0...
@@ -85,5 +86,13 @@ public class Bomb : MonoBehaviour {
         //If the numbers don't match, explode
         if (droppedBy != car.gameObject.GetComponent<Player>().playerID)
             Explode();
+    }
+
+    private void CheckOnStage()
+    {
+        if(!Physics.Raycast(transform.position, Vector3.down, 1.0f))
+        {
+            gameObject.GetComponent<Rigidbody>().useGravity = true;
+        }
     }
 }
