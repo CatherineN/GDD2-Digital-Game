@@ -16,6 +16,7 @@ public class AI : VehicleMovement {
     private bool tooClose = false;//determines whether or not the AI is too close to its target to bump effectively
 
     public float minVelocity; //the lowest possible velocity to make a significant bump
+    public float minDistance;// the edge of glooooooooooooooooooooory or where to determine if too close with low velocity
 
     // Use this for initialization
     public override void Start()
@@ -82,7 +83,7 @@ public class AI : VehicleMovement {
             Vector3 temp = cM.Cars[i].transform.position - position;
 
             //get the future velocity of the AI car when it reaches the other car's position
-            Vector3 futVelocity = GetFutureVelocity(cM.Cars[i].transform.position);
+            //Vector3 futVelocity = GetFutureVelocity(cM.Cars[i].transform.position);
 
             //compare to see if is smaller than stored
             if (temp.magnitude < closest.magnitude)
@@ -90,7 +91,7 @@ public class AI : VehicleMovement {
                 closestObject = cM.Cars[i]; //always set the closest object even if they can't build up to effective velocity to allow for repositioning
 
                 //determine if they will reach adequate velocity and therefore adequate force by the time they arrive at the target's position
-                if (futVelocity.magnitude < minVelocity)//make a fail check that continues to next target in loop if they won't reach necessary velocity
+                if (velocity.magnitude < minVelocity && temp < minDistance)//make a fail check that continues to next target in loop if they won't reach necessary velocity
                 {
                     Debug.Log(gameObject.name + "'s gotta go faster");
                     continue;
@@ -105,7 +106,7 @@ public class AI : VehicleMovement {
                 closestObject = cM.Cars[i];//always set the closest object even if they can't build up to effective velocity to allow for repositioning
 
                 //determine if they will reach adequate velocity and therefore adequate force by the time they arrive at the target's position
-                if (futVelocity.magnitude < minVelocity)//make a fail check that continues to next target in loop if they won't reach necessary velocity
+                if (velocity.magnitude < minVelocity && temp < minDistance)//make a fail check that continues to next target in loop if they won't reach necessary velocity
                 {
                     Debug.Log(gameObject.name + "'s gotta go faster");
                     continue;
