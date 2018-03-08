@@ -134,6 +134,7 @@ public class Collision : MonoBehaviour
             if (!Physics.Raycast(transform.position, Vector3.down, 1f, floorMask))
             {
                 rb.useGravity = true;
+                rb.constraints = RigidbodyConstraints.None;
                 foreach (Collider col in gameObject.GetComponents<Collider>())
                 {
                     col.isTrigger = false;
@@ -144,6 +145,7 @@ public class Collision : MonoBehaviour
             else if(wasFalling)
             {
                 rb.useGravity = false;
+                rb.constraints = RigidbodyConstraints.FreezeAll;
                 foreach (Collider col in gameObject.GetComponents<Collider>())
                 {
                     col.isTrigger = true;

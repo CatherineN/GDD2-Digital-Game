@@ -87,7 +87,7 @@ public abstract class VehicleMovement : MonoBehaviour {
         {
             velocity = Vector3.zero;
         }
-        velocity.y = 0;
+        //velocity.y = 0;
         //add velocity to position
         position += velocity;
         position.y = Mathf.Clamp(position.y, int.MinValue, .1f);
