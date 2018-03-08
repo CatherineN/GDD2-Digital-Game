@@ -73,13 +73,14 @@ public class BumperPhysics : VehicleMovement
             impact = 0.0001f;
         }
         // get the resultant force
-        Vector3 resultantForce = velocity * impact * impactForce;
+        Vector3 resultantForce = forceDir.normalized * impact * impactForce;
         Debug.Log(resultantForce);
         // correct for being inside the rigidbody
         //ApplyForce(-velocity);
-        transform.position = transform.position - (velocity * 2.0f);
+        transform.position += -velocity;
         // apply the force to the other object
         collision.gameObject.GetComponent<BumperPhysics>().ApplyForce(resultantForce);
+        ApplyForce(-resultantForce * 0.1f);
     }
 
     

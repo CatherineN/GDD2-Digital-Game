@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PaintBang : MonoBehaviour {
 
@@ -11,6 +12,7 @@ public class PaintBang : MonoBehaviour {
     public Color parColor;
     private float radius;
     private float fadeTime;
+    private bool collapsingArena = false;
 
     
     void Start ()
@@ -19,6 +21,7 @@ public class PaintBang : MonoBehaviour {
         speed = 8.5f;
         radius = GameObject.Find("SceneManager").GetComponent<CarManager>().ArenaRadius;
         fadeTime = 5f;
+        if (SceneManager.GetActiveScene().name == "CollapsingArena") collapsingArena = true;
     }
 	
 	// Update is called once per frame
@@ -28,7 +31,7 @@ public class PaintBang : MonoBehaviour {
         velocity = direction * speed;
         transform.forward = direction;
         transform.position += velocity * Time.deltaTime;
-        if(transform.position.y < 0 && transform.position.sqrMagnitude < radius * radius)
+        if(transform.position.y < 0 && (collapsingArena ? Physics.Raycast(transform.position, Vector3.down, 2f) : (transform.position.sqrMagnitude < radius * radius)))
         {
             GetComponent<Rigidbody>().useGravity = false;
             GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY;
