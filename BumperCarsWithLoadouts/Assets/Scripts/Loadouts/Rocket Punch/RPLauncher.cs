@@ -17,6 +17,9 @@ public class RPLauncher : MonoBehaviour {
     private List<GameObject> carList;
     private GameObject targetCar;
     public GameObject reticle;
+
+    private Animator anim;
+
     void Start ()
     {
         cooldown = cooldownTime;
@@ -25,6 +28,7 @@ public class RPLauncher : MonoBehaviour {
         carList = GameObject.Find("SceneManager").GetComponent<CarManager>().Cars;
         targetAngle = 45f;
         targetCar = null;
+        anim = gameObject.GetComponent<Animator>();
     }
 	
 	// Update is called once per frame
@@ -39,11 +43,12 @@ public class RPLauncher : MonoBehaviour {
                 //When the E key is pressed...
                 if (((Input.GetKeyDown(KeyCode.E) || Input.GetButtonDown("Fire3")) && cooldown >= cooldownTime) && gameObject.transform.parent.gameObject.GetComponent<Player>().enabled == true && targetCar != null)
                 {
+                    anim.SetTrigger("Active");
                     //Create a ROKETTO PUUUUNCH. The launcher is rotated, so we use the transform.up
-                    GameObject rocketPunchInstance = Instantiate(rocketPunch, gameObject.transform.position + (transform.right * -1.5f), new Quaternion(0, 0, 0, 0));
+                    GameObject rocketPunchInstance = Instantiate(rocketPunch, gameObject.transform.position + (transform.forward * 1.5f), new Quaternion(0, 0, 0, 0));
                     Debug.Log(transform.right);
                     Debug.Log(transform.up);
-                    rocketPunchInstance.GetComponent<RocketPunch>().direction = -transform.right;
+                    rocketPunchInstance.GetComponent<RocketPunch>().direction = transform.forward;
                     rocketPunchInstance.GetComponent<RocketPunch>().parentCarID = gameObject.GetComponentInParent<Player>().playerID;
                     rocketPunchInstance.GetComponent<RocketPunch>().parentVelocity = gameObject.GetComponentInParent<Player>().Velocity;
                     rocketPunchInstance.GetComponent<RocketPunch>().carToSeek = targetCar;
@@ -58,9 +63,10 @@ public class RPLauncher : MonoBehaviour {
                 //When the E key is pressed...
                 if (((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetButtonDown("Fire2")) && cooldown >= cooldownTime)  && gameObject.transform.parent.gameObject.GetComponent<Player>().enabled == true && targetCar != null)
                 {
+                    anim.SetTrigger("Active");
                     //Create a ROKETTO PUUUUNCH. The launcher is rotated, so we use the transform.up
-                    GameObject rocketPunchInstance = Instantiate(rocketPunch, gameObject.transform.position + (transform.right * -1.5f), new Quaternion(0, 0, 0, 0));
-                    rocketPunchInstance.GetComponent<RocketPunch>().direction = -transform.right;
+                    GameObject rocketPunchInstance = Instantiate(rocketPunch, gameObject.transform.position + (transform.forward * 1.5f), new Quaternion(0, 0, 0, 0));
+                    rocketPunchInstance.GetComponent<RocketPunch>().direction = transform.forward;
                     rocketPunchInstance.GetComponent<RocketPunch>().parentCarID = gameObject.GetComponentInParent<Player>().playerID;
                     rocketPunchInstance.GetComponent<RocketPunch>().parentVelocity = gameObject.GetComponentInParent<Player>().Velocity;
                     rocketPunchInstance.GetComponent<RocketPunch>().carToSeek = targetCar;
