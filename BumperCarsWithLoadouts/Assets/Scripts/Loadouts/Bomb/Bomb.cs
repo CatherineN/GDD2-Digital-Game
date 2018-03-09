@@ -38,10 +38,8 @@ public class Bomb : MonoBehaviour {
         {
             gameObject.GetComponent<AudioSource>().Play();
 
-            if (timer % 0.2f < 0.1)
-                gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
-            else
-                gameObject.GetComponent<MeshRenderer>().material.color = Color.black;
+            float lerp = Mathf.PingPong(Time.time, 0.1f) / 0.1f;
+            gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.black, Color.red, lerp);
         }
         if (timer <= 0)
         {

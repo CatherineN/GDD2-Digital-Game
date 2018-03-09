@@ -8,8 +8,10 @@ public class BumperPhysics : VehicleMovement
     public float frictionCoef = .5f;
     public float frictionForce = 2f;
     public float impactForce = 10.0f;
+    public float gravity = 1.0f;
 
     private bool collidedThisFrame;
+    private bool falling;
 
     // Use this for initialization
     public override void Start()
@@ -20,6 +22,8 @@ public class BumperPhysics : VehicleMovement
         Physics.IgnoreCollision(col[0], col[2], true);
 
         collidedThisFrame = false;
+        falling = false;
+        physicsDebug = true;
 
         base.Start();
     }
@@ -30,6 +34,8 @@ public class BumperPhysics : VehicleMovement
     /// </summary>
     protected override void CalcSteeringForces()
     {
+        // make sure we're on the ground
+        CheckFalling();
 
         // this is for our rotation
         angleToRotate = Quaternion.Euler(0, 0, 0);
@@ -37,6 +43,7 @@ public class BumperPhysics : VehicleMovement
         // this is the sum of all the forces
         total = Vector3.zero;
 
+        
         switch (playerID)
         {
             case 1:
@@ -49,11 +56,20 @@ public class BumperPhysics : VehicleMovement
 
         //clamp the total force to maxForce
         total = Vector3.ClampMagnitude(total, maxForce);
+
+        if(falling)
+        {
+            // apply gravity
+            total += Vector3.down * gravity;
+        }
+
+        
         // apply the sum of the forces to our bumper car
         ApplyForce(total);
 
         direction = Vector3.Lerp(angleToRotate * direction, transform.forward, Time.deltaTime * 0.5f);
-        ApplyFriction(CalculateCoefficientFriction(frictionCoef, frictionForce));
+        if(!falling)
+            ApplyFriction(CalculateCoefficientFriction(frictionCoef, frictionForce));
 
         collidedThisFrame = false;
     }
@@ -77,10 +93,25 @@ public class BumperPhysics : VehicleMovement
         Debug.Log(resultantForce);
         // correct for being inside the rigidbody
         //ApplyForce(-velocity);
-        transform.position += -velocity;
+        transform.position += (-velocity * 1.1f);
         // apply the force to the other object
         collision.gameObject.GetComponent<BumperPhysics>().ApplyForce(resultantForce);
         ApplyForce(-resultantForce * 0.1f);
+    }
+
+    private void CheckFalling()
+    {
+        // if there is nothing under the car, we are falling
+        if(!Physics.Raycast(transform.position, -transform.up, 1.0f))
+        {
+            falling = true;
+            lockRotation = false;
+        }
+        else
+        {
+            falling = false;
+            lockRotation = true;
+        }
     }
 
     
@@ -100,12 +131,12 @@ public class BumperPhysics : VehicleMovement
 
             //use spectrum of input strength to reflect in how fast change is in acceleration & turning
 
-            if (vt > 0) // go forward
+            if (vt > 0 && !falling) // go forward
             {
                 direction = transform.forward;
                 total += direction * vt;
             }
-            if (vt < 0) // turns counter-clockwise
+            if (vt < 0 && !falling) // turns counter-clockwise
             {
                 direction = transform.forward;
                 total += direction * vt;
@@ -123,7 +154,7 @@ public class BumperPhysics : VehicleMovement
         }
         else
         {
-            if (Input.GetKey(KeyCode.W)) // go forward
+            if (Input.GetKey(KeyCode.W) && !falling) // go forward
             {
                 direction = transform.forward;
                 total += direction;
@@ -139,7 +170,7 @@ public class BumperPhysics : VehicleMovement
                 angleToRotate = Quaternion.Euler(0, angleToRotate.y + turnSpeed, 0);
                 totalRotation += turnSpeed;
             }
-            if (Input.GetKey(KeyCode.S)) // go backward
+            if (Input.GetKey(KeyCode.S) && !falling) // go backward
             {
                 direction = -transform.forward;
                 total += direction;

@@ -33,6 +33,7 @@ public abstract class VehicleMovement : MonoBehaviour {
     protected Rigidbody rb;
 
     protected bool lockRotation = true;
+    protected bool physicsDebug = false;
 
     // Use this for initialization
     public virtual void Start () {
@@ -108,10 +109,14 @@ public abstract class VehicleMovement : MonoBehaviour {
         //set up vector equal to the seekers direction
         //transform.forward = direction;
         transform.position = position;
-        if (tag == "Player" && lockRotation)
+        if (tag == "Player" && lockRotation && !physicsDebug)
         {
             transform.rotation = Quaternion.Euler(0, totalRotation, 0);
             transform.position = new Vector3(position.x, 0.1f, position.z);
+        }
+        if(physicsDebug)
+        {
+            transform.rotation = Quaternion.Euler(0, totalRotation, 0);
         }
     }
 
