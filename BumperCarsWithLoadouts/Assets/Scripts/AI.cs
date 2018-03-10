@@ -14,9 +14,11 @@ public class AI : VehicleMovement {
     private GameObject target; //the gameobject that the agent is chasing
     private Vector3 adjustmentTarget; //the point in space that the AI will go to in order to build up speed before bumping the target
     private bool tooClose = false;//determines whether or not the AI is too close to its target to bump effectively
+    private bool looping = false;
 
-    public float minVelocity; //the lowest possible velocity to make a significant bump
-    public float minDistance;// the edge of glooooooooooooooooooooory or where to determine if too close with low velocity
+    public float minVelocity; //the lowest possible velocity to make a significant bump -- .25
+    //public float checkRadius;// the edge of glooooooooooooooooooooory or where to determine if too close with low velocity -- 3
+    public float minBestBumpDistance; //get the ratio between the distance and the minimum best bump distance
 
     // Use this for initialization
     public override void Start()
@@ -40,13 +42,6 @@ public class AI : VehicleMovement {
         //actual adding of forces to the total force
         //set the target of the Autonomous Agent
         SetTarget();
-        //check how close target and distance self if extremely close
-        //Vector3 adjustForce = AdjustPosition();
-        //AdjustPosition();
-        //if (tooClose == true)
-        //{
-        //    total += 2 * Seek(adjustmentTarget);
-        //}
         //seek its target
         if (target != null)
         {
@@ -82,6 +77,9 @@ public class AI : VehicleMovement {
             //get distance between
             Vector3 temp = cM.Cars[i].transform.position - position;
 
+            //get the ratio between the distance and the minimum best bump distance
+            float ratio = minBestBumpDistance / temp.magnitude;
+
             //get the future velocity of the AI car when it reaches the other car's position
             //Vector3 futVelocity = GetFutureVelocity(cM.Cars[i].transform.position);
 
@@ -91,7 +89,7 @@ public class AI : VehicleMovement {
                 closestObject = cM.Cars[i]; //always set the closest object even if they can't build up to effective velocity to allow for repositioning
 
                 //determine if they will reach adequate velocity and therefore adequate force by the time they arrive at the target's position
-                if (velocity.magnitude < minVelocity && temp.magnitude < minDistance)//make a fail check that continues to next target in loop if they won't reach necessary velocity
+                if (velocity.magnitude * ratio < minVelocity)//make a fail check that continues to next target in loop if they won't reach necessary velocity
                 {
                     Debug.Log(gameObject.name + "'s gotta go faster");
                     continue;
@@ -106,7 +104,7 @@ public class AI : VehicleMovement {
                 closestObject = cM.Cars[i];//always set the closest object even if they can't build up to effective velocity to allow for repositioning
 
                 //determine if they will reach adequate velocity and therefore adequate force by the time they arrive at the target's position
-                if (velocity.magnitude < minVelocity && temp.magnitude < minDistance)//make a fail check that continues to next target in loop if they won't reach necessary velocity
+                if (velocity.magnitude *ratio < minVelocity)//make a fail check that continues to next target in loop if they won't reach necessary velocity
                 {
                     Debug.Log(gameObject.name + "'s gotta go faster");
                     continue;
@@ -117,9 +115,12 @@ public class AI : VehicleMovement {
                 break;
             }
         }
-        if(target == null)//do the loop around behavior to build up speed before chasing a target
+        if(target == null)// || looping == true)//do the loop around behavior to build up speed before chasing a target
         {
-            
+            Vector3 loopPoint = Vector3.zero + (closestObject.transform.position - Vector3.zero);
+            total += 3 *Seek(loopPoint);
+            //looping = true;
+            Debug.Log(gameObject.name + " is looping around for another go");
         }
     }
     /// <summary>
