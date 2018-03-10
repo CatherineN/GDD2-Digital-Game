@@ -34,6 +34,7 @@ public abstract class VehicleMovement : MonoBehaviour {
 
     protected bool lockRotation = true;
     protected bool physicsDebug = false;
+    protected Vector3 targetUp;
 
     // Use this for initialization
     public virtual void Start () {
@@ -116,7 +117,9 @@ public abstract class VehicleMovement : MonoBehaviour {
         }
         if(physicsDebug)
         {
-            transform.rotation *= angleToRotate;
+            transform.up = targetUp;
+            transform.Rotate(Vector3.up, totalRotation);
+            
         }
     }
 

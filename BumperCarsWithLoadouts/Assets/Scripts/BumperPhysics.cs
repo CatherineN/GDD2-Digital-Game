@@ -69,7 +69,7 @@ public class BumperPhysics : VehicleMovement
         ApplyForce(total);
 
         direction = Vector3.Lerp(angleToRotate * direction, transform.forward, Time.deltaTime * 0.5f);
-        if(!falling)
+        if (!falling)
             ApplyFriction(CalculateCoefficientFriction(frictionCoef, frictionForce));
 
         collidedThisFrame = false;
@@ -110,8 +110,9 @@ public class BumperPhysics : VehicleMovement
     private void PlaceCarOnTerrain(RaycastHit hit)
     {
         transform.position = new Vector3(transform.position.x, hit.point.y + carHeight, transform.position.z);
-       /* Vector3 change = transform.up + hit.normal;
-        angleToRotate = Quaternion.Euler(change);*/
+        /*eulerToRotate += ((transform.position + transform.up) - (transform.position + hit.normal));
+        angleToRotate = Quaternion.Euler(eulerToRotate);/*/
+        targetUp = hit.normal;
     }
 
     private void CheckFalling()
@@ -160,12 +161,12 @@ public class BumperPhysics : VehicleMovement
             }
             if (hr < 0) // turns clockwise
             {
-                angleToRotate = Quaternion.Euler(angleToRotate.eulerAngles.x, angleToRotate.y + turnSpeed * hr, angleToRotate.eulerAngles.z);
+                angleToRotate = Quaternion.Euler(0, angleToRotate.y + turnSpeed * hr, 0);
                 totalRotation += turnSpeed * hr;
             }
             if (hr > 0) // go backward
             {
-                angleToRotate = Quaternion.Euler(angleToRotate.eulerAngles.x, angleToRotate.y + turnSpeed * hr, angleToRotate.eulerAngles.z);
+                angleToRotate = Quaternion.Euler(0, angleToRotate.y + turnSpeed * hr, 0);
                 totalRotation += turnSpeed * hr;
             }
         }
