@@ -91,7 +91,7 @@ public abstract class VehicleMovement : MonoBehaviour {
         //velocity.y = 0;
         //add velocity to position
         position += velocity;
-        position.y = Mathf.Clamp(position.y, int.MinValue, .1f);
+        if(!physicsDebug) position.y = Mathf.Clamp(position.y, int.MinValue, .1f);
         //calculate direction from velocity
         //direction = velocity.normalized;
         //zero out acceleration
@@ -116,7 +116,7 @@ public abstract class VehicleMovement : MonoBehaviour {
         }
         if(physicsDebug)
         {
-            transform.rotation = Quaternion.Euler(0, totalRotation, 0);
+            transform.rotation *= angleToRotate;
         }
     }
 

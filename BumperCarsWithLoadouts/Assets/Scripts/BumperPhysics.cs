@@ -12,6 +12,7 @@ public class BumperPhysics : VehicleMovement
 
     private bool collidedThisFrame;
     private bool falling;
+    private float carHeight = 0.5f;
 
     // Use this for initialization
     public override void Start()
@@ -34,12 +35,12 @@ public class BumperPhysics : VehicleMovement
     /// </summary>
     protected override void CalcSteeringForces()
     {
-        // make sure we're on the ground
-        CheckFalling();
-
         // this is for our rotation
         angleToRotate = Quaternion.Euler(0, 0, 0);
 
+        // make sure we're on the ground
+        CheckFalling();
+        
         // this is the sum of all the forces
         total = Vector3.zero;
 
@@ -76,33 +77,48 @@ public class BumperPhysics : VehicleMovement
 
     private void ManageCollision(UnityEngine.Collision collision)
     {
+        if(collision.gameObject.tag == "Player")
+        {
+            CarToCarCollision(collision);
+        }
+    }
+
+    private void CarToCarCollision(UnityEngine.Collision collision)
+    {
         // get the other collider
         Transform otherT = collision.collider.transform;
         // calculate the force direction
         Vector3 forceDir = transform.position - otherT.position;
         // get the projection
-        float impact = Vector3.Dot(velocity.normalized, forceDir.normalized);
+        float impact = Vector3.Dot(velocity, forceDir.normalized);
         // factor in mass
         impact = impact * (rb.mass / collision.collider.GetComponent<Rigidbody>().mass);
-        if(impact == 0)
+        if (impact == 0)
         {
             impact = 0.0001f;
         }
         // get the resultant force
         Vector3 resultantForce = forceDir.normalized * impact * impactForce;
-        Debug.Log(resultantForce);
         // correct for being inside the rigidbody
         //ApplyForce(-velocity);
         transform.position += (-velocity * 1.1f);
         // apply the force to the other object
         collision.gameObject.GetComponent<BumperPhysics>().ApplyForce(resultantForce);
-        ApplyForce(-resultantForce * 0.1f);
+        ApplyForce(-resultantForce * 0.5f);
+    }
+
+    private void PlaceCarOnTerrain(RaycastHit hit)
+    {
+        transform.position = new Vector3(transform.position.x, hit.point.y + carHeight, transform.position.z);
+       /* Vector3 change = transform.up + hit.normal;
+        angleToRotate = Quaternion.Euler(change);*/
     }
 
     private void CheckFalling()
     {
         // if there is nothing under the car, we are falling
-        if(!Physics.Raycast(transform.position, -transform.up, 1.0f))
+        RaycastHit hit;
+        if(!Physics.Raycast(transform.position, -transform.up, out hit,1.0f))
         {
             falling = true;
             lockRotation = false;
@@ -111,6 +127,7 @@ public class BumperPhysics : VehicleMovement
         {
             falling = false;
             lockRotation = true;
+            PlaceCarOnTerrain(hit);
         }
     }
 
@@ -143,12 +160,12 @@ public class BumperPhysics : VehicleMovement
             }
             if (hr < 0) // turns clockwise
             {
-                angleToRotate = Quaternion.Euler(0, angleToRotate.y + turnSpeed * hr, 0);
+                angleToRotate = Quaternion.Euler(angleToRotate.eulerAngles.x, angleToRotate.y + turnSpeed * hr, angleToRotate.eulerAngles.z);
                 totalRotation += turnSpeed * hr;
             }
             if (hr > 0) // go backward
             {
-                angleToRotate = Quaternion.Euler(0, angleToRotate.y + turnSpeed * hr, 0);
+                angleToRotate = Quaternion.Euler(angleToRotate.eulerAngles.x, angleToRotate.y + turnSpeed * hr, angleToRotate.eulerAngles.z);
                 totalRotation += turnSpeed * hr;
             }
         }

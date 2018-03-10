@@ -1,5 +1,7 @@
 // Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
 Shader "Cell Shader"
 {
     Properties 
@@ -51,7 +53,7 @@ Shader "Cell Shader"
             fixed _Outline;
 
             
-            v2f vert (appdata_t v) 
+            v2f vert (appdata_t v)
             {
                 v2f o;
 			    o.pos = v.vertex;
