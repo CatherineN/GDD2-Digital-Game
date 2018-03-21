@@ -81,6 +81,10 @@ public class BumperPhysics : VehicleMovement
         {
             CarToCarCollision(collision);
         }
+        else
+        {
+            CarToTerrainCollision(collision);
+        }
     }
 
     private void CarToCarCollision(UnityEngine.Collision collision)
@@ -105,6 +109,30 @@ public class BumperPhysics : VehicleMovement
         // apply the force to the other object
         collision.gameObject.GetComponent<BumperPhysics>().ApplyForce(resultantForce);
         ApplyForce(-resultantForce * 0.5f);
+    }
+
+    private void CarToTerrainCollision(UnityEngine.Collision collision)
+    {
+        RaycastHit hit;
+        Ray r = new Ray(transform.position, transform.position - collision.contacts[0].point);
+        Physics.Raycast(r, out hit, Mathf.Infinity, 2);
+        Debug.Log(Vector3.Angle(hit.transform.position + hit.normal, transform.position + direction));
+        /*if (Vector3.Angle(direction, hit.normal) > )
+        {
+
+        }
+        // calculate the force direction
+        Vector3 forceDir = collision.contacts[0].point - transform.position;
+        // get the projection
+        float impact = Vector3.Dot(velocity, forceDir.normalized);
+        if (impact == 0)
+        {
+            impact = 0.0001f;
+        }
+        // get the resultant force
+        Vector3 resultantForce = forceDir.normalized * impact * impactForce;
+        // apply the force to the player
+        ApplyForce(-resultantForce);*/
     }
 
     private void PlaceCarOnTerrain(RaycastHit hit)
