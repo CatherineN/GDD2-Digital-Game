@@ -19,6 +19,9 @@ public class TwoPlayerSelect : MonoBehaviour
     private bool verticalInUse = false;
     public Selectable selectMan;
     public MyEventSystem currentEventSystem;
+    public Text weaponDesc;
+    public Text weightDesc;
+
 
     // Use this for initialization
     void Start()
@@ -26,7 +29,7 @@ public class TwoPlayerSelect : MonoBehaviour
         
         tagTracker = 9;
         UpdateTagTracker();
-
+        
     }
 
     // Update is called once per frame
@@ -34,6 +37,7 @@ public class TwoPlayerSelect : MonoBehaviour
     {
         ToggleManager();
         SettingEditor();
+        TextEditor();
     }
     void ToggleManager()
     {
@@ -140,6 +144,38 @@ public class TwoPlayerSelect : MonoBehaviour
         {
             horizontalInUse = false;
         }
+
+    }
+    void TextEditor()
+    {
+        switch (GameObject.Find("Size-Bottom").GetComponent<MyDropdown>().value)
+        {
+            case 0:
+                weightDesc.text = "More agile, but easier to push around";
+                break;
+            case 1:
+                weightDesc.text = "An average weight. Beginner friendly.";
+                break;
+            case 2:
+                weightDesc.text = "Harder to bump, but more dificult to maneuver";
+                break;
+        }
+        switch (GameObject.Find("Weapon-Bottom").GetComponent<MyDropdown>().value)
+        {
+            case 0:
+                weaponDesc.text = "Drop bombs that explode after a short time, or on impact";
+                break;
+            case 1:
+                weaponDesc.text = "Shoot a small, but fast-moving projectile";
+                break;
+            case 2:
+                weaponDesc.text = "Drop paint bombs that temporarily blind your opponent on impact";
+                break;
+            case 3:
+                weaponDesc.text = "Fire a slow-moving homing missile";
+                break;
+        }
+
 
     }
     void SettingEditor()
