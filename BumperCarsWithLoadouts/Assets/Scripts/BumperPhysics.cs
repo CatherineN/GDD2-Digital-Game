@@ -113,16 +113,17 @@ public class BumperPhysics : VehicleMovement
 
     private void CarToTerrainCollision(UnityEngine.Collision collision)
     {
-        RaycastHit hit;
-        Ray r = new Ray(transform.position, transform.position - collision.contacts[0].point);
-        Physics.Raycast(r, out hit, Mathf.Infinity, 2);
-        Debug.Log(Vector3.Angle(hit.transform.position + hit.normal, transform.position + direction));
-        /*if (Vector3.Angle(direction, hit.normal) > )
-        {
-
-        }
         // calculate the force direction
         Vector3 forceDir = collision.contacts[0].point - transform.position;
+        RaycastHit hit;
+        if (Physics.Raycast(collision.contacts[0].point + transform.up, -transform.up, out hit, 1.0f))
+        {
+            if(hit.normal != transform.up)
+            {
+                targetUp = hit.normal;
+                return;
+            }
+        }
         // get the projection
         float impact = Vector3.Dot(velocity, forceDir.normalized);
         if (impact == 0)
@@ -130,13 +131,25 @@ public class BumperPhysics : VehicleMovement
             impact = 0.0001f;
         }
         // get the resultant force
-        Vector3 resultantForce = forceDir.normalized * impact * impactForce;
+        Vector3 resultantForce = forceDir.normalized * impact * 125f;
+        transform.position += (-velocity * 1.1f);
         // apply the force to the player
-        ApplyForce(-resultantForce);*/
+        ApplyForce(-resultantForce);
     }
 
     private void PlaceCarOnTerrain(RaycastHit hit)
     {
+        /*RaycastHit hit1;
+        Physics.Raycast(transform.position + transform.forward, -transform.up, out hit1, 1.0f);
+        RaycastHit hit2;
+        Physics.Raycast(transform.position - transform.forward, -transform.up, out hit2, 1.0f);
+        RaycastHit bestHit;
+        float angle1 = Vector3.SignedAngle(transform.up, hit.normal, transform.up);
+        float angle2 = Vector3.SignedAngle(transform.up, hit1.normal, transform.up);
+        float angle3 = Vector3.SignedAngle(transform.up, hit2.normal, transform.up);
+        if (angle1 > angle2) bestHit = hit;
+        else bestHit = hit1;
+        if (angle2 < angle3) bestHit = hit2;*/
         transform.position = new Vector3(transform.position.x, hit.point.y + carHeight, transform.position.z);
         /*eulerToRotate += ((transform.position + transform.up) - (transform.position + hit.normal));
         angleToRotate = Quaternion.Euler(eulerToRotate);/*/
