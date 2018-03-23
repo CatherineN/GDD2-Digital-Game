@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class ScawySystem : MonoBehaviour {
 
+    public enum State
+    {
+        Stalk,
+        Attack,
+        Scawed,
+    }
+
     //attributes
     public Vector3 position;
     public Vector3 direction;
@@ -14,14 +21,23 @@ public class ScawySystem : MonoBehaviour {
 
     //target reference
     public GameObject[] nodes;
-    //public GameObject target;
+    public GameObject target;
     private int targetNum;
     public float minDist;
+    public bool isAttacking;
+
+    public float timer;
+    public float startTimer;
+    public float targetRadius;
+
+
 
 
     // Use this for initialization
     void Start () {
-        targetNum = 0;       
+        targetNum = 0;
+        isAttacking = false;
+        timer = startTimer;
 	}
 	
 	// Update is called once per frame
@@ -29,7 +45,18 @@ public class ScawySystem : MonoBehaviour {
         Stalk();
         UpdatePosition();
         SetTransform();
-        ChangeTarget();
+
+        if (!isAttacking)
+        {
+            ChangeTarget();
+        }
+
+        if(timer < 0)
+        {
+            Attack();
+        }
+
+        timer--;
     }
 
     void ChangeTarget()
@@ -102,6 +129,38 @@ public class ScawySystem : MonoBehaviour {
     {
         gameObject.transform.forward = direction;
         gameObject.transform.position = position;
+    }
+
+    void Attack()
+    {
+        isAttacking = true;
+
+        Vector3 futurePos = PursueTarget();
+
+        Vector3 dist = gameObject.transform.position - target.transform.position;
+        float distance = dist.sqrMagnitude;
+
+        if (distance > targetRadius)
+        {
+            Vector3 seekingForce = Seek(futurePos);
+            ApplyForce(seekingForce);
+        }
+        else
+        {
+            //attack is over
+            timer = startTimer;
+            isAttacking = false;
+        }
+    }
+        Vector3 PursueTarget()
+    {
+        //get reference to target
+        //testing with one target for now
+
+        //find a point in front of target
+        Vector3 futurePos = target.transform.position + target.transform.forward * 3;
+        return futurePos;
+
     }
 
 }
