@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class ScawySystem : MonoBehaviour {
 
-    public enum State
+    public enum AIBehavior
     {
         Stalk,
         Attack,
-        Scawed,
+        Retreat,
+        Fatality
     }
 
     //attributes
@@ -30,7 +31,7 @@ public class ScawySystem : MonoBehaviour {
     public float startTimer;
     public float targetRadius;
 
-
+    public AIBehavior currentState = AIBehavior.Stalk;
 
 
     // Use this for initialization
@@ -42,21 +43,22 @@ public class ScawySystem : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        Stalk();
+
+        switch(currentState)
+        {
+            case AIBehavior.Stalk: Stalk();
+                break;
+            case AIBehavior.Attack:
+                break;
+            case AIBehavior.Retreat:
+                break;
+            case AIBehavior.Fatality:
+                break;
+        }
+
+        
         UpdatePosition();
         SetTransform();
-
-        if (!isAttacking)
-        {
-            ChangeTarget();
-        }
-
-        if(timer < 0)
-        {
-            Attack();
-        }
-
-        timer--;
     }
 
     void ChangeTarget()
@@ -75,8 +77,13 @@ public class ScawySystem : MonoBehaviour {
     //AI moves in circles around arena
     void Stalk()
     {
+        //switch the node that the AI is seeking currently
+        ChangeTarget();
+
         Vector3 seekingForce = Seek(nodes[targetNum].transform.position);
         ApplyForce(seekingForce);
+
+        
     }
 
     Vector3 Seek(Vector3 targetPosition)
@@ -152,7 +159,8 @@ public class ScawySystem : MonoBehaviour {
             isAttacking = false;
         }
     }
-        Vector3 PursueTarget()
+
+    Vector3 PursueTarget()
     {
         //get reference to target
         //testing with one target for now

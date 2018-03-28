@@ -35,7 +35,7 @@ public class Collision : MonoBehaviour
             p = gameObject.GetComponent<AI>();
         collisionCount = 0;
 
-        if (SceneManager.GetActiveScene().name == "CollapsingArena")
+        if (SceneManager.GetActiveScene().name == "CollapsingArena" || SceneManager.GetActiveScene().name == "VolcanoArena")
             fallingStage = true;
 
         cM = GameObject.Find("SceneManager").GetComponent<CarManager>();
