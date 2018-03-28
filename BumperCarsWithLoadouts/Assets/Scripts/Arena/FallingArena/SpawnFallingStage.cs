@@ -88,11 +88,11 @@ public class SpawnFallingStage : MonoBehaviour
 
     private void MakeColors()
     {
-        color1 = new Color(233f / 255f, 77f / 255f, 48f / 255f);
-        color2 = new Color(242f / 255f, 39f / 255f, 131f / 255f);
-        color3 = new Color(249f / 255f, 248f / 255f, 78f / 255f);
-        color4 = new Color(5f / 255f, 238f / 255f, 227f / 255f);
-        color5 = new Color(255f / 255f, 36f / 255f, 70f / 255f);
+        color1 = new Color(184f / 255f, 51f / 255f, 106f / 255f);
+        color2 = new Color(114f / 255f, 109f / 255f, 168f / 255f);
+        color3 = new Color(97f / 255f, 149f / 255f, 204f / 255f);
+        color4 = new Color(116f / 255f, 203f / 255f, 219f / 255f);
+        color5 = new Color(196f / 255f, 144f / 255f, 209f / 255f);
         colors = new Color[5];
         colors[0] = color1;
         colors[1] = color2;
