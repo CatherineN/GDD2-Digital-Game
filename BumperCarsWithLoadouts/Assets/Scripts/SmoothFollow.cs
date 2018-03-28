@@ -73,6 +73,8 @@ public class SmoothFollow : MonoBehaviour
             }
 
             transform.position = Vector3.Lerp(transform.position, wantedPosition, Time.deltaTime * positionDamping);
+
+            transform.position = target.position - (target.forward * 6);
             // Adjust the height of the camera
             transform.position = new Vector3(transform.position.x, currentHeight, transform.position.z);
             if (lookBehind == true)
@@ -85,6 +87,7 @@ public class SmoothFollow : MonoBehaviour
                 // Set the forward to rotate with time
                 transform.forward = Vector3.Lerp(transform.forward, target.forward, Time.deltaTime * rotationDamping);
             }
+            gameObject.transform.LookAt(target.transform);
         }
         else if (wideSpec)
         {
@@ -121,6 +124,7 @@ public class SmoothFollow : MonoBehaviour
             {
                 // Set the forward to rotate with time
                 transform.forward = Vector3.Lerp(transform.forward, friend.transform.forward, Time.deltaTime * rotationDamping);
+                
             }
         }
 
