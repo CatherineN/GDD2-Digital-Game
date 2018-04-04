@@ -81,6 +81,10 @@ public class BumperPhysics : VehicleMovement
         {
             CarToCarCollision(collision);
         }
+        else if(collision.gameObject.tag == "Slope")
+        {
+            CarToSlope(collision);
+        }
         else
         {
             CarToTerrainCollision(collision);
@@ -115,7 +119,7 @@ public class BumperPhysics : VehicleMovement
     {
         // calculate the force direction
         Vector3 forceDir = collision.contacts[0].point - transform.position;
-        RaycastHit hit;
+        /*RaycastHit hit;
         if (Physics.Raycast(collision.contacts[0].point + transform.up, -transform.up, out hit, 1.0f))
         {
             if(hit.normal != transform.up)
@@ -123,7 +127,7 @@ public class BumperPhysics : VehicleMovement
                 targetUp = hit.normal;
                 return;
             }
-        }
+        }*/
         // get the projection
         float impact = Vector3.Dot(velocity, forceDir.normalized);
         if (impact == 0)
@@ -135,6 +139,18 @@ public class BumperPhysics : VehicleMovement
         transform.position += (-velocity * 1.1f);
         // apply the force to the player
         ApplyForce(-resultantForce);
+    }
+
+    private void CarToSlope(UnityEngine.Collision collision)
+    {
+        // check if we can be on a slope
+        Ray r = new Ray(transform.position, (collision.contacts[0].point - transform.position).normalized);
+        RaycastHit hit;
+        collision.collider.Raycast(r, out hit, float.MaxValue);
+        if(Vector3.Angle(hit.normal, transform.up) > 89f)
+        {
+            CarToTerrainCollision(collision);
+        }
     }
 
     private void PlaceCarOnTerrain(RaycastHit hit)
