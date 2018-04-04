@@ -87,7 +87,10 @@ public class BumperPhysics : VehicleMovement
         }
         else
         {
-            CarToTerrainCollision(collision);
+            Ray r = new Ray(transform.position, (collision.contacts[0].point - transform.position).normalized);
+            RaycastHit hit;
+            collision.collider.Raycast(r, out hit, float.MaxValue);
+            CarToTerrainCollision(collision, hit);
         }
     }
 
@@ -115,7 +118,7 @@ public class BumperPhysics : VehicleMovement
         ApplyForce(-resultantForce * 0.5f);
     }
 
-    private void CarToTerrainCollision(UnityEngine.Collision collision)
+    private void CarToTerrainCollision(UnityEngine.Collision collision, RaycastHit hit)
     {
         // calculate the force direction
         Vector3 forceDir = collision.contacts[0].point - transform.position;
@@ -135,10 +138,11 @@ public class BumperPhysics : VehicleMovement
             impact = 0.0001f;
         }
         // get the resultant force
-        Vector3 resultantForce = forceDir.normalized * impact * 125f;
-        transform.position += (-velocity * 1.1f);
+        Vector3 resultantForce = forceDir.normalized * impact * 100f;
+        Vector3 reflectedForce = Vector3.Reflect(resultantForce, hit.normal);
+        transform.position += (-(velocity.sqrMagnitude * hit.normal * 1.5f));
         // apply the force to the player
-        ApplyForce(-resultantForce);
+        ApplyForce(reflectedForce);
     }
 
     private void CarToSlope(UnityEngine.Collision collision)
@@ -149,7 +153,7 @@ public class BumperPhysics : VehicleMovement
         collision.collider.Raycast(r, out hit, float.MaxValue);
         if(Vector3.Angle(hit.normal, transform.up) > 89f)
         {
-            CarToTerrainCollision(collision);
+            CarToTerrainCollision(collision, hit);
         }
     }
 
@@ -176,7 +180,7 @@ public class BumperPhysics : VehicleMovement
     {
         // if there is nothing under the car, we are falling
         RaycastHit hit;
-        if(!Physics.Raycast(transform.position, -transform.up, out hit,1.0f))
+        if(!Physics.Raycast(transform.position, Vector3.down, out hit,1f + velocity.sqrMagnitude))
         {
             falling = true;
             lockRotation = false;
@@ -187,6 +191,14 @@ public class BumperPhysics : VehicleMovement
             lockRotation = true;
             PlaceCarOnTerrain(hit);
         }
+    }
+
+    private void ResolveCollision(UnityEngine.Collision collision)
+    {
+        Vector3 dif = transform.TransformPoint(collision.contacts[0].thisCollider.bounds.center) - 
+            collision.contacts[0].otherCollider.transform.TransformPoint(collision.contacts[0].otherCollider.bounds.center);
+
+        transform.position += dif;
     }
 
     
@@ -318,7 +330,7 @@ public class BumperPhysics : VehicleMovement
 
     }
 
-    public void OnCollisionEnter(UnityEngine.Collision collision)
+    public void OnCollisionStay(UnityEngine.Collision collision)
     {
         if(!collidedThisFrame)
         {
