@@ -61,7 +61,7 @@ public abstract class VehicleMovement : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
+	public virtual void Update () {
         CalcSteeringForces();
         UpdatePosition();
         SetTransform();
@@ -94,7 +94,10 @@ public abstract class VehicleMovement : MonoBehaviour {
         position += velocity;
         if(!physicsDebug) position.y = Mathf.Clamp(position.y, int.MinValue, .1f);
         //calculate direction from velocity
-        //direction = velocity.normalized;
+        if (tag == "AI")
+        {
+            direction = velocity.normalized;
+        }
         //zero out acceleration
         acceleration = Vector3.zero;
         //calc future position at this speed over the specified time period
@@ -120,6 +123,10 @@ public abstract class VehicleMovement : MonoBehaviour {
             transform.up = targetUp;
             transform.Rotate(Vector3.up, totalRotation);
             
+        }
+        if(tag == "AI")
+        {
+            gameObject.transform.forward = direction;
         }
     }
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ScawySystem : MonoBehaviour {
+public class ScawySystem : VehicleMovement {
 
     public enum AIBehavior
     {
@@ -12,43 +12,41 @@ public class ScawySystem : MonoBehaviour {
         Fatality
     }
 
-    //attributes
-    public Vector3 position;
-    public Vector3 direction;
-    public Vector3 velocity;
-    public Vector3 acceleration;
-    public float mass;
-    public float maxSpeed;
-
+    
     //target reference
     public GameObject[] nodes;
     public GameObject target;
-    private int targetNum;
+    private int nodeNum;
+    public float nodeDist;
+    public float speed;
+    public float scalar;
     public float minDist;
-    public bool isAttacking;
 
-    public float timer;
-    public float startTimer;
     public float targetRadius;
 
     public AIBehavior currentState = AIBehavior.Stalk;
 
 
     // Use this for initialization
-    void Start () {
-        targetNum = 0;
-        isAttacking = false;
-        timer = startTimer;
+    public override void Start () {
+        nodeNum = 0;
+        base.Start();
+
+        maxSpeed = speed;
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	 public override void Update () {
+        total = Vector3.zero;
 
-        switch(currentState)
+        switch (currentState)
         {
-            case AIBehavior.Stalk: Stalk();
+            case AIBehavior.Stalk:
+                Stalk();
+                TransitionStalkAtk();
                 break;
             case AIBehavior.Attack:
+                Attack();
                 break;
             case AIBehavior.Retreat:
                 break;
@@ -56,21 +54,19 @@ public class ScawySystem : MonoBehaviour {
                 break;
         }
 
-        
-        UpdatePosition();
-        SetTransform();
+        base.Update();
     }
 
-    void ChangeTarget()
+    void ChangeNode()
     {
         //if the ai gets close to a node go to the next node
-        Vector3 dist = gameObject.transform.position - nodes[targetNum].transform.position;
+        Vector3 dist = gameObject.transform.position - nodes[nodeNum].transform.position;
         float distance = dist.sqrMagnitude;
 
-        if(distance < minDist)
+        if(distance < nodeDist)
         {
-            targetNum++;
-            targetNum = targetNum % 5;
+            nodeNum++;
+            nodeNum = nodeNum % 5;
         }
     }
 
@@ -78,97 +74,73 @@ public class ScawySystem : MonoBehaviour {
     void Stalk()
     {
         //switch the node that the AI is seeking currently
-        ChangeTarget();
+        ChangeNode();
 
-        Vector3 seekingForce = Seek(nodes[targetNum].transform.position);
-        ApplyForce(seekingForce);
-
-        
+        Vector3 seekingForce = Seek(nodes[nodeNum].transform.position);
+        total += seekingForce;        
     }
 
-    Vector3 Seek(Vector3 targetPosition)
+    protected override void CalcSteeringForces()
     {
-        //step 1, calculate a desired velocity
-        //which is from myself to my target's position
-        Vector3 desiredVelocity = targetPosition - position;
-
-        //step 2, Scale to the maximum speed
-        //this limits the steering force to the capabilities of this vehicle
-        desiredVelocity = Vector3.ClampMagnitude(desiredVelocity, maxSpeed);
-
-        //alternate way = normalize the desiredVelocity and then * maxSpeed
-        desiredVelocity.Normalize();
-        desiredVelocity *= maxSpeed;
-
-        //step 3, calculate the steering force
-        //steeringForce = desired - current
-        Vector3 steeringForce = desiredVelocity - velocity;
-
-        //step 4, return the force so it can be applied to the vehicle
-        return steeringForce;
+        total = Vector3.ClampMagnitude(total, maxForce);
+        ApplyForce(total);
     }
 
-    void ApplyForce(Vector3 force)
-    {
-        //accumulate the forces
-        acceleration += force / mass;
-    }
-
-    void UpdatePosition()
-    {
-        position = transform.position;
-
-        //step 1, add acceleration to velocity + multiply by time
-        velocity += acceleration * Time.deltaTime;
-
-        //step 2, add velocity to position
-        position += velocity * Time.deltaTime;
-
-        //step 3, reset acceleration vector
-        acceleration = Vector3.zero;
-
-        //step 4, set my own direction vector
-        //based on current velocity
-        direction = velocity.normalized;
-    }
-
-    void SetTransform()
-    {
-        gameObject.transform.forward = direction;
-        gameObject.transform.position = position;
-    }
-
+    
     void Attack()
     {
-        isAttacking = true;
-
         Vector3 futurePos = PursueTarget();
 
-        Vector3 dist = gameObject.transform.position - target.transform.position;
-        float distance = dist.sqrMagnitude;
+        Vector3 attackForce = Seek(futurePos);
+        total += attackForce;
 
-        if (distance > targetRadius)
-        {
-            Vector3 seekingForce = Seek(futurePos);
-            ApplyForce(seekingForce);
-        }
-        else
-        {
-            //attack is over
-            timer = startTimer;
-            isAttacking = false;
-        }
     }
 
     Vector3 PursueTarget()
     {
-        //get reference to target
-        //testing with one target for now
-
+       
         //find a point in front of target
-        Vector3 futurePos = target.transform.position + target.transform.forward * 3;
-        return futurePos;
+        Vector3 dir = target.transform.position - gameObject.transform.position;
+        dir.Normalize();
+        Vector3 futurePos = target.GetComponent<VehicleMovement>().Velocity;
+        futurePos.Normalize();
 
+        Vector3 targetPos = (dir + futurePos) * scalar + target.transform.position;
+
+        return targetPos;
+    }
+
+    void TransitionStalkAtk()
+    {
+        //checks for a target that is greater than a certain distance away
+        Vector3 farthest = new Vector3(0, 0, 0);
+        float farthestDist = farthest.sqrMagnitude;
+        //target = null;
+        Vector3 dir = target.transform.position - gameObject.transform.position;
+        float tempDist = dir.sqrMagnitude;
+
+        //compare distance between this car and every other car
+        //for (int i = 0; i < cM.Cars.Count; ++i)
+        //{
+        //    //get distance between
+        //    Vector3 temp = cM.Cars[i].transform.position - position;
+        //    tempDist = temp.sqrMagnitude;
+
+        //    //check if its farther
+        //    if(tempDist > farthestDist)
+        //    {
+        //        farthestDist = tempDist;
+        //        target = cM.Cars[i];
+        //    }
+        //}
+
+
+        Debug.Log(tempDist);
+        //state transition
+        if(tempDist > minDist)
+        {
+            currentState = AIBehavior.Attack;
+        }
     }
 
 }
