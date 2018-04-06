@@ -31,7 +31,7 @@ public class Cannonball : MonoBehaviour
         {
             if (hit.collider.tag == "Player" || hit.collider.tag == "AI")
             {
-                hit.collider.gameObject.GetComponent<Collision>().ProjectileHit(this.GetComponent<SphereCollider>());
+                hit.collider.gameObject.GetComponent<BumperPhysics>().ProjectileHit(this.GetComponent<SphereCollider>());
                 transform.position = hit.point;
             }
         }

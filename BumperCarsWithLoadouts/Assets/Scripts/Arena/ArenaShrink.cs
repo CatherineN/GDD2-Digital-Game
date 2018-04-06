@@ -41,7 +41,7 @@ public class ArenaShrink : MonoBehaviour {
 
         if(matchStarted == false)
         {
-            if(GameObject.Find("PlayerCar").GetComponent<Player>().enabled)
+            if(GameObject.Find("PlayerCar").GetComponent<BumperPhysics>().enabled)
             {
                 SetupTimer();
                 matchStarted = true;

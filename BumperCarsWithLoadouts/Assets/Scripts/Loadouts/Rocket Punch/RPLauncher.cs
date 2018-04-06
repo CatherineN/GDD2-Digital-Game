@@ -41,7 +41,7 @@ public class RPLauncher : MonoBehaviour {
         {
             case 1:
                 //When the E key is pressed...
-                if (((Input.GetKeyDown(KeyCode.E) || Input.GetButtonDown("Fire3")) && cooldown >= cooldownTime) && gameObject.transform.parent.gameObject.GetComponent<Player>().enabled == true && targetCar != null)
+                if (((Input.GetKeyDown(KeyCode.E) || Input.GetButtonDown("Fire3")) && cooldown >= cooldownTime) && gameObject.transform.parent.gameObject.GetComponent<BumperPhysics>().enabled == true && targetCar != null)
                 {
                     anim.SetTrigger("Active");
                     //Create a ROKETTO PUUUUNCH. The launcher is rotated, so we use the transform.up
@@ -61,7 +61,7 @@ public class RPLauncher : MonoBehaviour {
                 break;
             case 2:
                 //When the E key is pressed...
-                if (((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetButtonDown("Fire2")) && cooldown >= cooldownTime)  && gameObject.transform.parent.gameObject.GetComponent<Player>().enabled == true && targetCar != null)
+                if (((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetButtonDown("Fire2")) && cooldown >= cooldownTime)  && gameObject.transform.parent.gameObject.GetComponent<BumperPhysics>().enabled == true && targetCar != null)
                 {
                     anim.SetTrigger("Active");
                     //Create a ROKETTO PUUUUNCH. The launcher is rotated, so we use the transform.up

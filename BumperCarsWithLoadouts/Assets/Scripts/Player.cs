@@ -19,7 +19,6 @@ public class Player : VehicleMovement {
         set
         {
             lockRot = value;
-            lockRotation = value;
         }
     }
     /// <summary>

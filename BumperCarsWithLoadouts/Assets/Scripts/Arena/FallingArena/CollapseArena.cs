@@ -19,7 +19,7 @@ public class CollapseArena : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-       if(matchStart == false && GameObject.Find("PlayerCar").GetComponent<Player>().enabled)
+       if(matchStart == false && GameObject.Find("PlayerCar").GetComponent<BumperPhysics>().enabled)
         {
             matchStart = true;
             StartCoroutine(Fall());

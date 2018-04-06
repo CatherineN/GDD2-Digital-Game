@@ -9,6 +9,7 @@ public class BumperPhysics : VehicleMovement
     public float frictionForce = 2f;
     public float impactForce = 10.0f;
     public float gravity = 1.0f;
+    public float cannonImpact = 1f;
 
     private bool collidedThisFrame;
     private bool falling;
@@ -171,6 +172,7 @@ public class BumperPhysics : VehicleMovement
         else bestHit = hit1;
         if (angle2 < angle3) bestHit = hit2;*/
         transform.position = new Vector3(transform.position.x, hit.point.y + carHeight, transform.position.z);
+        //transform.position = hit.point + hit.normal.normalized * carHeight;
         /*eulerToRotate += ((transform.position + transform.up) - (transform.position + hit.normal));
         angleToRotate = Quaternion.Euler(eulerToRotate);/*/
         targetUp = hit.normal;
@@ -180,17 +182,30 @@ public class BumperPhysics : VehicleMovement
     {
         // if there is nothing under the car, we are falling
         RaycastHit hit;
-        if(!Physics.Raycast(transform.position, Vector3.down, out hit,1f + velocity.sqrMagnitude))
+        if(!Physics.Raycast(transform.position, Vector3.down, out hit, carHeight + velocity.sqrMagnitude))
         {
             falling = true;
-            lockRotation = false;
         }
         else
         {
             falling = false;
-            lockRotation = true;
             PlaceCarOnTerrain(hit);
         }
+    }
+
+    public void ProjectileHit(Collider other)
+    {
+        ApplyForce(other.GetComponent<Cannonball>().velocity.normalized * cannonImpact);
+        GameObject pSystem = transform.GetChild(4).gameObject;//HitByCannon Particle effect
+        pSystem.transform.localPosition = transform.InverseTransformPoint(other.transform.position);
+        StartCoroutine(Hit());
+        Destroy(other.gameObject);
+    }
+
+    public void PunchHit(Collider other)
+    {
+        ApplyForce(other.GetComponent<RocketPunch>().velocity.normalized * (cannonImpact * 1.5f));
+        Destroy(other.gameObject);
     }
 
     private void ResolveCollision(UnityEngine.Collision collision)
@@ -330,12 +345,25 @@ public class BumperPhysics : VehicleMovement
 
     }
 
-    public void OnCollisionStay(UnityEngine.Collision collision)
+    public void OnCollisionEnter(UnityEngine.Collision collision)
     {
         if(!collidedThisFrame)
         {
             collidedThisFrame = true;
             ManageCollision(collision);
         }
+    }
+
+    IEnumerator Hit()
+    {
+        GameObject p = transform.GetChild(4).gameObject;//HitByCannon Particle effect
+        ParticleSystem pSystem = p.GetComponent<ParticleSystem>();
+        ParticleSystem.EmissionModule em = pSystem.emission;
+        for (int i = 0; i < 20; i++)
+        {
+            em.enabled = true;
+            yield return null;
+        }
+        em.enabled = false;
     }
 }

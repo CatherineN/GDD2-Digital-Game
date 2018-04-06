@@ -63,7 +63,7 @@ public class Bomb : MonoBehaviour {
             //Make sure they dont FLY TO THE MOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOON
             explosionForce.y = 0;
             //Apply the explosion force
-            c.GetComponent<VehicleMovement>().ApplyForce(explosionForce);
+            c.GetComponent<BumperPhysics>().ApplyForce(explosionForce);
         }
         // spawn the explosion
         GameObject e = Instantiate(explosion, transform.position, Quaternion.identity);

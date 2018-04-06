@@ -31,7 +31,6 @@ public abstract class VehicleMovement : MonoBehaviour {
 
     protected CarManager cM;
     protected Rigidbody rb;
-
     protected bool lockRotation = true;
     protected bool physicsDebug = false;
     protected Vector3 targetUp;
@@ -92,7 +91,7 @@ public abstract class VehicleMovement : MonoBehaviour {
         //velocity.y = 0;
         //add velocity to position
         position += velocity;
-        if(!physicsDebug) position.y = Mathf.Clamp(position.y, int.MinValue, .1f);
+        //if(!physicsDebug) position.y = Mathf.Clamp(position.y, int.MinValue, .1f);
         //calculate direction from velocity
         if (tag == "AI")
         {

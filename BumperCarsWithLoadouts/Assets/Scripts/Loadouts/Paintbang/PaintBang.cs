@@ -59,7 +59,7 @@ public class PaintBang : MonoBehaviour {
             Explode();*/
         if(car.tag == "Player")
         {
-            if (car.GetComponent<Player>().playerID == 1 && car.gameObject.GetComponent<Renderer>().materials[1].color != parColor)
+            if (car.GetComponent<BumperPhysics>().playerID == 1 && car.gameObject.GetComponent<Renderer>().materials[1].color != parColor)
             {
                 GameObject.Find("top cam").transform.GetChild(0).gameObject.layer = 8;
                 for (int i = 0; i < 6; i++)
@@ -70,7 +70,7 @@ public class PaintBang : MonoBehaviour {
                 }
                 Destroy(gameObject);
             }
-            if (car.GetComponent<Player>().playerID == 2 && car.gameObject.GetComponent<Renderer>().materials[1].color != parColor)
+            if (car.GetComponent<BumperPhysics>().playerID == 2 && car.gameObject.GetComponent<Renderer>().materials[1].color != parColor)
             {
                 GameObject.Find("bot cam").transform.GetChild(0).gameObject.layer = 9;
                 for (int i = 0; i < 6; i++)
