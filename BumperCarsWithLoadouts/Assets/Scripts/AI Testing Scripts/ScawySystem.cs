@@ -54,6 +54,8 @@ public class ScawySystem : VehicleMovement {
                 break;
         }
 
+       
+
         base.Update();
     }
 
@@ -77,11 +79,13 @@ public class ScawySystem : VehicleMovement {
         ChangeNode();
 
         Vector3 seekingForce = Seek(nodes[nodeNum].transform.position);
+        Debug.Log(seekingForce);
         total += seekingForce;        
     }
 
     protected override void CalcSteeringForces()
     {
+        Debug.DrawLine(gameObject.transform.position, gameObject.transform.position + total * 10, Color.black);
         total = Vector3.ClampMagnitude(total, maxForce);
         ApplyForce(total);
     }
@@ -101,11 +105,15 @@ public class ScawySystem : VehicleMovement {
        
         //find a point in front of target
         Vector3 dir = target.transform.position - gameObject.transform.position;
+        //Debug.DrawLine(gameObject.transform.position, gameObject.transform.position + dir, Color.red);
         dir.Normalize();
         Vector3 futurePos = target.GetComponent<VehicleMovement>().Velocity;
+        Debug.DrawLine(gameObject.transform.position, gameObject.transform.position + futurePos * 10, Color.blue);
         futurePos.Normalize();
 
-        Vector3 targetPos = (dir + futurePos) * scalar + target.transform.position;
+        Vector3 targetPos = ((dir + futurePos) * scalar) + target.transform.position;
+
+        //Debug.DrawLine(gameObject.transform.position, targetPos);
 
         return targetPos;
     }
@@ -133,12 +141,14 @@ public class ScawySystem : VehicleMovement {
         //        target = cM.Cars[i];
         //    }
         //}
+        
 
-
-        Debug.Log(tempDist);
+        
         //state transition
         if(tempDist > minDist)
         {
+            //total = Vector3.zero;
+            Debug.Log(tempDist);
             currentState = AIBehavior.Attack;
         }
     }
