@@ -38,6 +38,10 @@ public class OnePlayerSelect : MonoBehaviour
         SettingEditor();
         TextEditor();
     }
+
+    /// <summary>
+    ///Uses the New And Improved event system to 
+    /// </summary>
     void ToggleManager()
     {
         
@@ -171,6 +175,9 @@ public class OnePlayerSelect : MonoBehaviour
         }
 
     }
+    /// <summary>
+    /// Switches the description text depending on what is currently desplayed in the dropdown
+    /// </summary>
     void TextEditor()
     {
         switch (GameObject.Find("Size").GetComponent<MyDropdown>().value)
@@ -203,9 +210,13 @@ public class OnePlayerSelect : MonoBehaviour
 
 
     }
+
+    /// <summary>
+    /// updates the options based on user input
+    /// </summary>
     void SettingEditor()
     {
-
+        //sliders
         if (tagTracker < 4)
         {
             if (selected)
@@ -226,7 +237,8 @@ public class OnePlayerSelect : MonoBehaviour
             }
             
 
-        }        
+        }       
+        //dropdowns
         else if (tagTracker < 8)
         {
             if (selected)
@@ -277,7 +289,12 @@ public class OnePlayerSelect : MonoBehaviour
         }
                 
     }
-    
+
+
+    /// <summary>
+    /// tracks the index of the currently active element based on the input from the toggle manager. Makes sure that there is only ever one active element 
+    /// (because otherwise Unity shits itself in pure confusion.
+    /// </summary>
     void UpdateTagTracker()
     {
         if (!selected)
@@ -310,6 +327,7 @@ public class OnePlayerSelect : MonoBehaviour
                 s.interactable = false;
             }
 
+            //last element
             if (tagTracker > 8)
             {
                 tagTracker = 8;
