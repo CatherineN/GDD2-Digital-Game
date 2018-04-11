@@ -44,13 +44,20 @@ public class ScawySystem : VehicleMovement {
             case AIBehavior.Stalk:
                 Stalk();
                 TransitionStalkAtk();
+                TransitionStalkFat();
                 break;
             case AIBehavior.Attack:
                 Attack();
+                TransitionAtkFat();
+                TransitionAtkRtr();
                 break;
             case AIBehavior.Retreat:
+                Retreat();
+                TransitionRtrStalk();
                 break;
             case AIBehavior.Fatality:
+                Fatality();
+                TransitionFatRtr();
                 break;
         }
 
@@ -59,7 +66,7 @@ public class ScawySystem : VehicleMovement {
         base.Update();
     }
 
-    void ChangeNode()
+    bool ChangeNode()
     {
         //if the ai gets close to a node go to the next node
         Vector3 dist = gameObject.transform.position - nodes[nodeNum].transform.position;
@@ -69,10 +76,14 @@ public class ScawySystem : VehicleMovement {
         {
             nodeNum++;
             nodeNum = nodeNum % 5;
+            return true;
         }
+        return false;
     }
 
-    //AI moves in circles around arena
+    /// <summary>
+    /// AI moves in predefined paths around arena
+    /// </summary>
     void Stalk()
     {
         //switch the node that the AI is seeking currently
@@ -90,7 +101,10 @@ public class ScawySystem : VehicleMovement {
         ApplyForce(total);
     }
 
-    
+    /// <summary>
+    /// Initial attack against the targeted bumper car
+    /// Only includes Bumping right now, no loadouts
+    /// </summary>
     void Attack()
     {
         Vector3 futurePos = PursueTarget();
@@ -100,6 +114,10 @@ public class ScawySystem : VehicleMovement {
 
     }
 
+    /// <summary>
+    /// Unique Pursue method that attempts to find a point past the targeted car
+    /// </summary>
+    /// <returns>Point past the car</returns>
     Vector3 PursueTarget()
     {
        
@@ -118,6 +136,10 @@ public class ScawySystem : VehicleMovement {
         return targetPos;
     }
 
+    /// <summary>
+    /// Transition the AI from Stalking behavior to Attacking behavior
+    /// Only changes the AI behavior if the AI can find a targetable car that is at least a certain distance away
+    /// </summary>
     void TransitionStalkAtk()
     {
         //checks for a target that is greater than a certain distance away
@@ -153,4 +175,77 @@ public class ScawySystem : VehicleMovement {
         }
     }
 
+    /// <summary>
+    /// Transitions between Retreat behavior and Stalk behavior
+    /// Occurs when the AI reaches the node farthest from when it transitioned into retreat
+    /// </summary>
+    void TransitionRtrStalk()
+    {
+        if(ChangeNode())
+        {
+            currentState = AIBehavior.Stalk;
+        }
+    }
+
+    /// <summary>
+    /// After attacking the car should retreat back towards the middle of the arena away from the edge
+    /// Seeks the node on the set stalking path that is furthest away
+    /// </summary>
+    void Retreat()
+    {
+        Vector3 seekingForce = Seek(nodes[nodeNum].transform.position);
+        total += seekingForce;
+    }
+
+    /// <summary>
+    /// Transition between the Attack and Retreat behaviors
+    /// Occurs once the car reaches the point past their target or hits the target
+    /// Check if they reached within a certain radius, perhaps a cone of acceptable area
+    /// </summary>
+    void TransitionAtkRtr()
+    {
+        //check if within acceptable area
+        if((position - target.transform.position).magnitude < targetRadius)
+        {
+            currentState = AIBehavior.Retreat;
+            GameObject seekNode = Utility.FindFurthestObject(nodes, gameObject);
+            //need a way to check what the nodeNum is for Stalk when it finishes retreating
+        }
+    }
+
+    /// <summary>
+    /// State of following the targeted car and repeatedly hitting it until it falls off the edge
+    /// </summary>
+    void Fatality()
+    {
+        
+    }
+
+    /// <summary>
+    /// Transition between the Attack and Fatality behaviors
+    /// Occurs if the target's position after attack is near the edge of a fall-off point
+    /// </summary>
+    void TransitionAtkFat()
+    {
+        
+    }
+
+    /// <summary>
+    /// Transition between the Stalk and Fatality behaviors
+    /// Occurs if the selected target is near the edge of a fall-off point
+    /// </summary>
+    void TransitionStalkFat()
+    {
+        
+    }
+
+    /// <summary>
+    /// Transition between the Fatality and Retreat behaviors
+    /// Occurs when the target car has been knocked off the arena
+    /// Check if the target has become inactive
+    /// </summary>
+    void TransitionFatRtr()
+    {
+
+    }
 }

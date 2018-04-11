@@ -25,4 +25,74 @@ public static class Utility {
     {
         Physics.IgnoreLayerCollision(15, 15, true);
     }
+
+    /// <summary>
+    /// Finds the object furthest away from the current object in a list
+    /// </summary>
+    /// <param name="objs">The list of objects to retrieve the furthest from</param>
+    /// <param name="current">The current object to compare distances to</param>
+    /// <returns></returns>
+    public static GameObject FindFurthestObject(List<GameObject> objs, GameObject current)
+    {
+        GameObject target = null;
+
+        //checks for a target that is greater than a certain distance away
+        Vector3 farthest = new Vector3(0, 0, 0);
+        float farthestDist = farthest.sqrMagnitude;
+        //target = null;
+        Vector3 dir = target.transform.position - current.transform.position;
+        float tempDist = dir.sqrMagnitude;
+
+        //compare distance between this car and every other car
+        for (int i = 0; i < objs.Count; ++i)
+        {
+            //get distance between
+            Vector3 temp = objs[i].transform.position - current.transform.position;
+            tempDist = temp.sqrMagnitude;
+
+            //check if its farther
+            if (tempDist > farthestDist)
+            {
+                farthestDist = tempDist;
+                target = objs[i];
+            }
+        }
+
+        return target;
+    }
+
+    /// <summary>
+    /// Finds the object furthest away from the current object in an array
+    /// </summary>
+    /// <param name="objs">The array of objects to retrieve the furthest from</param>
+    /// <param name="current">The current object to compare distances to</param>
+    /// <returns></returns>
+    public static GameObject FindFurthestObject(GameObject[] objs, GameObject current)
+    {
+        GameObject target = null;
+
+        //checks for a target that is greater than a certain distance away
+        Vector3 farthest = new Vector3(0, 0, 0);
+        float farthestDist = farthest.sqrMagnitude;
+        //target = null;
+        Vector3 dir = target.transform.position - current.transform.position;
+        float tempDist = dir.sqrMagnitude;
+
+        //compare distance between this car and every other car
+        for (int i = 0; i < objs.Length; ++i)
+        {
+            //get distance between
+            Vector3 temp = objs[i].transform.position - current.transform.position;
+            tempDist = temp.sqrMagnitude;
+
+            //check if its farther
+            if (tempDist > farthestDist)
+            {
+                farthestDist = tempDist;
+                target = objs[i];
+            }
+        }
+
+        return target;
+    }
 }
