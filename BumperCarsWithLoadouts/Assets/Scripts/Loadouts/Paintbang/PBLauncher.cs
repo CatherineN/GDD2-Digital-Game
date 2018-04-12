@@ -16,7 +16,7 @@ public class PBLauncher : MonoBehaviour {
     private float cooldown;
     void Start ()
     {
-        playerID = GetComponentInParent<Player>().playerID;
+        playerID = GetComponentInParent<BumperPhysics>().playerID;
         gameObject.GetComponent<Renderer>().material.color = transform.parent.GetComponentInParent<Renderer>().materials[1].color;
         cooldown = cooldownTime;
         ability.sprite = sprite;

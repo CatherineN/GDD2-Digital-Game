@@ -19,7 +19,7 @@ public class Cannon : MonoBehaviour {
     {
         //gameObject.GetComponent<Renderer>().material.color = transform.GetComponentInParent<Renderer>().materials[1].color;
         //set the player id
-        playerID = GetComponentInParent<Player>().playerID;
+        playerID = GetComponentInParent<BumperPhysics>().playerID;
         cooldown = cooldownTime;
         ability.sprite = sprite;
         fireSounds[0] = Resources.Load("cannon sound 1") as AudioClip;

@@ -22,6 +22,7 @@ public class ArenaShrink : MonoBehaviour {
     public float stageSize = 1; //how big the arena is scaled
     private float startTime;
     private bool matchStarted = false;//whether or not the match has started
+    private Vector3 previousScale = Vector3.zero;
 
     private void Awake()
     {
@@ -34,6 +35,7 @@ public class ArenaShrink : MonoBehaviour {
     void Start () {
         minSize = new Vector3(minSizef, minSizef, minSizef);
         defaultSize = Vector3.one * stageSize;
+        previousScale = transform.GetChild(1).transform.localScale;
 	}
 	
 	// Update is called once per frame
@@ -58,6 +60,7 @@ public class ArenaShrink : MonoBehaviour {
         {
             float percent = (timeElasped - secsTilShrink) *shrinkSpeed/Vector3.Distance(defaultSize, minSize);
             transform.localScale = Vector3.Lerp(defaultSize, minSize, percent);
+            transform.GetChild(1).transform.localScale = new Vector3(transform.GetChild(1).transform.localScale.x, previousScale.y, transform.GetChild(1).transform.localScale.z);
         }
         
 	}

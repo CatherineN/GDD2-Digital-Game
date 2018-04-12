@@ -10,10 +10,13 @@ public class BumperPhysics : VehicleMovement
     public float impactForce = 10.0f;
     public float gravity = 1.0f;
     public float cannonImpact = 1f;
+    public GameObject stage;
 
     private bool collidedThisFrame;
     private bool falling;
     private float carHeight = 0.5f;
+
+    private List<Collider> colList;
 
     // Use this for initialization
     public override void Start()
@@ -27,6 +30,13 @@ public class BumperPhysics : VehicleMovement
         falling = false;
         physicsDebug = true;
 
+        colList = new List<Collider>();
+
+        for(int i = 0; i < stage.transform.childCount; i++)
+        {
+            colList.Add(stage.transform.GetChild(i).GetComponent<Collider>());
+        }
+
         base.Start();
     }
 
@@ -38,6 +48,8 @@ public class BumperPhysics : VehicleMovement
     {
         // this is for our rotation
         angleToRotate = Quaternion.Euler(0, 0, 0);
+
+        //gameObject.GetComponent<Renderer>().material.color = Color.green;
 
         // make sure we're on the ground
         CheckFalling();
@@ -74,6 +86,8 @@ public class BumperPhysics : VehicleMovement
             ApplyFriction(CalculateCoefficientFriction(frictionCoef, frictionForce));
 
         collidedThisFrame = false;
+
+        
     }
 
     private void ManageCollision(UnityEngine.Collision collision)
@@ -181,16 +195,20 @@ public class BumperPhysics : VehicleMovement
     private void CheckFalling()
     {
         // if there is nothing under the car, we are falling
+        Ray r = new Ray(transform.position, Vector3.down);
         RaycastHit hit;
-        if(!Physics.Raycast(transform.position, Vector3.down, out hit, carHeight + velocity.sqrMagnitude))
+        foreach(Collider c in colList)
         {
-            falling = true;
+            if (c.Raycast(r, out hit, carHeight /*+ velocity.sqrMagnitude*/))
+            {
+                falling = false;
+                PlaceCarOnTerrain(hit);
+                return;
+            }
         }
-        else
-        {
-            falling = false;
-            PlaceCarOnTerrain(hit);
-        }
+
+        // no hit
+        falling = true;
     }
 
     public void ProjectileHit(Collider other)
@@ -365,5 +383,10 @@ public class BumperPhysics : VehicleMovement
             yield return null;
         }
         em.enabled = false;
+    }
+
+    public void NotifyColliderDelete(Collider collider)
+    {
+        colList.Remove(collider);
     }
 }

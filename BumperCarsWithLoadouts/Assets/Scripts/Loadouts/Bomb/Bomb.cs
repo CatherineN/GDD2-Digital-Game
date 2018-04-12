@@ -78,11 +78,11 @@ public class Bomb : MonoBehaviour {
         if(!dropped)
         {
             //Set droppedBy to the dropping car's playerID, and make sure it doesn't happen again.
-            droppedBy = car.gameObject.GetComponent<Player>().playerID;
+            droppedBy = car.gameObject.GetComponent<BumperPhysics>().playerID;
             dropped = true;
         }
         //If the numbers don't match, explode
-        if (droppedBy != car.gameObject.GetComponent<Player>().playerID)
+        if (droppedBy != car.gameObject.GetComponent<BumperPhysics>().playerID)
             Explode();
     }
 

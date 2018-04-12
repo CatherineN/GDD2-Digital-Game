@@ -23,7 +23,7 @@ public class RPLauncher : MonoBehaviour {
     void Start ()
     {
         cooldown = cooldownTime;
-        playerID = GetComponentInParent<Player>().playerID;
+        playerID = GetComponentInParent<BumperPhysics>().playerID;
         ability.sprite = sprite;
         carList = GameObject.Find("SceneManager").GetComponent<CarManager>().Cars;
         targetAngle = 45f;
@@ -49,8 +49,8 @@ public class RPLauncher : MonoBehaviour {
                     Debug.Log(transform.right);
                     Debug.Log(transform.up);
                     rocketPunchInstance.GetComponent<RocketPunch>().direction = transform.forward;
-                    rocketPunchInstance.GetComponent<RocketPunch>().parentCarID = gameObject.GetComponentInParent<Player>().playerID;
-                    rocketPunchInstance.GetComponent<RocketPunch>().parentVelocity = gameObject.GetComponentInParent<Player>().Velocity;
+                    rocketPunchInstance.GetComponent<RocketPunch>().parentCarID = gameObject.GetComponentInParent<BumperPhysics>().playerID;
+                    rocketPunchInstance.GetComponent<RocketPunch>().parentVelocity = gameObject.GetComponentInParent<BumperPhysics>().Velocity;
                     rocketPunchInstance.GetComponent<RocketPunch>().carToSeek = targetCar;
                     rocketPunchInstance.GetComponent<RocketPunch>().reticle = reticle;
                     //StartCoroutine(Fire());
@@ -67,8 +67,8 @@ public class RPLauncher : MonoBehaviour {
                     //Create a ROKETTO PUUUUNCH. The launcher is rotated, so we use the transform.up
                     GameObject rocketPunchInstance = Instantiate(rocketPunch, gameObject.transform.position + (transform.forward * 1.5f), new Quaternion(0, 0, 0, 0));
                     rocketPunchInstance.GetComponent<RocketPunch>().direction = transform.forward;
-                    rocketPunchInstance.GetComponent<RocketPunch>().parentCarID = gameObject.GetComponentInParent<Player>().playerID;
-                    rocketPunchInstance.GetComponent<RocketPunch>().parentVelocity = gameObject.GetComponentInParent<Player>().Velocity;
+                    rocketPunchInstance.GetComponent<RocketPunch>().parentCarID = gameObject.GetComponentInParent<BumperPhysics>().playerID;
+                    rocketPunchInstance.GetComponent<RocketPunch>().parentVelocity = gameObject.GetComponentInParent<BumperPhysics>().Velocity;
                     rocketPunchInstance.GetComponent<RocketPunch>().carToSeek = targetCar;
                     rocketPunchInstance.GetComponent<RocketPunch>().reticle = reticle;
                     //StartCoroutine(Fire());

@@ -18,7 +18,7 @@ public class BombDropper : MonoBehaviour {
     {
         gameObject.GetComponent<Renderer>().material.color = transform.GetComponentInParent<Renderer>().material.color;
         //set the player id
-        playerID = GetComponentInParent<Player>().playerID;
+        playerID = GetComponentInParent<BumperPhysics>().playerID;
         cooldown = cooldownTime;
         ability.sprite = sprite;
         anim = gameObject.GetComponent<Animator>();
