@@ -68,6 +68,7 @@ public class RocketPunch : MonoBehaviour {
             acceleration = ultimaForce;
             velocity += acceleration;
             transform.position += velocity;
+            transform.LookAt(carToSeekPos);
         }
         if (timer == 70)
             Destroy(gameObject);
