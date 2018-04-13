@@ -142,32 +142,13 @@ public class ScawySystem : VehicleMovement {
     /// </summary>
     void TransitionStalkAtk()
     {
-        //checks for a target that is greater than a certain distance away
-        Vector3 farthest = new Vector3(0, 0, 0);
-        float farthestDist = farthest.sqrMagnitude;
-        //target = null;
+        target = Utility.FindFurthestObject(cM.Cars, gameObject);
+
         Vector3 dir = target.transform.position - gameObject.transform.position;
         float tempDist = dir.sqrMagnitude;
 
-        //compare distance between this car and every other car
-        //for (int i = 0; i < cM.Cars.Count; ++i)
-        //{
-        //    //get distance between
-        //    Vector3 temp = cM.Cars[i].transform.position - position;
-        //    tempDist = temp.sqrMagnitude;
-
-        //    //check if its farther
-        //    if(tempDist > farthestDist)
-        //    {
-        //        farthestDist = tempDist;
-        //        target = cM.Cars[i];
-        //    }
-        //}
-        
-
-        
         //state transition
-        if(tempDist > minDist)
+        if (tempDist > minDist)
         {
             //total = Vector3.zero;
             Debug.Log(tempDist);
@@ -210,6 +191,7 @@ public class ScawySystem : VehicleMovement {
             currentState = AIBehavior.Retreat;
             GameObject seekNode = Utility.FindFurthestObject(nodes, gameObject);
             //need a way to check what the nodeNum is for Stalk when it finishes retreating
+            nodeNum = seekNode.GetComponent<Node>().num;
         }
     }
 

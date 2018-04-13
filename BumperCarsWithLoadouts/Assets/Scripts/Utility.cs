@@ -40,15 +40,15 @@ public static class Utility {
         Vector3 farthest = new Vector3(0, 0, 0);
         float farthestDist = farthest.sqrMagnitude;
         //target = null;
-        Vector3 dir = target.transform.position - current.transform.position;
-        float tempDist = dir.sqrMagnitude;
+        //Vector3 dir = target.transform.position - current.transform.position;
+        //float tempDist = dir.sqrMagnitude;
 
         //compare distance between this car and every other car
         for (int i = 0; i < objs.Count; ++i)
         {
             //get distance between
             Vector3 temp = objs[i].transform.position - current.transform.position;
-            tempDist = temp.sqrMagnitude;
+            float tempDist = temp.sqrMagnitude;
 
             //check if its farther
             if (tempDist > farthestDist)
@@ -75,15 +75,15 @@ public static class Utility {
         Vector3 farthest = new Vector3(0, 0, 0);
         float farthestDist = farthest.sqrMagnitude;
         //target = null;
-        Vector3 dir = target.transform.position - current.transform.position;
-        float tempDist = dir.sqrMagnitude;
+        //Vector3 dir = target.transform.position - current.transform.position;
+        //float tempDist = farthestDist;
 
         //compare distance between this car and every other car
         for (int i = 0; i < objs.Length; ++i)
         {
             //get distance between
             Vector3 temp = objs[i].transform.position - current.transform.position;
-            tempDist = temp.sqrMagnitude;
+            float tempDist = temp.sqrMagnitude;
 
             //check if its farther
             if (tempDist > farthestDist)

@@ -17,7 +17,7 @@ public class CarManager : MonoBehaviour {
     public Text NumCars1;
     public Text NumCars2;
 
-    private List<GameObject> cars;//keeps track of all the cars on the arena
+    public List<GameObject> cars;//keeps track of all the cars on the arena
     private bool haveSpawned = false;//determines if the AI have been spawned in yet
 
     private int carsLeft;//how many cars are left in the scene
@@ -32,8 +32,9 @@ public class CarManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         GetAliveCars();
-        UpdateRemainingCarUI();
-	}
+        if (SceneManager.GetActiveScene().name != "AI_Testing") UpdateRemainingCarUI();
+
+    }
 
     //propeties
     public List<GameObject> Cars
