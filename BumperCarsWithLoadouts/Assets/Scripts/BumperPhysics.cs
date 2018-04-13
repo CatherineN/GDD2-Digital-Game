@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using XInputDotNetPure;
 
 public class BumperPhysics : VehicleMovement
 {
@@ -115,7 +116,8 @@ public class BumperPhysics : VehicleMovement
         transform.position += (-velocity * 1.1f);
         // apply the force to the other object
         collision.gameObject.GetComponent<BumperPhysics>().ApplyForce(resultantForce);
-        ApplyForce(-resultantForce * 0.5f);
+        StartCoroutine(Vibrate(0.15f, 3f, 0));
+        StartCoroutine(Vibrate(0.15f, 3f, PlayerIndex.Two));
     }
 
     private void CarToTerrainCollision(UnityEngine.Collision collision, RaycastHit hit)
@@ -141,6 +143,8 @@ public class BumperPhysics : VehicleMovement
         Vector3 resultantForce = forceDir.normalized * impact * 100f;
         Vector3 reflectedForce = Vector3.Reflect(resultantForce, hit.normal);
         transform.position += (-(velocity.sqrMagnitude * hit.normal * 1.5f));
+        StartCoroutine(Vibrate(0.15f, 3f, 0));
+        StartCoroutine(Vibrate(0.15f, 3f, PlayerIndex.Two));
         // apply the force to the player
         ApplyForce(reflectedForce);
     }
@@ -337,5 +341,12 @@ public class BumperPhysics : VehicleMovement
             collidedThisFrame = true;
             ManageCollision(collision);
         }
+    }
+
+    IEnumerator Vibrate(float length, float intensity, PlayerIndex index)
+    {
+        GamePad.SetVibration(index, intensity, intensity);
+        yield return new WaitForSeconds(length);
+        GamePad.SetVibration(index, 0, 0);
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Bomb : MonoBehaviour {
 
     // Use this for initialization
@@ -44,6 +45,7 @@ public class Bomb : MonoBehaviour {
         if (timer <= 0)
         {
             Explode();
+          
         }
 	}
     private void Explode()
@@ -83,7 +85,10 @@ public class Bomb : MonoBehaviour {
         }
         //If the numbers don't match, explode
         if (droppedBy != car.gameObject.GetComponent<Player>().playerID)
+        {
             Explode();
+        }
+            
     }
 
     private void CheckOnStage()
@@ -93,4 +98,5 @@ public class Bomb : MonoBehaviour {
             gameObject.GetComponent<Rigidbody>().useGravity = true;
         }
     }
+   
 }
