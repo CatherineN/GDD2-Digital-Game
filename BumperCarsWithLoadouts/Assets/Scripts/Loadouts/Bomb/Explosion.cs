@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using XInputDotNetPure;
 
 public class Explosion : MonoBehaviour
 {
@@ -38,5 +39,13 @@ public class Explosion : MonoBehaviour
     public void SetRadius(float rad)
     {
         maxRadius = rad / 10;
+        StartCoroutine(Vibrate(0.15f, 3f, 0));
+        StartCoroutine(Vibrate(0.15f, 3f, PlayerIndex.Two));
+    }
+    IEnumerator Vibrate(float length, float intensity, PlayerIndex index)
+    {
+        GamePad.SetVibration(index, intensity, intensity);
+        yield return new WaitForSeconds(length);
+        GamePad.SetVibration(index, 0, 0);
     }
 }

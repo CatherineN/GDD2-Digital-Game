@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using XInputDotNetPure;
 
 public class Collision : MonoBehaviour
 {
@@ -177,12 +178,16 @@ public class Collision : MonoBehaviour
         pSystem.transform.localPosition = transform.InverseTransformPoint(other.transform.position);
         StartCoroutine(Hit());
         Destroy(other.gameObject);
+        StartCoroutine(Vibrate(0.15f, 3f, 0));
+        StartCoroutine(Vibrate(0.15f, 3f, PlayerIndex.Two));
     }
 
     public void PunchHit(Collider other)
     {
         p.ApplyForce(other.GetComponent<RocketPunch>().velocity.normalized * (cannonImpact * 1.5f));
         Destroy(other.gameObject);
+        StartCoroutine(Vibrate(0.15f, 3f, 0));
+        StartCoroutine(Vibrate(0.15f, 3f, PlayerIndex.Two));
     }
     IEnumerator Hit()
     {
@@ -195,5 +200,11 @@ public class Collision : MonoBehaviour
             yield return null;
         }
         em.enabled = false;
+    }
+    IEnumerator Vibrate(float length, float intensity, PlayerIndex index)
+    {
+        GamePad.SetVibration(index, intensity, intensity);
+        yield return new WaitForSeconds(length);
+        GamePad.SetVibration(index, 0, 0);
     }
 }
