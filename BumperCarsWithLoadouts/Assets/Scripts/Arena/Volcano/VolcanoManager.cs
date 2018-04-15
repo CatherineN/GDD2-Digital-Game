@@ -7,25 +7,33 @@ public class VolcanoManager : MonoBehaviour
     public float timeBetweenEruptions = 15f;
     public int rocksPerEruption = 1;
     public int decoRocksPer = 10;
-    public int maxEruptions = -1;
+    public int maxEruptions = -1; // use -1 for infinite eruptions
     public GameObject rockGO;
     public GameObject decoRock;
 
     private float timer;
+    private bool active;
 
 	// Use this for initialization
 	void Start ()
     {
         timer = 0f;
+        active = true;
 	}
 	
 	// Update is called once per frame
 	void Update ()
     {
+        if (maxEruptions == 0)
+            active = false;
+
+        if (!active) return;
+
         if(timer >= timeBetweenEruptions)
         {
             Erupt();
             timer = 0f;
+            maxEruptions--;
         }
 
         timer += Time.deltaTime;
