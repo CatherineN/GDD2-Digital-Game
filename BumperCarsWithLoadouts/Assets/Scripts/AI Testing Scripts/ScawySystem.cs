@@ -99,6 +99,7 @@ public class ScawySystem : VehicleMovement {
         Debug.DrawLine(gameObject.transform.position, gameObject.transform.position + total * 10, Color.black);
         total = Vector3.ClampMagnitude(total, maxForce);
         ApplyForce(total);
+        total = Vector3.zero;
     }
 
     /// <summary>
@@ -123,15 +124,15 @@ public class ScawySystem : VehicleMovement {
        
         //find a point in front of target
         Vector3 dir = target.transform.position - gameObject.transform.position;
-        //Debug.DrawLine(gameObject.transform.position, gameObject.transform.position + dir, Color.red);
+        Debug.DrawLine(gameObject.transform.position, gameObject.transform.position + dir, Color.red);
         dir.Normalize();
         Vector3 futurePos = target.GetComponent<VehicleMovement>().Velocity;
         Debug.DrawLine(gameObject.transform.position, gameObject.transform.position + futurePos * 10, Color.blue);
         futurePos.Normalize();
 
-        Vector3 targetPos = ((dir + futurePos) * scalar) + target.transform.position;
+        Vector3 targetPos = ((futurePos * scalar) +dir ) + target.transform.position;
 
-        //Debug.DrawLine(gameObject.transform.position, targetPos);
+        Debug.DrawLine(gameObject.transform.position, targetPos);
 
         return targetPos;
     }
