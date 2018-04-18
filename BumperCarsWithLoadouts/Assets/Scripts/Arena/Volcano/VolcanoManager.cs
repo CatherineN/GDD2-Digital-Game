@@ -19,7 +19,12 @@ public class VolcanoManager : MonoBehaviour
     {
         timer = 0f;
         active = true;
-	}
+
+        //set up the timer
+        GameObject.Find("SceneManager").GetComponent<ResetTimer>().enabled = true;
+        GameObject.Find("SceneManager").GetComponent<ResetTimer>().timeBtwEvents = timeBetweenEruptions;
+        GameObject.Find("SceneManager").GetComponent<ResetTimer>().eventLength = .1f;//slightly off, but it works for now
+    }
 	
 	// Update is called once per frame
 	void Update ()
