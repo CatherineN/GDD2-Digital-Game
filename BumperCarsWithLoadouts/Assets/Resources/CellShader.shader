@@ -16,6 +16,7 @@ Shader "Cell Shader"
 		_Brightness ("Brightness 1 = neutral", Float) = 1.0							//7	
 		_OutlineColor ("Outline Color", Color) = (0.5,0.5,0.5,1.0)					//10
 		_Outline ("Outline width", Float) = 0.01									//11
+		[MaterialToggle(_LIGHT_ON)] _Light("Use Lighting", Float) = 0				//12
 
     }
  
@@ -26,7 +27,11 @@ Shader "Cell Shader"
         Lighting On
         Fog { Mode Off }
         
-        UsePass "TSF/Base1/BASE"
+		//#if _LIGHT_ON
+			//UsePass "TSF/TSFLighting/LIGHT"
+		//#else
+			UsePass "TSF/Base1/BASE"
+		//#endif
         	
         Pass
         {
