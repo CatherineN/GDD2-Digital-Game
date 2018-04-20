@@ -54,6 +54,7 @@ Shader "TSF/Base1"
 				#if _TEX_ON
 				half2 uv : TEXCOORD0;
 				#endif
+				fixed4 diff : COLOR0;
 				half2 uvn : TEXCOORD1;
 			};
 
