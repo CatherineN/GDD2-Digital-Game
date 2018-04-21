@@ -36,6 +36,7 @@ public class PBLauncher : MonoBehaviour {
                     GameObject paintbangInstance = Instantiate(paintbang, gameObject.transform.position + (transform.up / 2.5f), new Quaternion(0, 0, 0, 0));
                     paintbangInstance.GetComponent<PaintBang>().direction = transform.up;
                     paintbangInstance.GetComponent<PaintBang>().parColor = gameObject.GetComponent<Renderer>().material.color;
+                    paintbangInstance.tag = "Paintbang1";
                     cooldown = 0.0f;
                 }
                 break;
@@ -47,6 +48,7 @@ public class PBLauncher : MonoBehaviour {
                     GameObject paintbangInstance = Instantiate(paintbang, gameObject.transform.position + (transform.up / 2.5f), new Quaternion(0, 0, 0, 0));
                     paintbangInstance.GetComponent<PaintBang>().direction = transform.up;
                     paintbangInstance.GetComponent<PaintBang>().parColor = gameObject.GetComponent<Renderer>().material.color;
+                    paintbangInstance.tag = "Paintbang2";
                     cooldown = 0.0f;
                 }
                 break;
