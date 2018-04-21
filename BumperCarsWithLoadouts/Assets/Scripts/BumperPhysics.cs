@@ -243,7 +243,6 @@ public class BumperPhysics : VehicleMovement
     /// </summary>
     void GetInputPlayer1()
     {
-        Debug.Log("P1: " + turnSpeed);
         //only check for joystick input if there are joysticks plugged in
         if (Input.GetJoystickNames().Length != 0)
         {
@@ -308,7 +307,6 @@ public class BumperPhysics : VehicleMovement
     /// </summary>
     void GetInputPlayer2()
     {
-        Debug.Log("P2: " + turnSpeed);
         //only check for joystick input if there are joysticks plugged in
         if (Input.GetJoystickNames().Length != 0)
         {
@@ -318,12 +316,12 @@ public class BumperPhysics : VehicleMovement
 
             //use spectrum of input strength to reflect in how fast change is in acceleration & turning
 
-            if (vt > 0) // go forward
+            if (vt > 0 && !falling) // go forward
             {
                 direction = transform.forward;
                 total += direction * vt;
             }
-            if (vt < 0)// go backward
+            if (vt < 0 && !falling)// go backward
             {
                 direction = transform.forward;
                 total += direction * vt;
