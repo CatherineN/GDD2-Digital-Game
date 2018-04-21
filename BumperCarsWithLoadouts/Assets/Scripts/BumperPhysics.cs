@@ -190,6 +190,7 @@ public class BumperPhysics : VehicleMovement
         /*eulerToRotate += ((transform.position + transform.up) - (transform.position + hit.normal));
         angleToRotate = Quaternion.Euler(eulerToRotate);/*/
         targetUp = hit.normal;
+        velocity.y = 0;
     }
 
     private void CheckFalling()
@@ -199,7 +200,7 @@ public class BumperPhysics : VehicleMovement
         RaycastHit hit;
         foreach(Collider c in colList)
         {
-            if (c.Raycast(r, out hit, carHeight /*+ velocity.sqrMagnitude*/))
+            if (c.Raycast(r, out hit, carHeight + velocity.sqrMagnitude))
             {
                 falling = false;
                 PlaceCarOnTerrain(hit);
@@ -242,6 +243,7 @@ public class BumperPhysics : VehicleMovement
     /// </summary>
     void GetInputPlayer1()
     {
+        Debug.Log("P1: " + turnSpeed);
         //only check for joystick input if there are joysticks plugged in
         if (Input.GetJoystickNames().Length != 0)
         {
@@ -306,6 +308,7 @@ public class BumperPhysics : VehicleMovement
     /// </summary>
     void GetInputPlayer2()
     {
+        Debug.Log("P2: " + turnSpeed);
         //only check for joystick input if there are joysticks plugged in
         if (Input.GetJoystickNames().Length != 0)
         {
