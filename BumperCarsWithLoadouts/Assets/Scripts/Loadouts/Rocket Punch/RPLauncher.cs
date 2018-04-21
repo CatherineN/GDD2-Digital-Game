@@ -17,6 +17,7 @@ public class RPLauncher : MonoBehaviour {
     private List<GameObject> carList;
     private GameObject targetCar;
     public GameObject reticle;
+    public AudioClip whistle;
 
     private Animator anim;
 
@@ -45,6 +46,7 @@ public class RPLauncher : MonoBehaviour {
                 {
                     anim.SetTrigger("Active");
                     //Create a ROKETTO PUUUUNCH. The launcher is rotated, so we use the transform.up
+                    GameObject.Find("PlayerCar").GetComponent<AudioSource>().PlayOneShot(whistle);
                     GameObject rocketPunchInstance = Instantiate(rocketPunch, gameObject.transform.position + (transform.forward * 1.5f), new Quaternion(0, 0, 0, 0));
                     Debug.Log(transform.right);
                     Debug.Log(transform.up);
@@ -65,6 +67,7 @@ public class RPLauncher : MonoBehaviour {
                 {
                     anim.SetTrigger("Active");
                     //Create a ROKETTO PUUUUNCH. The launcher is rotated, so we use the transform.up
+                    GameObject.Find("PlayerCar2").GetComponent<AudioSource>().PlayOneShot(whistle);
                     GameObject rocketPunchInstance = Instantiate(rocketPunch, gameObject.transform.position + (transform.forward * 1.5f), new Quaternion(0, 0, 0, 0));
                     rocketPunchInstance.GetComponent<RocketPunch>().direction = transform.forward;
                     rocketPunchInstance.GetComponent<RocketPunch>().parentCarID = gameObject.GetComponentInParent<BumperPhysics>().playerID;

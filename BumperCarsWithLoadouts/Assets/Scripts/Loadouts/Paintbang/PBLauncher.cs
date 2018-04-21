@@ -14,6 +14,7 @@ public class PBLauncher : MonoBehaviour {
     public Sprite sprite;
     public float cooldownTime;
     private float cooldown;
+    public AudioClip twang;
     void Start ()
     {
         playerID = GetComponentInParent<BumperPhysics>().playerID;
@@ -33,6 +34,7 @@ public class PBLauncher : MonoBehaviour {
                 if (((Input.GetKeyDown(KeyCode.E) || Input.GetButtonDown("Fire3")) && cooldown >= cooldownTime)&& gameObject.transform.parent.gameObject.GetComponent<BumperPhysics>().enabled == true)
                 {
                     //Create a cannonball at the mouth of the cannon. The cannon is rotated, so we use the transform.up
+                    GameObject.Find("PlayerCar").GetComponent<AudioSource>().PlayOneShot(twang);
                     GameObject paintbangInstance = Instantiate(paintbang, gameObject.transform.position + (transform.up / 2.5f), new Quaternion(0, 0, 0, 0));
                     paintbangInstance.GetComponent<PaintBang>().direction = transform.up;
                     paintbangInstance.GetComponent<PaintBang>().parColor = gameObject.GetComponent<Renderer>().material.color;
@@ -45,6 +47,7 @@ public class PBLauncher : MonoBehaviour {
                 if (((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetButtonDown("Fire2")) && cooldown >= cooldownTime)&& gameObject.transform.parent.gameObject.GetComponent<BumperPhysics>().enabled == true)
                 {
                     //Create a cannonball at the mouth of the cannon. The cannon is rotated, so we use the transform.up
+                    GameObject.Find("PlayerCar2").GetComponent<AudioSource>().PlayOneShot(twang);
                     GameObject paintbangInstance = Instantiate(paintbang, gameObject.transform.position + (transform.up / 2.5f), new Quaternion(0, 0, 0, 0));
                     paintbangInstance.GetComponent<PaintBang>().direction = transform.up;
                     paintbangInstance.GetComponent<PaintBang>().parColor = gameObject.GetComponent<Renderer>().material.color;
