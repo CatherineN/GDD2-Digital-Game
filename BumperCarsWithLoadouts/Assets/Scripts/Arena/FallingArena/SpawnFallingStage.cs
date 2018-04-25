@@ -20,7 +20,7 @@ public class SpawnFallingStage : MonoBehaviour
     private Color[] colors;
 
     // Use this for initialization
-    void Start ()
+    void Awake ()
     {
         halfX = xOffset / 2.0f;
         halfZ = zOffset / 2.0f;

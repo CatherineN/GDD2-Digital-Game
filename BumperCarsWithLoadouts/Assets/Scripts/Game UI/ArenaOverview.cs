@@ -13,8 +13,8 @@ public class ArenaOverview : MonoBehaviour {
     public GameObject topCanvas;
     public GameObject botCanvas;
     public GameObject introCanvas;
-    private Player p1;
-    private Player p2;
+    private BumperPhysics p1;
+    private BumperPhysics p2;
 
     public float rotationDamping = 1.0f;
     public float positionDamping = .5f;
@@ -48,8 +48,8 @@ public class ArenaOverview : MonoBehaviour {
         countdown = false;
         isStarted = false;
         //everything starts out disabled
-        p1 = GameObject.Find("PlayerCar").GetComponent<Player>();
-        p2 = GameObject.Find("PlayerCar2").GetComponent<Player>();
+        p1 = GameObject.Find("PlayerCar").GetComponent<BumperPhysics>();
+        p2 = GameObject.Find("PlayerCar2").GetComponent<BumperPhysics>();
 
         p1.enabled = false;
         p2.enabled = false;

@@ -31,7 +31,6 @@ public abstract class VehicleMovement : MonoBehaviour {
 
     protected CarManager cM;
     protected Rigidbody rb;
-
     protected bool lockRotation = true;
     protected bool physicsDebug = false;
     protected Vector3 targetUp;
@@ -85,14 +84,14 @@ public abstract class VehicleMovement : MonoBehaviour {
         velocity += acceleration * Time.deltaTime;
         //clamp velocity
         velocity = Vector3.ClampMagnitude(velocity, maxSpeed);
-        if(velocity.magnitude < .01f)
+        if(velocity.magnitude < .005f)
         {
             velocity = Vector3.zero;
         }
         //velocity.y = 0;
         //add velocity to position
         position += velocity;
-        if(!physicsDebug) position.y = Mathf.Clamp(position.y, int.MinValue, .1f);
+        //if(!physicsDebug) position.y = Mathf.Clamp(position.y, int.MinValue, .1f);
         //calculate direction from velocity
         if (tag == "AI")
         {
@@ -113,11 +112,11 @@ public abstract class VehicleMovement : MonoBehaviour {
         //set up vector equal to the seekers direction
         //transform.forward = direction;
         transform.position = position;
-        if (tag == "Player" && lockRotation && !physicsDebug)
+        /*if (tag == "Player" && lockRotation && !physicsDebug)
         {
             transform.rotation = Quaternion.Euler(0, totalRotation, 0);
             transform.position = new Vector3(position.x, 0.1f, position.z);
-        }
+        }*/
         if(physicsDebug)
         {
             transform.up = targetUp;

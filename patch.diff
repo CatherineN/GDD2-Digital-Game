@@ -1,0 +1,232 @@
+From 362a15533697024278b2800166e78c2888626856 Mon Sep 17 00:00:00 2001
+From: Kat Weis <kxw4589@g.rit.edu>
+Date: Sun, 15 Apr 2018 19:52:43 -0400
+Subject: [PATCH] Adjusted the Timer script to be slightly better and created a
+ ResetTimer that will reset after the event occurs
+
+---
+ .../Assets/Scenes/Materials.meta                   |  10 -----
+ .../Assets/Scenes/Materials/lambert1.mat           | Bin 5016 -> 0 bytes
+ .../Assets/Scenes/Materials/lambert1.mat.meta      |  10 -----
+ .../Assets/Scripts/Game UI/ResetTimer.cs           |  39 +++++++++++++++++
+ .../Assets/Scripts/Game UI/ResetTimer.cs.meta      |  13 ++++++
+ .../Assets/Scripts/Game UI/Timer.cs                |  48 ++++++++++++++-------
+ 6 files changed, 84 insertions(+), 36 deletions(-)
+ delete mode 100644 BumperCarsWithLoadouts/Assets/Scenes/Materials.meta
+ delete mode 100644 BumperCarsWithLoadouts/Assets/Scenes/Materials/lambert1.mat
+ delete mode 100644 BumperCarsWithLoadouts/Assets/Scenes/Materials/lambert1.mat.meta
+ create mode 100644 BumperCarsWithLoadouts/Assets/Scripts/Game UI/ResetTimer.cs
+ create mode 100644 BumperCarsWithLoadouts/Assets/Scripts/Game UI/ResetTimer.cs.meta
+
+diff --git a/BumperCarsWithLoadouts/Assets/Scenes/Materials.meta b/BumperCarsWithLoadouts/Assets/Scenes/Materials.meta
+deleted file mode 100644
+index b2fde28..0000000
+--- a/BumperCarsWithLoadouts/Assets/Scenes/Materials.meta
++++ /dev/null
+@@ -1,10 +0,0 @@
+-fileFormatVersion: 2
+-guid: 20da1a1a3c0046349a3ba94429427011
+-folderAsset: yes
+-timeCreated: 1523057561
+-licenseType: Pro
+-DefaultImporter:
+-  externalObjects: {}
+-  userData: 
+-  assetBundleName: 
+-  assetBundleVariant: 
+diff --git a/BumperCarsWithLoadouts/Assets/Scenes/Materials/lambert1.mat b/BumperCarsWithLoadouts/Assets/Scenes/Materials/lambert1.mat
+deleted file mode 100644
+index 5c71c25fa853ba7d011c39dd3b3d819ba885d04e..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+HcmV?d00001
+
+literal 5016
+zcmeI0yKfvt9LIm>dzd&7Fo6&fAcpWJI4?p7dD!tQ3CYEmToMq?X?-{LE$r=DyL*Y<
+zt%O8HM-zz(AwfZdfIk2!G)QzPqKW8fkmzW@e7`fhlN-k<9hJu#-^^!!^PS&gZ*T5I
+zwtOP8{icYFiadfBkwXU#9vwe4eqiyi{Ij;URw{u#&I@a6lXIg-Zr%8M{?^oYKmY!V
+zOgBMK;(Cpj(T<8_ShA)knMetLUzR2Nwj@~vkW!|XWDCZ(!5_rykmW=28#MM{PW$oz
+zABWD%m_LwTD|9{{lI+J^r#fIis6+pZ{g4dm3|n53v(Wz<I`p4=lrpXvDjkGB?Bw*h
+zG)Z38e(uH^`Z+?bds!~Q_5*azw_08jXvisa#>>tIeJ9?BG&6kA&ux|)KhI!Je;&rG
+zWZK^GlZD*K&rx#ST|XbS+|=tm%o*2qbT-!U0(R=^vB+bZ-sK<VT;C>>hBN=4f>UP)
+zIvaKV1pf+S`u_xBM(*Z$r{!**pCm_P{`a8n%rkX%5oY8SUB}OIzT5Julb@%+O@3-l
+z9iJxGz2?;M8Ox3S2<py#d7qknUHviIPg2X(f0kT#SN}Q7OL809-(ybwy?EUyKhKl@
+zKrJ^vFOZ{=^L{S!^CDqJUUBm95^X2Rt4<#HJ~Mt+ojkmf^D?gfgz+78`uQqeb3b)`
+z|H%1kmY1D<_gP+X_I;fkjddKX?>J#*{A653efL{lbMy~@o4AG@eZB`xT*FRWhb*tk
+zUl_B#yhjeBv$2lf;C`!MG2gpyXi9GMi|5r5ZEN`8`}a-DYjOwL+n~c|44#*0V_N5P
+zM7RUI0`k^6zBA{?EH^s4z^U`L<-;<lb9@~ybWT`4r0ca8I;`VK@{Inw_2P5OaJOC)
+z<Y?>bHA$F}SDp9cY0KSuO@VJzuW54K-FnSfUe)okUKOxebT&R$`JCC8$2CWok-Ks6
+zIcm5Y*I9D3^>Lje%*fri-m%<`>pb{Iap74C4R$xKy5&{5hMgD}pXC?PMaE!X)A1g`
+zV#Yg<UK-#>bKY3TkLCQ*I(|IomvdhCQWg7NAdN;EpP23VX%x?{q$*7OC_E*-)|?-x
+zb2At;ytIpfwrh61j*5BNjO^gNTD=j)odn>5ztl~8-tt`FEpa{@dJB*Wlhg~_ez<ha
+z!@gn4OEXa)mzsV@b<Ui_e7c{cQSY(}vB{;r>MKdo7)!2rOLcEqI(|Z_j@i56C5cMp
+zYUrn{jW}9Xak|><DwRU0>0MWy9QrWowXUd@+3<R9ZYGAN{aA5D+Y6Me$STJ3i;Ibt
+znF}IMJ31W&QJhFDOR^vy3V{-B9m9XqZkCIYDYl*IPwjjbt0d~jZI$fr)8*De-w#qh
+zY^jwr_Uwwy!Da?FGq9O~%?xa2;D5^i50-(~Tfj%?L4LOBLwLSB4<BqiG@6m<FZ5i~
+zn(FtK`N{0G3};1l(|D+9&8XD#gVVu+>O}Xk=NIYRzV0O-<|@U@e`;Th;+_}WN1F%w
+z)@;vDc*wbrt&Xqm`5_Jq#qQ?S^<k8nb;K70e)~)iCCNR)uyEJ#%YSRW-46O2I&zP_
+z_PgQ5*uz`7N8Z(DzDKCf+L%*~)*B|9?x)e>B1SU7FYtMuZSJf&{N)cIt(hd93UD0b
+z3bbwLts+KioK5JOY3_$ANwh70XfU>`m(^mR+9`6bFXh@r&a}1Qm<{`S)KU3dueUjB
+zrm+f_(k?IN>x+DVjQsk=3I1TvYWAWi?a~KSjVHV5t`~+X;4-xB=&k0mYWD*#K8tf|
+zz_Tiy$~BvD`)<71M2+@WuQgR012mn(_uq~ElwM{N{4q=0=<^{hg!g^kvk9HA;(ohp
+JqYaCH{{rqHRZIW?
+
+diff --git a/BumperCarsWithLoadouts/Assets/Scenes/Materials/lambert1.mat.meta b/BumperCarsWithLoadouts/Assets/Scenes/Materials/lambert1.mat.meta
+deleted file mode 100644
+index 185c10b..0000000
+--- a/BumperCarsWithLoadouts/Assets/Scenes/Materials/lambert1.mat.meta
++++ /dev/null
+@@ -1,10 +0,0 @@
+-fileFormatVersion: 2
+-guid: 1a41c303303b4644b841fc08f59f4df1
+-timeCreated: 1523057562
+-licenseType: Pro
+-NativeFormatImporter:
+-  externalObjects: {}
+-  mainObjectFileID: 2100000
+-  userData: 
+-  assetBundleName: 
+-  assetBundleVariant: 
+diff --git a/BumperCarsWithLoadouts/Assets/Scripts/Game UI/ResetTimer.cs b/BumperCarsWithLoadouts/Assets/Scripts/Game UI/ResetTimer.cs
+new file mode 100644
+index 0000000..8f69955
+--- /dev/null
++++ b/BumperCarsWithLoadouts/Assets/Scripts/Game UI/ResetTimer.cs	
+@@ -0,0 +1,39 @@
++﻿using System.Collections;
++using System.Collections.Generic;
++using UnityEngine;
++using UnityEngine.UI;
++
++public class ResetTimer : Timer {
++
++    public float timeBtwEvents;
++    public float eventLength;
++
++	// Use this for initialization
++	void Start () {
++        timeLeft = timeBtwEvents;
++	}
++	
++	// Update is called once per frame
++	public override void Update () {
++
++        base.Update();
++        
++        if (timeLeft <= 0)//if timer is less than 0 display event message
++        {
++            foreach (Text label in timerLabels)
++            {
++                if (timeLeft <= 0 - eventLength)
++                {
++                    //reset the timer to countdown again once the event is over
++                    timeLeft = timeBtwEvents;
++                    label.text = countMsg + FormatTime(timeLeft);
++                }
++                else
++                {
++                    label.text = endMessage;
++                }
++            }
++            
++        }
++    }
++}
+diff --git a/BumperCarsWithLoadouts/Assets/Scripts/Game UI/ResetTimer.cs.meta b/BumperCarsWithLoadouts/Assets/Scripts/Game UI/ResetTimer.cs.meta
+new file mode 100644
+index 0000000..f6a2d69
+--- /dev/null
++++ b/BumperCarsWithLoadouts/Assets/Scripts/Game UI/ResetTimer.cs.meta	
+@@ -0,0 +1,13 @@
++fileFormatVersion: 2
++guid: a977c4c2e14f08440b87804ae967a527
++timeCreated: 1523833694
++licenseType: Pro
++MonoImporter:
++  externalObjects: {}
++  serializedVersion: 2
++  defaultReferences: []
++  executionOrder: 0
++  icon: {instanceID: 0}
++  userData: 
++  assetBundleName: 
++  assetBundleVariant: 
+diff --git a/BumperCarsWithLoadouts/Assets/Scripts/Game UI/Timer.cs b/BumperCarsWithLoadouts/Assets/Scripts/Game UI/Timer.cs
+index 9991398..ca34392 100644
+--- a/BumperCarsWithLoadouts/Assets/Scripts/Game UI/Timer.cs	
++++ b/BumperCarsWithLoadouts/Assets/Scripts/Game UI/Timer.cs	
+@@ -8,18 +8,18 @@ public class Timer : MonoBehaviour {
+     public Text[] timerLabels;//the UI element used to display the timer
+     public float timeLeft;//time in the timer in seconds
+     public string endMessage;//the string that is displayed once the timer ticks down to 0
++    public string countMsg;//the string that is displayed while the timer ticks down to 0
+ 
+-	// Use this for initialization
+-	void Start () {
++    // Use this for initialization
++    void Start () {
+ 		
+ 	}
+-	
+-	// Update is called once per frame
+-	void Update () {
++
++    // Update is called once per frame
++    public virtual void Update () {
+         timeLeft -= Time.deltaTime;
+ 
+-        int minutes = (int)timeLeft / 60;
+-        int seconds = (int)timeLeft % 60;
++        string formattedTime = FormatTime(timeLeft);
+ 
+         //update the label
+         foreach (Text label in timerLabels)
+@@ -28,20 +28,36 @@ public class Timer : MonoBehaviour {
+             {
+                 label.text = endMessage;
+             }
+-            else if(minutes > 0)//else display the time remaining properly formatted
+-            {
+-                label.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+-            }
+-            else if(seconds >= 10)
+-            {
+-                label.text = string.Format("{0:00}", seconds);
+-            }
+             else
+             {
+-                label.text = string.Format("{0:0}", seconds);
++                label.text = countMsg + formattedTime;
+             }
+         }
+ 
+         
+     }
++
++    /// <summary>
++    /// Formats a float into a formatted string in minutes and seconds using stardard format
++    /// </summary>
++    /// <param name="time">The time that needs to be formatted into minutes and seconds</param>
++    /// <returns>Time in the format of min:secs</returns>
++    protected string FormatTime(float time)
++    {
++        int minutes = (int)time / 60;
++        int seconds = (int)time % 60;
++
++        if (minutes > 0)//else display the time remaining properly formatted
++        {
++            return string.Format("{0:00}:{1:00}", minutes, seconds);
++        }
++        else if (seconds >= 10)
++        {
++            return string.Format("{0:00}", seconds);
++        }
++        else
++        {
++            return string.Format("{0:0}", seconds);
++        }
++    }
+ }
+-- 
+2.14.1.windows.1
+

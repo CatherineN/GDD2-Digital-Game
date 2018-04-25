@@ -103,13 +103,12 @@ public class SetPrefs : MonoBehaviour {
                 break;
         }
 
-        float mass = gameObject.GetComponent<Rigidbody>().mass;
-        mass = weight;
+        gameObject.GetComponent<Rigidbody>().mass = weight;
 
         // loads in the saved weight
-        if (mass == 0)
+        if (gameObject.GetComponent<Rigidbody>().mass == 0)
         {
-            mass = 50;
+            gameObject.GetComponent<Rigidbody>().mass = 50;
         }
     }
 }
