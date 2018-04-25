@@ -13,7 +13,7 @@ public class PaintBang : MonoBehaviour {
     private float radius;
     private float fadeTime;
     private bool collapsingArena = false;
-
+    public AudioClip splat;
     
     void Start ()
     {
@@ -46,7 +46,7 @@ public class PaintBang : MonoBehaviour {
 
     public void OnTriggerEnter(Collider car)
     {
-        Debug.Log("PAINT");
+        //Debug.Log("PAINT");
         /*//If the bomb has not collided with the starting car yet
         if (!dropped)
         {
@@ -59,8 +59,9 @@ public class PaintBang : MonoBehaviour {
             Explode();*/
         if(car.tag == "Player")
         {
-            if (car.GetComponent<Player>().playerID == 1 && car.gameObject.GetComponent<Renderer>().materials[1].color != parColor)
+            if (car.GetComponent<BumperPhysics>().playerID == 1 && gameObject.tag == "Paintbang2")
             {
+                GameObject.Find("PlayerCar2").GetComponent<AudioSource>().PlayOneShot(splat);
                 GameObject.Find("top cam").transform.GetChild(0).gameObject.layer = 8;
                 for (int i = 0; i < 6; i++)
                 {
@@ -70,8 +71,9 @@ public class PaintBang : MonoBehaviour {
                 }
                 Destroy(gameObject);
             }
-            if (car.GetComponent<Player>().playerID == 2 && car.gameObject.GetComponent<Renderer>().materials[1].color != parColor)
+            if (car.GetComponent<BumperPhysics>().playerID == 2 && gameObject.tag == "Paintbang1")
             {
+                GameObject.Find("PlayerCar").GetComponent<AudioSource>().PlayOneShot(splat);
                 GameObject.Find("bot cam").transform.GetChild(0).gameObject.layer = 9;
                 for (int i = 0; i < 6; i++)
                 {

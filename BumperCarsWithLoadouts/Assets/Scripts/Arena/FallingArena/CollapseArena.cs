@@ -11,6 +11,8 @@ public class CollapseArena : MonoBehaviour {
     private Transform prevTransform;
     private bool matchStart = false;
     public float fallTime;
+    public GameObject p1;
+    public GameObject p2;
 	void Start ()
     {
         rand = new System.Random();
@@ -19,7 +21,7 @@ public class CollapseArena : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-       if(matchStart == false && GameObject.Find("PlayerCar").GetComponent<Player>().enabled)
+       if(matchStart == false && GameObject.Find("PlayerCar").GetComponent<BumperPhysics>().enabled)
         {
             matchStart = true;
             StartCoroutine(Fall());
@@ -43,6 +45,8 @@ public class CollapseArena : MonoBehaviour {
         faller.GetComponent<Rigidbody>().useGravity = true;
         faller.GetComponent<Rigidbody>().isKinematic = false;
         faller.GetComponent<Collider>().enabled = false;
+        p1.SendMessage("NotifyColliderDelete", faller.GetComponent<Collider>());
+        p2.SendMessage("NotifyColliderDelete", faller.GetComponent<Collider>());
         faller.gameObject.GetComponent<MeshRenderer>().material.color = Color.black;
         yield return new WaitForSeconds(fallTime);
         StartCoroutine(Fall());

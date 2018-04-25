@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using XInputDotNetPure;
 
 public class BumperPhysics : VehicleMovement
 {
@@ -10,10 +9,14 @@ public class BumperPhysics : VehicleMovement
     public float frictionForce = 2f;
     public float impactForce = 10.0f;
     public float gravity = 1.0f;
+    public float cannonImpact = 1f;
+    public GameObject stage;
 
     private bool collidedThisFrame;
     private bool falling;
     private float carHeight = 0.5f;
+
+    private List<Collider> colList;
 
     // Use this for initialization
     public override void Start()
@@ -27,6 +30,13 @@ public class BumperPhysics : VehicleMovement
         falling = false;
         physicsDebug = true;
 
+        colList = new List<Collider>();
+
+        for(int i = 0; i < stage.transform.childCount; i++)
+        {
+            colList.Add(stage.transform.GetChild(i).GetComponent<Collider>());
+        }
+
         base.Start();
     }
 
@@ -38,6 +48,8 @@ public class BumperPhysics : VehicleMovement
     {
         // this is for our rotation
         angleToRotate = Quaternion.Euler(0, 0, 0);
+
+        //gameObject.GetComponent<Renderer>().material.color = Color.green;
 
         // make sure we're on the ground
         CheckFalling();
@@ -74,6 +86,8 @@ public class BumperPhysics : VehicleMovement
             ApplyFriction(CalculateCoefficientFriction(frictionCoef, frictionForce));
 
         collidedThisFrame = false;
+
+        
     }
 
     private void ManageCollision(UnityEngine.Collision collision)
@@ -116,8 +130,7 @@ public class BumperPhysics : VehicleMovement
         transform.position += (-velocity * 1.1f);
         // apply the force to the other object
         collision.gameObject.GetComponent<BumperPhysics>().ApplyForce(resultantForce);
-        StartCoroutine(Vibrate(0.15f, 3f, 0));
-        StartCoroutine(Vibrate(0.15f, 3f, PlayerIndex.Two));
+        ApplyForce(-resultantForce * 0.5f);
     }
 
     private void CarToTerrainCollision(UnityEngine.Collision collision, RaycastHit hit)
@@ -143,8 +156,6 @@ public class BumperPhysics : VehicleMovement
         Vector3 resultantForce = forceDir.normalized * impact * 100f;
         Vector3 reflectedForce = Vector3.Reflect(resultantForce, hit.normal);
         transform.position += (-(velocity.sqrMagnitude * hit.normal * 1.5f));
-        StartCoroutine(Vibrate(0.15f, 3f, 0));
-        StartCoroutine(Vibrate(0.15f, 3f, PlayerIndex.Two));
         // apply the force to the player
         ApplyForce(reflectedForce);
     }
@@ -175,26 +186,45 @@ public class BumperPhysics : VehicleMovement
         else bestHit = hit1;
         if (angle2 < angle3) bestHit = hit2;*/
         transform.position = new Vector3(transform.position.x, hit.point.y + carHeight, transform.position.z);
+        //transform.position = hit.point + hit.normal.normalized * carHeight;
         /*eulerToRotate += ((transform.position + transform.up) - (transform.position + hit.normal));
         angleToRotate = Quaternion.Euler(eulerToRotate);/*/
         targetUp = hit.normal;
+        velocity.y = 0;
     }
 
     private void CheckFalling()
     {
         // if there is nothing under the car, we are falling
+        Ray r = new Ray(transform.position, Vector3.down);
         RaycastHit hit;
-        if(!Physics.Raycast(transform.position, Vector3.down, out hit,1f + velocity.sqrMagnitude))
+        foreach(Collider c in colList)
         {
-            falling = true;
-            lockRotation = false;
+            if (c.Raycast(r, out hit, carHeight + velocity.sqrMagnitude))
+            {
+                falling = false;
+                PlaceCarOnTerrain(hit);
+                return;
+            }
         }
-        else
-        {
-            falling = false;
-            lockRotation = true;
-            PlaceCarOnTerrain(hit);
-        }
+
+        // no hit
+        falling = true;
+    }
+
+    public void ProjectileHit(Collider other)
+    {
+        ApplyForce(other.GetComponent<Cannonball>().velocity.normalized * cannonImpact);
+        GameObject pSystem = transform.GetChild(4).gameObject;//HitByCannon Particle effect
+        pSystem.transform.localPosition = transform.InverseTransformPoint(other.transform.position);
+        StartCoroutine(Hit());
+        Destroy(other.gameObject);
+    }
+
+    public void PunchHit(Collider other)
+    {
+        ApplyForce(other.GetComponent<RocketPunch>().velocity.normalized * (cannonImpact * 1.5f));
+        Destroy(other.gameObject);
     }
 
     private void ResolveCollision(UnityEngine.Collision collision)
@@ -286,12 +316,12 @@ public class BumperPhysics : VehicleMovement
 
             //use spectrum of input strength to reflect in how fast change is in acceleration & turning
 
-            if (vt > 0) // go forward
+            if (vt > 0 && !falling) // go forward
             {
                 direction = transform.forward;
                 total += direction * vt;
             }
-            if (vt < 0)// go backward
+            if (vt < 0 && !falling)// go backward
             {
                 direction = transform.forward;
                 total += direction * vt;
@@ -334,7 +364,7 @@ public class BumperPhysics : VehicleMovement
 
     }
 
-    public void OnCollisionStay(UnityEngine.Collision collision)
+    public void OnCollisionEnter(UnityEngine.Collision collision)
     {
         if(!collidedThisFrame)
         {
@@ -343,10 +373,21 @@ public class BumperPhysics : VehicleMovement
         }
     }
 
-    IEnumerator Vibrate(float length, float intensity, PlayerIndex index)
+    IEnumerator Hit()
     {
-        GamePad.SetVibration(index, intensity, intensity);
-        yield return new WaitForSeconds(length);
-        GamePad.SetVibration(index, 0, 0);
+        GameObject p = transform.GetChild(4).gameObject;//HitByCannon Particle effect
+        ParticleSystem pSystem = p.GetComponent<ParticleSystem>();
+        ParticleSystem.EmissionModule em = pSystem.emission;
+        for (int i = 0; i < 20; i++)
+        {
+            em.enabled = true;
+            yield return null;
+        }
+        em.enabled = false;
+    }
+
+    public void NotifyColliderDelete(Collider collider)
+    {
+        colList.Remove(collider);
     }
 }

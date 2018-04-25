@@ -16,6 +16,7 @@ Shader "Cell Shader"
 		_Brightness ("Brightness 1 = neutral", Float) = 1.0							//7	
 		_OutlineColor ("Outline Color", Color) = (0.5,0.5,0.5,1.0)					//10
 		_Outline ("Outline width", Float) = 0.01									//11
+		//[MaterialToggle(_LIGHT_ON)] _Light("Use Lighting", Float) = 0				//12
 
     }
  
@@ -25,8 +26,8 @@ Shader "Cell Shader"
 		LOD 250 
         Lighting On
         Fog { Mode Off }
-        
-        UsePass "TSF/Base1/BASE"
+		
+		UsePass "TSF/Base1/BASE"
         	
         Pass
         {
@@ -39,6 +40,7 @@ Shader "Cell Shader"
             #pragma vertex vert
  			#pragma fragment frag
 			
+
             struct appdata_t 
             {
 				float4 vertex : POSITION;

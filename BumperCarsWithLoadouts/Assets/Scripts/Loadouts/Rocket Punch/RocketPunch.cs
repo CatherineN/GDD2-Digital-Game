@@ -79,7 +79,7 @@ public class RocketPunch : MonoBehaviour {
         {
             if (hit.collider.tag == "Player" || hit.collider.tag == "AI")
             {
-                hit.collider.gameObject.GetComponent<Collision>().PunchHit(this.GetComponent<SphereCollider>());
+                hit.collider.gameObject.GetComponent<BumperPhysics>().PunchHit(this.GetComponent<SphereCollider>());
                 transform.position = hit.point;
                 reticle.gameObject.SetActive(false);
             }
