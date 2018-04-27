@@ -34,7 +34,7 @@ public class StartGame : MonoBehaviour {
             if (stageSelect.value == 0)
                 SceneManager.LoadScene("DefaultArena");
             else if (stageSelect.value == 1)
-                SceneManager.LoadScene("IceArena");
+                SceneManager.LoadScene("VolcanoArena");
             else if (stageSelect.value == 2)
                 SceneManager.LoadScene("CollapsingArena");
         }

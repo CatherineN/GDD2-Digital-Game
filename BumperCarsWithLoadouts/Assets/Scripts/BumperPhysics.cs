@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using XInputDotNetPure;
 
 public class BumperPhysics : VehicleMovement
 {
@@ -131,6 +132,10 @@ public class BumperPhysics : VehicleMovement
         // apply the force to the other object
         collision.gameObject.GetComponent<BumperPhysics>().ApplyForce(resultantForce);
         ApplyForce(-resultantForce * 0.5f);
+
+        impact = Mathf.Abs(impact);
+        StartCoroutine(Vibrate(impact, 3f, 0));
+        StartCoroutine(Vibrate(impact, 3f, PlayerIndex.Two));
     }
 
     private void CarToTerrainCollision(UnityEngine.Collision collision, RaycastHit hit)
@@ -219,12 +224,20 @@ public class BumperPhysics : VehicleMovement
         pSystem.transform.localPosition = transform.InverseTransformPoint(other.transform.position);
         StartCoroutine(Hit());
         Destroy(other.gameObject);
+        if(playerID == 1)
+            StartCoroutine(Vibrate(0.15f, 3f, 0));
+        else
+            StartCoroutine(Vibrate(0.15f, 3f, PlayerIndex.Two));
     }
 
     public void PunchHit(Collider other)
     {
         ApplyForce(other.GetComponent<RocketPunch>().velocity.normalized * (cannonImpact * 1.5f));
         Destroy(other.gameObject);
+        if (playerID == 1)
+            StartCoroutine(Vibrate(0.15f, 3f, 0));
+        else
+            StartCoroutine(Vibrate(0.15f, 3f, PlayerIndex.Two));
     }
 
     private void ResolveCollision(UnityEngine.Collision collision)
@@ -384,6 +397,13 @@ public class BumperPhysics : VehicleMovement
             yield return null;
         }
         em.enabled = false;
+    }
+
+    IEnumerator Vibrate(float length, float intensity, PlayerIndex index)
+    {
+        GamePad.SetVibration(index, intensity, intensity);
+        yield return new WaitForSeconds(length);
+        GamePad.SetVibration(index, 0, 0);
     }
 
     public void NotifyColliderDelete(Collider collider)

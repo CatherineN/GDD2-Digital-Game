@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class ArenaOverview : MonoBehaviour {
 
@@ -111,6 +112,10 @@ public class ArenaOverview : MonoBehaviour {
         {
             p1.enabled = true;
             p2.enabled = true;
+            if(SceneManager.GetActiveScene().name == "VolcanoArena")
+            {
+                GameObject.Find("Arena").GetComponent<VolcanoManager>().enabled = true;
+            }
 
             if(gameObject.GetComponent<Timer>().timeLeft <= -1)
             //disable the timer on the canvas to avoid distracting the players
