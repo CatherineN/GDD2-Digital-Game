@@ -22,6 +22,7 @@ public class ScawySystem : BumperPhysics {
     public float speed;
     public float scalar;
     public float minDist;
+    public float finisherRad;//how far from the edge they have to be to be considered for finishing
 
     public float targetRadius;
 
@@ -82,7 +83,7 @@ public class ScawySystem : BumperPhysics {
             case AIBehavior.Stalk:
                 Stalk();
                 TransitionStalkAtk();
-                TransitionStalkFat();
+                //TransitionStalkFat();
                 break;
             case AIBehavior.Attack:
                 Attack();
@@ -118,7 +119,7 @@ public class ScawySystem : BumperPhysics {
 
         ApplyForce(total);
 
-        
+        collidedThisFrame = false;
     }
 
     /// <summary>
@@ -220,9 +221,7 @@ public class ScawySystem : BumperPhysics {
     /// </summary>
     void Fatality()
     {
-        Vector3 futurePos = PursueTarget();
-
-        Vector3 attackForce = Seek(futurePos);
+        Vector3 attackForce = Seek(target.transform.position);
         total += attackForce;
     }
 
@@ -257,7 +256,7 @@ public class ScawySystem : BumperPhysics {
     /// </summary>
     void TransitionFatRtr()
     {
-        if(target.transform.position.y <= -.5f)
+        if(target.transform.position.y <= -.1f)
         {
             currentState = AIBehavior.Retreat;
         }
@@ -279,9 +278,10 @@ public class ScawySystem : BumperPhysics {
     {
         switch(SceneManager.GetActiveScene().name)
         {
+            case "AI_Testing":
             case "DefaultArena":
                 {
-                    if(true)
+                    if(cM.ArenaRadius * finisherRad <= Vector3.Distance(target.transform.position, Vector3.zero))
                     {
                         return true;
                     }

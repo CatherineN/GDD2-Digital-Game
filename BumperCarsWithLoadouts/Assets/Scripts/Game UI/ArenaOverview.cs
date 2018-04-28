@@ -31,6 +31,8 @@ public class ArenaOverview : MonoBehaviour {
     private bool p1Voted = false;
     private bool p2Voted = false;
 
+    private CarManager cM;
+
     static float timer = 0;
     private float percentage = 0;
 
@@ -41,6 +43,8 @@ public class ArenaOverview : MonoBehaviour {
             SkipToCountdown();
             countdown = true;
         }
+
+        cM = GameObject.Find("SceneManager").GetComponent<CarManager>();
     }
 
     // Use this for initialization
@@ -54,6 +58,11 @@ public class ArenaOverview : MonoBehaviour {
 
         p1.enabled = false;
         p2.enabled = false;
+
+        foreach(GameObject c in cM.Cars)
+        {
+            c.GetComponent<VehicleMovement>().enabled = false;
+        }
 
         start = cam.transform.position;//set original start to the beginning
 
@@ -112,7 +121,12 @@ public class ArenaOverview : MonoBehaviour {
         {
             p1.enabled = true;
             p2.enabled = true;
-            if(SceneManager.GetActiveScene().name == "VolcanoArena")
+            foreach (GameObject c in cM.Cars)
+            {
+                c.GetComponent<VehicleMovement>().enabled = true;
+            }
+
+            if (SceneManager.GetActiveScene().name == "VolcanoArena")
             {
                 GameObject.Find("Arena").GetComponent<VolcanoManager>().enabled = true;
             }

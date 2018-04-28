@@ -13,7 +13,7 @@ public class BumperPhysics : VehicleMovement
     public float cannonImpact = 1f;
     public GameObject stage;
 
-    private bool collidedThisFrame;
+    protected bool collidedThisFrame;
     protected bool falling;
     private float carHeight = 0.5f;
 
@@ -134,8 +134,12 @@ public class BumperPhysics : VehicleMovement
         ApplyForce(-resultantForce * 0.5f);
 
         impact = Mathf.Abs(impact);
-        StartCoroutine(Vibrate(impact, 3f, 0));
-        StartCoroutine(Vibrate(impact, 3f, PlayerIndex.Two));
+        if(tag == "Player")
+        {
+            StartCoroutine(Vibrate(impact, 3f, 0));
+            StartCoroutine(Vibrate(impact, 3f, PlayerIndex.Two));
+        }
+        
     }
 
     private void CarToTerrainCollision(UnityEngine.Collision collision, RaycastHit hit)
