@@ -13,6 +13,7 @@ public class PaintBang : MonoBehaviour {
     private float radius;
     private float fadeTime;
     private bool collapsingArena = false;
+    private bool volcanoArena = false;
     public AudioClip splat;
     
     void Start ()
@@ -22,6 +23,7 @@ public class PaintBang : MonoBehaviour {
         radius = GameObject.Find("SceneManager").GetComponent<CarManager>().ArenaRadius;
         fadeTime = 5f;
         if (SceneManager.GetActiveScene().name == "CollapsingArena") collapsingArena = true;
+        if (SceneManager.GetActiveScene().name == "VolcanoArena") volcanoArena = true;
     }
 	
 	// Update is called once per frame
@@ -31,7 +33,7 @@ public class PaintBang : MonoBehaviour {
         velocity = direction * speed;
         transform.forward = direction;
         transform.position += velocity * Time.deltaTime;
-        if(transform.position.y < 0 && (collapsingArena ? Physics.Raycast(transform.position, Vector3.down, 2f) : (transform.position.sqrMagnitude < radius * radius)))
+        if(transform.position.y < 0 && ((collapsingArena ? Physics.Raycast(transform.position, Vector3.down, 2f) : (transform.position.sqrMagnitude < radius * radius)) || (volcanoArena ? Physics.Raycast(transform.position, Vector3.down, 2f) : (transform.position.sqrMagnitude < radius * radius))))
         {
             GetComponent<Rigidbody>().useGravity = false;
             GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY;

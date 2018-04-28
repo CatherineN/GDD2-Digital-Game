@@ -39,9 +39,9 @@ public class PBLauncher : MonoBehaviour {
                     anim.SetTrigger("Active");
                     //Create a cannonball at the mouth of the cannon. The cannon is rotated, so we use the transform.up
                     GameObject.Find("PlayerCar").GetComponent<AudioSource>().PlayOneShot(twang);
-                    GameObject paintbangInstance = Instantiate(paintbang, gameObject.transform.position + (transform.forward / 2.5f), new Quaternion(0, 0, 0, 0));
-                    paintbangInstance.GetComponent<PaintBang>().direction = transform.up;
-                    paintbangInstance.GetComponent<PaintBang>().parColor = gameObject.transform.parent.GetComponent<Renderer>().material.color;
+                    GameObject paintbangInstance = Instantiate(paintbang, gameObject.transform.position + (transform.up / 2.5f), new Quaternion(0, 0, 0, 0));
+                    paintbangInstance.GetComponent<PaintBang>().direction = (transform.forward + transform.up).normalized;
+                    paintbangInstance.GetComponent<PaintBang>().parColor = gameObject.transform.parent.GetComponent<Renderer>().materials[1].color;
                     paintbangInstance.tag = "Paintbang1";
                     cooldown = 0.0f;
                 }
@@ -53,9 +53,9 @@ public class PBLauncher : MonoBehaviour {
                     anim.SetTrigger("Active");
                     //Create a cannonball at the mouth of the cannon. The cannon is rotated, so we use the transform.up
                     GameObject.Find("PlayerCar2").GetComponent<AudioSource>().PlayOneShot(twang);
-                    GameObject paintbangInstance = Instantiate(paintbang, gameObject.transform.position + (transform.forward / 2.5f), new Quaternion(0, 0, 0, 0));
-                    paintbangInstance.GetComponent<PaintBang>().direction = transform.up;
-                    paintbangInstance.GetComponent<PaintBang>().parColor = gameObject.GetComponent<Renderer>().material.color;
+                    GameObject paintbangInstance = Instantiate(paintbang, gameObject.transform.position + (transform.up / 2.5f), new Quaternion(0, 0, 0, 0));
+                    paintbangInstance.GetComponent<PaintBang>().direction = (transform.forward + transform.up).normalized;
+                    paintbangInstance.GetComponent<PaintBang>().parColor = gameObject.transform.parent.GetComponent<Renderer>().materials[1].color;
                     paintbangInstance.tag = "Paintbang2";
                     cooldown = 0.0f;
                 }
