@@ -13,7 +13,7 @@ public class BumperPhysics : VehicleMovement
     public GameObject stage;
 
     private bool collidedThisFrame;
-    private bool falling;
+    protected bool falling;
     private float carHeight = 0.5f;
 
     private List<Collider> colList;
@@ -92,7 +92,7 @@ public class BumperPhysics : VehicleMovement
 
     private void ManageCollision(UnityEngine.Collision collision)
     {
-        if(collision.gameObject.tag == "Player")
+        if(collision.gameObject.tag == "Player" || collision.gameObject.tag == "AI")
         {
             CarToCarCollision(collision);
         }
@@ -193,7 +193,7 @@ public class BumperPhysics : VehicleMovement
         velocity.y = 0;
     }
 
-    private void CheckFalling()
+    protected void CheckFalling()
     {
         // if there is nothing under the car, we are falling
         Ray r = new Ray(transform.position, Vector3.down);
@@ -368,6 +368,7 @@ public class BumperPhysics : VehicleMovement
     {
         if(!collidedThisFrame)
         {
+            Debug.Log("Hit");
             collidedThisFrame = true;
             ManageCollision(collision);
         }

@@ -8,6 +8,8 @@ public class CarManager : MonoBehaviour {
 
     private int numAI; //how many AI cars are spawned in the arena
     public GameObject prefabAI;
+    public GameObject stageHolder;
+    public GameObject nodeHolder;
     //float to determine the extents of the arena
     private float arenaRadius;
 
@@ -69,15 +71,38 @@ public class CarManager : MonoBehaviour {
     /// </summary>
     private void SpawnAI()
     {
+        GameObject[] spawns = GameObject.FindGameObjectsWithTag("Spawn");
+        List<Vector3> spawnPos = new List<Vector3>();
+        foreach (var s in spawns)
+        {
+            spawnPos.Add(s.transform.position);
+        }
         for (int i = 0; i < numAI; ++i)
         {
             Debug.Log(i);
             float xPos = ArenaRadius* Mathf.Cos(2 * Mathf.PI * i / numAI)*.9f;
             float zPos = ArenaRadius * Mathf.Sin(2 * Mathf.PI * i / numAI) * .9f;
+
+            int index = Random.Range(0, 4 - numAI);
+
             //instantiate car
-            GameObject carInstance = Instantiate(prefabAI, new Vector3(xPos, 0, zPos), Quaternion.identity) as GameObject;
+            GameObject carInstance = Instantiate(prefabAI, spawnPos[index], Quaternion.identity) as GameObject;
+
+            //set the nodes for stalking around the arena
+            for (int k = 0; k < nodeHolder.transform.childCount; k++)
+            {
+                carInstance.GetComponent<ScawySystem>().nodes[k] = nodeHolder.transform.GetChild(k).gameObject;
+            }
+            
+
+            //set the arena
+            carInstance.GetComponent<BumperPhysics>().stage = stageHolder;
+
             //add car to list
             cars.Add(carInstance);
+
+            //remove that spawn point from the list
+            spawnPos.RemoveAt(index);
         }
         haveSpawned = true;
     }
