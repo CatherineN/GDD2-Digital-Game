@@ -22,6 +22,7 @@ public class SmoothFollow : MonoBehaviour
     public bool lookBehind;
     public bool isPlayerOne;
     public bool isDead = false;
+    public float distanceScale;
 
     //the guy to look at after death
     public GameObject friend;
@@ -74,7 +75,7 @@ public class SmoothFollow : MonoBehaviour
 
             transform.position = Vector3.Lerp(transform.position, wantedPosition, Time.deltaTime * positionDamping);
 
-            transform.position = target.position - (target.forward * 6);
+            transform.position = target.position - (target.forward * distanceScale);
             // Adjust the height of the camera
             transform.position = new Vector3(transform.position.x, currentHeight, transform.position.z);
             if (lookBehind == true)
