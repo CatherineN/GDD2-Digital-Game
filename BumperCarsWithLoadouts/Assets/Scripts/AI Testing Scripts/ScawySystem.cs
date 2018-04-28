@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class ScawySystem : VehicleMovement {
+public class ScawySystem : BumperPhysics {
 
     public enum AIBehavior
     {
@@ -26,6 +27,8 @@ public class ScawySystem : VehicleMovement {
 
     public AIBehavior currentState = AIBehavior.Stalk;
 
+    private bool isDead = false;
+
 
     // Use this for initialization
     public override void Start () {
@@ -37,31 +40,7 @@ public class ScawySystem : VehicleMovement {
 	
 	// Update is called once per frame
 	 public override void Update () {
-        total = Vector3.zero;
 
-        switch (currentState)
-        {
-            case AIBehavior.Stalk:
-                Stalk();
-                TransitionStalkAtk();
-                TransitionStalkFat();
-                break;
-            case AIBehavior.Attack:
-                Attack();
-                TransitionAtkFat();
-                TransitionAtkRtr();
-                break;
-            case AIBehavior.Retreat:
-                Retreat();
-                TransitionRtrStalk();
-                break;
-            case AIBehavior.Fatality:
-                Fatality();
-                TransitionFatRtr();
-                break;
-        }
-
-       
 
         base.Update();
     }
@@ -96,10 +75,50 @@ public class ScawySystem : VehicleMovement {
 
     protected override void CalcSteeringForces()
     {
+        total = Vector3.zero;
+
+        switch (currentState)
+        {
+            case AIBehavior.Stalk:
+                Stalk();
+                TransitionStalkAtk();
+                TransitionStalkFat();
+                break;
+            case AIBehavior.Attack:
+                Attack();
+                TransitionAtkFat();
+                TransitionAtkRtr();
+                break;
+            case AIBehavior.Retreat:
+                Retreat();
+                TransitionRtrStalk();
+                break;
+            case AIBehavior.Fatality:
+                Fatality();
+                TransitionFatRtr();
+                break;
+        }
+
+        CheckAlive();
+
+        // make sure we're on the ground
+        CheckFalling();
+
         Debug.DrawLine(gameObject.transform.position, gameObject.transform.position + total * 10, Color.black);
         total = Vector3.ClampMagnitude(total, maxForce);
+
+        if (falling)
+        {
+            // apply gravity
+            total += Vector3.down * gravity;
+        }
+
+        //if (!falling)
+        //    ApplyFriction(CalculateCoefficientFriction(frictionCoef, frictionForce));
+
         ApplyForce(total);
-        total = Vector3.zero;
+
+        
     }
 
     /// <summary>
@@ -201,7 +220,10 @@ public class ScawySystem : VehicleMovement {
     /// </summary>
     void Fatality()
     {
-        
+        Vector3 futurePos = PursueTarget();
+
+        Vector3 attackForce = Seek(futurePos);
+        total += attackForce;
     }
 
     /// <summary>
@@ -210,7 +232,10 @@ public class ScawySystem : VehicleMovement {
     /// </summary>
     void TransitionAtkFat()
     {
-        
+        if(CloseToEdge())
+        {
+            currentState = AIBehavior.Fatality;
+        }
     }
 
     /// <summary>
@@ -219,7 +244,10 @@ public class ScawySystem : VehicleMovement {
     /// </summary>
     void TransitionStalkFat()
     {
-        
+        if (CloseToEdge())
+        {
+            currentState = AIBehavior.Fatality;
+        }
     }
 
     /// <summary>
@@ -229,6 +257,58 @@ public class ScawySystem : VehicleMovement {
     /// </summary>
     void TransitionFatRtr()
     {
+        if(target.transform.position.y <= -.5f)
+        {
+            currentState = AIBehavior.Retreat;
+        }
+    }
 
+    /// <summary>
+    /// Checks whether the AI car has fallen off the arena
+    /// </summary>
+    private void CheckAlive()
+    {
+        if (gameObject.transform.position.y < -10)
+        {
+            isDead = true;
+            tag = "Dead";
+        }
+    }
+
+    private bool CloseToEdge()
+    {
+        switch(SceneManager.GetActiveScene().name)
+        {
+            case "DefaultArena":
+                {
+                    if(true)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                break;
+            case "CollaspingArena":
+                {
+                    if (true)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                break;
+            case "VolcanoArena":
+                {
+                    if (true)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                break;
+            default:
+                return false;
+                break;
+        }
     }
 }
