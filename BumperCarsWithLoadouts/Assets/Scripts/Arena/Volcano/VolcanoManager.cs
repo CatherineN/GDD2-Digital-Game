@@ -10,6 +10,7 @@ public class VolcanoManager : MonoBehaviour
     public int maxEruptions = -1; // use -1 for infinite eruptions
     public GameObject rockGO;
     public GameObject decoRock;
+    public AudioClip eruptionSE;
 
     private float timer;
     private bool active;
@@ -36,6 +37,7 @@ public class VolcanoManager : MonoBehaviour
 
         if(timer >= timeBetweenEruptions)
         {
+            GameObject.Find("PlayerCar").GetComponent<AudioSource>().PlayOneShot(eruptionSE);
             Erupt();
             timer = 0f;
             maxEruptions--;
