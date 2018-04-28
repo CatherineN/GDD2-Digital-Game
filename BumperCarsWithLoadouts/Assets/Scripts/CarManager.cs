@@ -57,7 +57,7 @@ public class CarManager : MonoBehaviour {
 
         //initialize list
         cars = new List<GameObject>();
-        if (haveSpawned == false)
+        if (haveSpawned == false && SceneManager.GetActiveScene().name == "DefaultArena")
         {
             Debug.Log(numAI);
             SpawnAI();

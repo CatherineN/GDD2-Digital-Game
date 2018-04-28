@@ -15,12 +15,15 @@ public class PBLauncher : MonoBehaviour {
     public float cooldownTime;
     private float cooldown;
     public AudioClip twang;
+
+    private Animator anim;
     void Start ()
     {
         playerID = GetComponentInParent<BumperPhysics>().playerID;
-        gameObject.GetComponent<Renderer>().material.color = transform.parent.GetComponentInParent<Renderer>().materials[1].color;
+        //gameObject.GetComponent<Renderer>().material.color = transform.parent.GetComponentInParent<Renderer>().materials[1].color;
         cooldown = cooldownTime;
         ability.sprite = sprite;
+        anim = gameObject.GetComponent<Animator>();
     }
 	
 	// Update is called once per frame
@@ -33,11 +36,12 @@ public class PBLauncher : MonoBehaviour {
                 //When the E key is pressed...
                 if (((Input.GetKeyDown(KeyCode.E) || Input.GetButtonDown("Fire3")) && cooldown >= cooldownTime)&& gameObject.transform.parent.gameObject.GetComponent<BumperPhysics>().enabled == true)
                 {
+                    anim.SetTrigger("Active");
                     //Create a cannonball at the mouth of the cannon. The cannon is rotated, so we use the transform.up
                     GameObject.Find("PlayerCar").GetComponent<AudioSource>().PlayOneShot(twang);
-                    GameObject paintbangInstance = Instantiate(paintbang, gameObject.transform.position + (transform.up / 2.5f), new Quaternion(0, 0, 0, 0));
+                    GameObject paintbangInstance = Instantiate(paintbang, gameObject.transform.position + (transform.forward / 2.5f), new Quaternion(0, 0, 0, 0));
                     paintbangInstance.GetComponent<PaintBang>().direction = transform.up;
-                    paintbangInstance.GetComponent<PaintBang>().parColor = gameObject.GetComponent<Renderer>().material.color;
+                    paintbangInstance.GetComponent<PaintBang>().parColor = gameObject.transform.parent.GetComponent<Renderer>().material.color;
                     paintbangInstance.tag = "Paintbang1";
                     cooldown = 0.0f;
                 }
@@ -46,9 +50,10 @@ public class PBLauncher : MonoBehaviour {
                 //When the E key is pressed...
                 if (((Input.GetKeyDown(KeyCode.Keypad0) || Input.GetButtonDown("Fire2")) && cooldown >= cooldownTime)&& gameObject.transform.parent.gameObject.GetComponent<BumperPhysics>().enabled == true)
                 {
+                    anim.SetTrigger("Active");
                     //Create a cannonball at the mouth of the cannon. The cannon is rotated, so we use the transform.up
                     GameObject.Find("PlayerCar2").GetComponent<AudioSource>().PlayOneShot(twang);
-                    GameObject paintbangInstance = Instantiate(paintbang, gameObject.transform.position + (transform.up / 2.5f), new Quaternion(0, 0, 0, 0));
+                    GameObject paintbangInstance = Instantiate(paintbang, gameObject.transform.position + (transform.forward / 2.5f), new Quaternion(0, 0, 0, 0));
                     paintbangInstance.GetComponent<PaintBang>().direction = transform.up;
                     paintbangInstance.GetComponent<PaintBang>().parColor = gameObject.GetComponent<Renderer>().material.color;
                     paintbangInstance.tag = "Paintbang2";
