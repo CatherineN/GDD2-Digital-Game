@@ -125,7 +125,9 @@ public abstract class VehicleMovement : MonoBehaviour {
         }
         if(tag == "AI")
         {
+            direction.y = 0;
             gameObject.transform.forward = direction;
+            //transform.up = targetUp;
         }
     }
 
